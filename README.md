@@ -58,9 +58,9 @@ This project is set up with Jenkins for continuous integration and deployment.
 <span style="color:red;font-style:italic">Instructions on setting up the development environment, including cloning repo, setting up a virtual environment, etc???</span>
 
 
-## Licence
+## License
 
-Distributed under the MIT Licence. See `LICENCE` for more information. 
+Distributed under the MIT License. See `LICENSE` for more information. 
 
 # Contact
 
