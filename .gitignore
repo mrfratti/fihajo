@@ -39,4 +39,18 @@ pip-wheel-metadata
 /poetry.toml
 
 poetry/core/*
+.mnist.csv
 
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+# Jupyter Notebook
+.ipynb_checkpoints
+
+poetry.lock
+Archive.txt
