@@ -39,7 +39,8 @@ pip-wheel-metadata
 /poetry.toml
 
 poetry/core/*
-.mnist.csv
+
+mnist.csv
 
 # Environments
 .env
