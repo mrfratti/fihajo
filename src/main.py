@@ -1,6 +1,8 @@
 import argparse
 import os.path
 import datetime
+import platform
+
 import tensorflow as tf
 from tensorflow.keras.datasets import mnist
 import uncertainty_wizard as uwiz
@@ -36,8 +38,13 @@ class BuildModel:
         model.add(tf.keras.layers.Dense(128, activation='relu'))
         model.add(tf.keras.layers.Dense(10, activation='softmax'))
 
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            opt = tf.keras.optimizers.legacy.Adadelta()
+        else:
+            opt = tf.keras.optimizers.Adadelta()
+
         model.compile(loss=tf.keras.losses.categorical_crossentropy,
-                      optimizer=tf.keras.optimizers.legacy.Adadelta(),
+                      optimizer=opt,
                       metrics=['accuracy'])
 
         model.summary()
