@@ -55,11 +55,11 @@ class Trainer:
     def __init__(self, model):
         self.model = model
 
-    def train_model(self, x_train, y_train, epochs):
+    def train_model(self, x_train, y_train, epochs, batch_size):
         history = self.model.fit(x_train,
                                  y_train,
                                  validation_split=0.1,
-                                 batch_size=32,
+                                 batch_size=batch_size,
                                  epochs=epochs,
                                  verbose=1,
                                  callbacks=[tf.keras.callbacks.EarlyStopping(patience=2),
@@ -225,8 +225,9 @@ class UncertaintyAnalyzer:
 
 
 class AIUncertaintyTool:
-    def __init__(self, epochs=5):
+    def __init__(self, epochs=5, batch_size=32):
         self.epochs = epochs
+        self.batch_size = batch_size
         self.model = None
 
     def run_train(self):
@@ -237,7 +238,7 @@ class AIUncertaintyTool:
         stochastic_mode = StochasticMode()
         self.model = BuildModel.create_mnist_model(stochastic_mode)
         trainer = Trainer(self.model)
-        history = trainer.train_model(x_train, y_train, self.epochs)
+        history = trainer.train_model(x_train, y_train, self.epochs, self.batch_size)
         Trainer.plot_training_results(history)
         self.model.inner.save_weights('data/mnist_model_stochastic_weights.h5')
 
@@ -278,7 +279,8 @@ def main():
     # Subcommand for training
     parser_train = subparsers.add_parser('train', help='Train the model')
     parser_train.add_argument('--epochs', type=int, default=5, help='Number of epochs for training the model')
-    parser_train.set_defaults(func=lambda args: train(args.epochs))
+    parser_train.add_argument('--batch', type=int, default=32, help='Type in batch size for training')
+    parser_train.set_defaults(func=lambda args: train(args.epochs, args.batch))
 
     # Subcommand for evaluation
     parser_evaluate = subparsers.add_parser('evaluate', help='Evaluate the model')
@@ -291,17 +293,16 @@ def main():
     args = parser.parse_args()
 
     if args.command == 'train':
-        AIUncertaintyTool(epochs=args.epochs).run_train()
+        AIUncertaintyTool(epochs=args.epochs, batch_size=args.batch).run_train()
     elif args.command == 'evaluate':
         AIUncertaintyTool().run_evaluate()
     elif args.command == 'analyze':
         AIUncertaintyTool().run_analyze()
 
 
-def train(epochs):
-    tool = AIUncertaintyTool(epochs)
+def train(epochs, batch_size):
+    tool = AIUncertaintyTool(epochs, batch_size)
     tool.run_train()
-
 
 def evaluate():
     tool = AIUncertaintyTool()
