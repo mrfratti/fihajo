@@ -62,7 +62,9 @@ class Trainer:
                                  batch_size=32,
                                  epochs=epochs,
                                  verbose=1,
-                                 callbacks=[tf.keras.callbacks.EarlyStopping(patience=2)])
+                                 callbacks=[tf.keras.callbacks.EarlyStopping(patience=2),
+                                            tf.keras.callbacks.TensorBoard(log_dir='./data/logs', histogram_freq=1)])
+
         return history
 
     @staticmethod
@@ -237,7 +239,7 @@ class AIUncertaintyTool:
         trainer = Trainer(self.model)
         history = trainer.train_model(x_train, y_train, self.epochs)
         Trainer.plot_training_results(history)
-        self.model.inner.save_weights('data/mnist_model_stochastic.h5')
+        self.model.inner.save_weights('data/mnist_model_stochastic_weights.h5')
 
     def run_evaluate(self):
         #if self.model is None:
@@ -249,7 +251,7 @@ class AIUncertaintyTool:
 
         # Evaluate model
         self.model = BuildModel.create_mnist_model(StochasticMode())
-        self.model.inner.load_weights('data/mnist_model_stochastic.h5')
+        self.model.inner.load_weights('data/mnist_model_stochastic_weights.h5')
         evaluator = Evaluator(self.model)
         evaluator.evaluate(x_test, y_test)
         evaluator.plot_confusion_matrix(y_test, x_test)
@@ -261,7 +263,7 @@ class AIUncertaintyTool:
 
         # Analyze uncertainty
         self.model = BuildModel.create_mnist_model(StochasticMode())
-        self.model.inner.load_weights('data/mnist_model_stochastic.h5')
+        self.model.inner.load_weights('data/mnist_model_stochastic_weights.h5')
         analyzer = UncertaintyAnalyzer(self.model)
         results = analyzer.analyze_uncertainty(x_test)
         analyzer.plot_uncertainty(results)
