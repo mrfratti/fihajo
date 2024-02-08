@@ -2,7 +2,6 @@ import argparse
 import os.path
 import datetime
 import platform
-
 import tensorflow as tf
 from tensorflow.keras.datasets import mnist
 import uncertainty_wizard as uwiz
