@@ -46,8 +46,6 @@ class BuildModel:
                       optimizer=opt,
                       metrics=['accuracy'])
 
-        model.summary()
-
         return model
 
 
