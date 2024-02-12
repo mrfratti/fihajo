@@ -16,6 +16,7 @@ def main():
 
     # Subcommand for evaluation
     parser_evaluate = subparsers.add_parser('evaluate', help='Evaluate the model')
+    parser_evaluate.add_argument('--eps', type=float, default=0.3, help='Epsilon for adversarial perturbation')
     parser_evaluate.set_defaults(func=evaluate_model)
 
     # Subcommand for uncertainty analysis

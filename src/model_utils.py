@@ -24,14 +24,14 @@ def create_mnist_model(stochastic_mode):
         tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
         tf.keras.layers.MaxPooling2D(pool_size=(2, 2)), UwizBernoulliDropout(0.5, stochastic_mode=stochastic_mode),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(128, activation='sigmoid'),
         tf.keras.layers.Dense(10, activation='softmax')
     ])
 
     if platform.system() == 'Darwin' and platform.processor() == 'arm':
-        opt = tf.keras.optimizers.legacy.Adadelta()
+        opt = tf.keras.optimizers.legacy.Adam()
     else:
-        opt = tf.keras.optimizers.Adadelta()
+        opt = tf.keras.optimizers.Adam()
 
     model.compile(loss=tf.keras.losses.categorical_crossentropy,
                   optimizer=opt,
