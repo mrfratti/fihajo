@@ -1,7 +1,7 @@
 import logging
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ModelCheckpoint, LambdaCallback
-from model_utils import load_and_preprocess_mnist, create_mnist_model
-from visualization import plot_training_results
+from .model_utils import create_mnist_model, load_and_preprocess_mnist
+from .visualization import plot_training_results
 from uncertainty_wizard.models._stochastic._stochastic_mode import StochasticMode
 
 
@@ -27,7 +27,7 @@ def train_model(args):
                         verbose=1,
                         callbacks=callbacks)
 
-    print("Training completed. Saving model weights as 'model_weights.h5")
+    print("\nTraining completed. Saving model weights as 'model_weights.h5")
     model.inner.save_weights('data/model_weights.h5')
     print('\n')
     print("Model weights saved")

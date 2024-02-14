@@ -1,6 +1,6 @@
 import tensorflow as tf
-from model_utils import load_and_preprocess_mnist, create_mnist_model
-from visualization import plot_confusion_matrix, plot_predictions, plot_adversarial_examples, plot_accuracy_comparison
+from .model_utils import load_and_preprocess_mnist, create_mnist_model
+from .visualization import plot_confusion_matrix, plot_predictions, plot_adversarial_examples, plot_accuracy_comparison
 import numpy as np
 from uncertainty_wizard.models._stochastic._stochastic_mode import StochasticMode
 from tensorflow.keras.losses import SparseCategoricalCrossentropy
@@ -71,6 +71,3 @@ def evaluate_model(args):
     plot_confusion_matrix(y_test, y_pred_classes, classes=[str(i) for i in range(10)])
     plot_adversarial_examples(model, x_test, args.eps, num_samples=25)
     plot_accuracy_comparison(accuracies)
-
-    # %load_ext tensorboard
-    # %tensorboard --logdir data/logs

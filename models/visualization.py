@@ -42,10 +42,11 @@ def plot_training_results(history):
 
 
 def plot_predictions(model, x_test, num_samples=25):
-    y_pred = model.predict(x_test)
     predictions = model.predict(x_test[:num_samples])
     predicted_labels = np.argmax(predictions, axis=1)
+    y_pred = np.argmax(model.predict(x_test), axis=1)
 
+    plt.figure(figsize=(10, 10))
     for i in range(num_samples):
         plt.subplot(5, 5, i + 1)
         plt.imshow(x_test[i].reshape(28, 28), cmap='gray')
