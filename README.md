@@ -18,23 +18,12 @@ The tool is containerized using [Docker](https://www.docker.com), ensuring a con
 
 ## Building the Docker Image 
 
-To build the Docker image, run the following command:
+...
 
-```bash
-docker build -t your-dockerhub-username/ai-uncertainty-analysis:latest .
-```
-
-*Note: Replace `your-dockerhub-username` with your actual Docker Hub username*
 
 ## Running the Docker Image
 
-After building the image, you can run it using:
-
-```bash
-docker run -p 8080:8080 your-dockerhub-username/ai-uncertainty-analysis:latest
-```
-
-*Note: This will start a Jenkins instance preconfigured with the necessary dependencies.*
+...
 
 
 ## Usage 
@@ -55,8 +44,7 @@ This project is set up with Jenkins for continuous integration and deployment.
 
 ## Setting Up the Development Environment
 
-<span style="color:red;font-style:italic">Instructions on setting up the development environment, including cloning repo, setting up a virtual environment, etc???</span>
-
+...
 
 ## License
 
@@ -64,6 +52,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 # Contact
 
-Firat Celebi: firat.celebi@hotmail.com
-Joakim Hole Polden: ?
-Harykaran Lambotharan: h.lambotharan@stud.uis.no
+- Firat Celebi: firat.celebi@hotmail.com
+- Joakim Hole Polden: joakimpolden@gmail.com
+- Harykaran Lambotharan: h.lambotharan@stud.uis.no
