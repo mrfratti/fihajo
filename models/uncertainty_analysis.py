@@ -1,6 +1,5 @@
 from .model_utils import create_mnist_model, load_and_preprocess_mnist
 from .visualization import (plot_uncertainty_distribution, plot_predictions, plot_distribution_pcs_ms,
-                           plot_pcs_ms_scores,
                            plot_distribution_pcs_ms_scores)
 from uncertainty_wizard.models._stochastic._stochastic_mode import StochasticMode
 
@@ -25,7 +24,5 @@ def analyze_uncertainty(args):
 
     # Plot results
     plot_uncertainty_distribution(results)
-    plot_predictions(model.inner, x_test)
     plot_distribution_pcs_ms(results)
-    plot_pcs_ms_scores(results)
     plot_distribution_pcs_ms_scores(results)

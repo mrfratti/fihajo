@@ -41,15 +41,15 @@ def create_mnist_model(stochastic_mode):
     return model
 
 
-def create_adv_mnist_model(stochastic_mode):
-    model = uwiz.models.StochasticSequential([
-        tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1)),
-        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-        UwizBernoulliDropout(0.5, stochastic_mode=stochastic_mode),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dense(10, activation='softmax')
-    ])
-
-    return model
+#def create_adv_mnist_model(stochastic_mode):
+#    model = uwiz.models.StochasticSequential([
+#        tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1)),
+#        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+#        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
+#        UwizBernoulliDropout(0.5, stochastic_mode=stochastic_mode),
+#        tf.keras.layers.Flatten(),
+#        tf.keras.layers.Dense(128, activation='relu'),
+#        tf.keras.layers.Dense(10, activation='softmax')
+#    ])
+#
+#    return model

@@ -157,7 +157,7 @@ def plot_accuracy_comparison(accuracies, labels=['Clean', 'FGSM', 'PGD']):
 
 def plot_uncertainty_distribution(results):
     uncertainty_scores = results[1][1]
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(10, 10))
     plt.hist(uncertainty_scores, bins=50, alpha=0.7, color='blue')
     plt.title('Distribution of Uncertainty Scores')
     plt.xlabel('Uncertainty Score')
@@ -177,6 +177,7 @@ def plot_distribution_pcs_ms(results):
     # Results is a list of tuples, where each tuple contains (predictions, scores)
     pcs_scores, mean_softmax_scores = results[0][1], results[1][1]
 
+    plt.figure(figsize=(10,10))
     plt.subplot(1, 2, 1)
     plt.hist(pcs_scores, bins=50, alpha=0.7)
     plt.xlabel('PCS Score')
@@ -200,38 +201,11 @@ def plot_distribution_pcs_ms(results):
     plt.show()
 
 
-def plot_pcs_ms_scores(results, num_samples=25):
-    # PCS scores
-    pcs_scores, mean_softmax_scores = results[0][1][:num_samples], results[1][1][:num_samples]
-    plt.figure(figsize=(10,4))
-    plt.subplot(1, 2, 1)
-    plt.bar(range(num_samples), pcs_scores)
-    plt.xlabel('Sample')
-    plt.ylabel('PCS Score')
-    plt.title('PCS Scores for Test Samples')
-
-    # Mean Softmax scores
-    plt.subplot(1, 2, 2)
-    plt.bar(range(num_samples), mean_softmax_scores)
-    plt.xlabel('Sample')
-    plt.ylabel('Mean Softmax Score')
-    plt.title('Mean Softmax Scores for Test Samples')
-    plt.tight_layout()
-
-    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    filename = f"pcs_ms_scores_{timestamp}.png"
-
-    plot_dir = './data/plots/analyze'
-    os.makedirs(plot_dir, exist_ok=True)
-    plt.savefig(os.path.join(plot_dir, filename))
-
-    plt.show()
-
-
 def plot_distribution_pcs_ms_scores(results):
     pcs_predictions, pcs_confidences = results[0][0], results[0][1]
     mean_softmax_predictions, mean_softmax_confidences = results[1][0], results[1][1]
 
+    plt.figure(figsize=(10, 10))
     plt.hist(pcs_confidences, bins=50, alpha=0.7, color='blue', label='PCS')
     plt.hist(mean_softmax_confidences, bins=50, alpha=0.7, color='red', label='Mean Softmax')
     plt.xlabel('Predictive Confidence Score')

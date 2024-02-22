@@ -7,13 +7,13 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from uncertainty_wizard.models import StochasticMode
 from tensorflow.keras.utils import Progbar
 from tensorflow.keras.metrics import CategoricalAccuracy
-from .model_utils import create_adv_mnist_model, load_and_preprocess_mnist
+from .model_utils import create_mnist_model, load_and_preprocess_mnist
 
 
 def adv_training(args):
     (x_train, y_train), _ = load_and_preprocess_mnist()
     stochastic_mode = StochasticMode()
-    model = create_adv_mnist_model(stochastic_mode)
+    model = create_mnist_model(stochastic_mode)
 
     if platform.system() == 'Darwin' and platform.processor() == 'arm':
         optimizer = tf.keras.optimizers.legacy.Adam()
