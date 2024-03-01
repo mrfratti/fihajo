@@ -2,7 +2,6 @@ import argparse
 from models.training import train_model
 from models.evaluation import evaluate_model
 from models.uncertainty_analysis import analyze_uncertainty
-from models.adv_training import adv_training
 
 
 def main():
@@ -13,14 +12,10 @@ def main():
     parser_train = subparsers.add_parser('train', help='Train the model')
     parser_train.add_argument('--epochs', type=int, default=5, help='Number of epochs for training the model')
     parser_train.add_argument('--batch', type=int, default=64, help='Type in batch size for training')
+    parser_train.add_argument('--adv-train', action='store_true', help='Enable adversarial training')
+    parser_train.add_argument('--eps', type=float, default=0.3,
+                              help='Epsilon value for adversarial training, only used if --adv-train is specified')
     parser_train.set_defaults(func=train_model)
-
-    # Subcommand for adversarial training
-    parser_adv_train = subparsers.add_parser('adv-train', help='Adversarial training')
-    parser_adv_train.add_argument('--epochs', type=int, default=10, help='Number of epochs for adversarial training')
-    parser_adv_train.add_argument('--batch', type=int, default=128, help='Batch size for adversarial training')
-    parser_adv_train.add_argument('--eps', type=float, default=0.3, help='Epsilon value for adversarial training')
-    parser_adv_train.set_defaults(func=adv_training)
 
     # Subcommand for evaluation
     parser_evaluate = subparsers.add_parser('evaluate', help='Evaluate the model')
