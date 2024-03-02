@@ -1,5 +1,5 @@
 import logging
-import platform
+import os
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ModelCheckpoint, LambdaCallback
@@ -9,7 +9,6 @@ from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from .model_utils import create_mnist_model, load_and_preprocess_mnist
 from .visualization import plot_training_results
-#from uncertainty_wizard.models._stochastic._stochastic_mode import StochasticMode
 from uncertainty_wizard.models import StochasticMode
 
 
@@ -18,6 +17,9 @@ def train_model(args):
     # Recreate model architecture
     stochastic_mode = StochasticMode()
     model = create_mnist_model(stochastic_mode)
+
+    if args.save_path is None:
+        args.save_path = 'data/models/adv_model_weights.h5' if args.adv_train else 'data/models/model_weights.h5'
 
     if args.adv_train:
         print("Starting adversarial training...")
@@ -59,6 +61,7 @@ def train_model(args):
             train_accuracy.reset_states()
 
             print(f"End of Epoch {epoch+1}")
+            print("Adversarial training completed. Saving model weights to: {}".format(args.save_path))
 
     else:
         print("Starting standard training...")
@@ -77,11 +80,11 @@ def train_model(args):
                             verbose=1,
                             callbacks=callbacks)
 
-        print("\nTraining completed. Saving model weights as 'model_weights.h5")
-        model.inner.save_weights('data/model_weights.h5')
-        print('\n')
-        print("Model weights saved")
+        print("Training completed. Saving model weights to: {}".format(args.save_path))
         plot_training_results(history)
 
-    model.inner.save_weights('data/adv_model_weights.h5')
-    print("Adversarial training completed and model weights of it saved.")
+    weights_dir = os.path.dirname(args.save_path)
+    if not os.path.exists(weights_dir):
+        os.makedirs(weights_dir)
+    model.inner.save_weights(args.save_path)
+    print("Model weights saved to: {}".format(args.save_path))

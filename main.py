@@ -15,6 +15,7 @@ def main():
     parser_train.add_argument('--adv-train', action='store_true', help='Enable adversarial training')
     parser_train.add_argument('--eps', type=float, default=0.3,
                               help='Epsilon value for adversarial training, only used if --adv-train is specified')
+    parser_train.add_argument('--save-path', type=str, default=None, help='Path to save the model weights')
     parser_train.set_defaults(func=train_model)
 
     # Subcommand for evaluation
