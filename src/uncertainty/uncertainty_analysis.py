@@ -1,7 +1,7 @@
-from .model_utils import create_mnist_model, load_and_preprocess_mnist
-from .visualization import (plot_uncertainty_distribution, plot_predictions, plot_distribution_pcs_ms,
+from src.models.model_utils import create_mnist_model, load_and_preprocess_mnist
+from src.visualization.visualization import (plot_uncertainty_distribution, plot_predictions, plot_distribution_pcs_ms,
                            plot_distribution_pcs_ms_scores)
-from uncertainty_wizard.models._stochastic._stochastic_mode import StochasticMode
+from uncertainty_wizard.models import StochasticMode
 
 
 def analyze_uncertainty(args):

@@ -12,6 +12,7 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 def plot_training_results(history):
     # Plot training & validation accuracy and loss
     # Accuracy
+    plt.figure(dpi=1200)
     plt.subplot(1, 2, 1)
     plt.plot(history.history['accuracy'], label='Train Accuracy')
     plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
@@ -40,6 +41,29 @@ def plot_training_results(history):
 
     plt.show()
 
+
+def plot_adversarial_training_results(history):
+    plt.figure(dpi=1200)
+    plt.subplot(1, 2, 1)
+    plt.plot(history['accuracy'], label='Train Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.title('Adversarial Training Accuracy')
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(history['loss'], label='Train Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Adversarial Training Loss')
+    plt.legend()
+
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    filename = f"adv_train_acc_loss_{timestamp}.png"
+    plot_dir = './data/plots/adv_train'
+    os.makedirs(plot_dir, exist_ok=True)
+    plt.savefig(os.path.join(plot_dir, filename))
+    plt.show()
 
 def plot_predictions(model, x_test, num_samples=25):
     predictions = model.predict(x_test[:num_samples])

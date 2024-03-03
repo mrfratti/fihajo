@@ -1,7 +1,8 @@
 import argparse
-from models.training import train_model
-from models.evaluation import evaluate_model
-from models.uncertainty_analysis import analyze_uncertainty
+
+from src.models.training import train_model
+from src.models.evaluation import evaluate_model
+from src.uncertainty.uncertainty_analysis import analyze_uncertainty
 
 
 def main():

@@ -30,9 +30,9 @@ def create_mnist_model(stochastic_mode):
     ])
 
     if platform.system() == 'Darwin' and platform.processor() == 'arm':
-        opt = tf.keras.optimizers.legacy.Adam()
+        opt = tf.keras.optimizers.legacy.Adadelta()
     else:
-        opt = tf.keras.optimizers.Adam()
+        opt = tf.keras.optimizers.Adadelta()
 
     model.compile(loss=tf.keras.losses.categorical_crossentropy,
                   optimizer=opt,

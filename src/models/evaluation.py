@@ -1,8 +1,8 @@
 import tensorflow as tf
 from .model_utils import load_and_preprocess_mnist, create_mnist_model
-from .visualization import plot_confusion_matrix, plot_predictions, plot_adversarial_examples, plot_accuracy_comparison
+from src.visualization.visualization import plot_confusion_matrix, plot_predictions, plot_adversarial_examples, plot_accuracy_comparison
 import numpy as np
-from uncertainty_wizard.models._stochastic._stochastic_mode import StochasticMode
+from uncertainty_wizard.models import StochasticMode
 from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.metrics import SparseCategoricalAccuracy
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method

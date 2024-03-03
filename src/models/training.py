@@ -8,7 +8,7 @@ from tensorflow.keras.metrics import Mean, SparseCategoricalAccuracy, Categorica
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from .model_utils import create_mnist_model, load_and_preprocess_mnist
-from .visualization import plot_training_results
+from src.visualization.visualization import plot_training_results, plot_adversarial_training_results
 from uncertainty_wizard.models import StochasticMode
 
 
@@ -23,6 +23,8 @@ def train_model(args):
 
     if args.adv_train:
         print("Starting adversarial training...")
+        # Collect training history for adversarial training
+        adv_training_history = {'loss': [], 'accuracy': [], 'val_loss': [], 'val_accuracy': []}
 
         loss_object = CategoricalCrossentropy(from_logits=True)
         train_loss = Mean(name='train_loss')
@@ -54,6 +56,9 @@ def train_model(args):
                 progbar.update(batch_index + 1, values=[("loss", train_loss.result()),
                                                         ("accuracy", train_accuracy.result())])
 
+            adv_training_history['loss'].append(train_loss.result().numpy())
+            adv_training_history['accuracy'].append(train_accuracy.result().numpy())
+
             print(f"Epoch {epoch+1}, Loss: {train_loss.result()}, Accuracy: {train_accuracy.result()}")
 
             # Reset metrics at the end of each epoch
@@ -61,7 +66,8 @@ def train_model(args):
             train_accuracy.reset_states()
 
             print(f"End of Epoch {epoch+1}")
-            print("Adversarial training completed. Saving model weights to: {}".format(args.save_path))
+        print("Adversarial training completed. Saving model weights to: {}".format(args.save_path))
+        plot_adversarial_training_results(adv_training_history)
 
     else:
         print("Starting standard training...")
