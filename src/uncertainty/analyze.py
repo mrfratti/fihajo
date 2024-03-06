@@ -36,7 +36,7 @@ class Analyzer:
         self.analyze_entropy(x_test)
         self.table_generator(x_test, y_test)
 
-    def run_quantified(self, x_test):
+    def quantification(self, x_test):
         if self.quantified_results is None:
             quantifiers = ['pcs', 'mean_softmax', 'predictive_entropy']
             self.quantified_results = self.model.predict_quantified(x_test,
