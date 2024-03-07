@@ -11,30 +11,47 @@ from tensorflow.keras.metrics import Mean, SparseCategoricalAccuracy, Categorica
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from uncertainty_wizard.models import StochasticMode
-from .model_utils import load_and_preprocess_mnist, create_mnist_model
+from .model_utils import ModelUtils
 from src.visualization.visualization import VisualizeTraining
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class Trainer:
+    """
+    Trainer class for training and evalating a model using both normal and adversarial training methods.
+    """
     def __init__(self, args: argparse.Namespace) -> None:
+        """
+        Initializes the Trainer object with command-line arguments and prepares the model for training.
+        :param args: command-line arguments specifying training parameters.
+        """
         self.args = args
+        self.utils = ModelUtils()
         self.model = self.create_model()
         self.loss_object = CategoricalCrossentropy(from_logits=False)
 
-    @staticmethod
-    def create_model():
+    def create_model(self):
+        """
+        Creates a MNIST model based on the specified stochastic mode.
+        :return: A TensorFlow model prepared for MNIST training.
+        """
         stochastic_mode = StochasticMode()
-        return create_mnist_model(stochastic_mode)
+        return self.utils.create_mnist_model(stochastic_mode)
 
     def train(self):
+        """
+        Selects the training method based on whether adversarial training is enabled via command-line arguments.
+        """
         if self.args.adv:
             self.adversarial_training()
         else:
             self.training()
 
     def training(self):
+        """
+        Executes standard training procedure for the MNIST model, including callbacks for early stopping and logging.
+        """
         logging.info("Starting training...")
         callbacks = [
             EarlyStopping(patience=3, verbose=1),
@@ -44,7 +61,7 @@ class Trainer:
         ]
 
         # Load and preprocess the MNIST dataset
-        (x_train, y_train), _ = load_and_preprocess_mnist()
+        (x_train, y_train), _ = self.utils.load_and_preprocess_mnist()
 
         history = self.model.fit(x_train, y_train,
                                  validation_split=0.1,
@@ -57,6 +74,9 @@ class Trainer:
         visualizer.plot_training_results(history)
 
     def adversarial_training(self):
+        """
+        Executes adversarial training, incorporating attacks during training to improve model robustness.
+        """
         logging.info("Starting adversarial training...")
         adv_training_history = {'loss': [], 'accuracy': [], 'val_loss': [], 'val_accuracy': []}
 
@@ -71,7 +91,7 @@ class Trainer:
             optimizer = tf.keras.optimizers.Adadelta()
 
         # Load and preprocess the MNIST dataset
-        (x_train, y_train), (x_val, y_val) = load_and_preprocess_mnist()
+        (x_train, y_train), (x_val, y_val) = self.utils.load_and_preprocess_mnist()
 
         for epoch in range(self.args.epochs):
             print(f"\nEpoch {epoch + 1}/{self.args.epochs}")

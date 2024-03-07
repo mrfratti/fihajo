@@ -3,7 +3,7 @@ import logging
 import os.path
 import pandas as pd
 from sklearn.metrics import classification_report
-from .model_utils import load_and_preprocess_mnist, create_mnist_model
+from .model_utils import ModelUtils
 from src.visualization.visualization import VisualizeEvaluation
 import numpy as np
 from uncertainty_wizard.models import StochasticMode
@@ -14,13 +14,26 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 class Evaluator:
+    """
+    Evaluator class for evaluating a trained model, including support for adversarial evaluation.
+    """
     def __init__(self, args: argparse.Namespace) -> None:
+        """
+        Initializes the Evaluator object with command-line arguments and loads the trained model.
+        :param args: Command-line arguments specifying evaluation parameters.
+        """
         self.args = args
+        self.utils = ModelUtils()
         self.model = self.create_and_load_model(args.model_path)
 
     def create_and_load_model(self, model_path: str):
+        """
+        Creates the MNIST model and loads weights from specified path.
+        :param model_path: Path to the model weights.
+        :return: The MNIST model with loaded weights.
+        """
         stochastic_mode = StochasticMode()
-        model = create_mnist_model(stochastic_mode)
+        model = self.utils.create_mnist_model(stochastic_mode)
         model_path = self.args.model_path or self._default_load_path()
         logging.info(f"Loading model weights from {model_path}")
         model.inner.load_weights(model_path)
@@ -28,10 +41,17 @@ class Evaluator:
 
     @staticmethod
     def _default_load_path() -> str:
+        """
+        Provides a default path for model weight loading if none is specified.
+        :return: A string representing the default model weights path.
+        """
         return 'data/models/model_weights.h5'
 
     def evaluate(self):
-        _, (x_test, y_test) = load_and_preprocess_mnist()
+        """
+        Orchestrates the evaluation process, including standard and adversarial evaluation if specified.
+        """
+        _, (x_test, y_test) = self.utils.load_and_preprocess_mnist()
 
         self.evaluation(x_test, y_test, plot_results=not self.args.adv_eval)
         if self.args.adv_eval:
