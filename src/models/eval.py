@@ -26,12 +26,9 @@ class Evaluator:
         model.inner.load_weights(model_path)
         return model
 
-    def _default_load_path(self) -> str:
-        base_path = 'data/models'
-        file_name = 'model_weights.h5' if self.args.adv_eval else 'model_weights.h5'
-        # Correctly form the full path as a string
-        full_path = os.path.join(base_path, file_name)
-        return full_path
+    @staticmethod
+    def _default_load_path() -> str:
+        return 'data/models/model_weights.h5'
 
     def evaluate(self):
         _, (x_test, y_test) = load_and_preprocess_mnist()

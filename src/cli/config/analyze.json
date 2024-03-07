@@ -1,0 +1,4 @@
+{
+  "command": "analyze",
+  "batch": 64
+}

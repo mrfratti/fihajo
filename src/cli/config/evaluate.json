@@ -1,0 +1,5 @@
+{
+  "command": "evaluate",
+  "adv_eval": true,
+  "eps": 0.3
+}

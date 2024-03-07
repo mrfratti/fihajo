@@ -6,28 +6,32 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 from sklearn.manifold import TSNE
-from src.models.model_utils import create_mnist_model, load_and_preprocess_mnist
+from src.models.model_utils import load_and_preprocess_mnist, create_mnist_model
 from src.visualization.visualization import VisualizeUncertainty
 from uncertainty_wizard.models import StochasticMode
 
 
 class Analyzer:
-    def __init__(self, args: argparse.Namespace):
-        self.args = args
-        self.model = self.create_and_load_model(args.model_path if args.model_path else 'data/models/model_weights.h5')
+    def __init__(self, model_path: str, batch: int):
+        self.model_path = model_path
+        self.batch = batch
+        self.model = self.create_and_load_model(self.model_path)
         self.quantified_results = None
         self.pcs_mean_softmax_scores = None
         self.entropy_scores = None
         self.mean_softmax_scores = None
         self.pcs_scores = None
 
-    @staticmethod
-    def create_and_load_model(model_path: str):
+    def create_and_load_model(self, model_path: str):
         stochastic_mode = StochasticMode()
         model = create_mnist_model(stochastic_mode)
         logging.info(f"Loading model weights from {model_path}")
         model.inner.load_weights(model_path)
         return model
+
+    @staticmethod
+    def _default_load_path():
+        return 'data/models/model_weights.h5'
 
     def analyze(self):
         _, (x_test, y_test) = load_and_preprocess_mnist()
@@ -36,12 +40,12 @@ class Analyzer:
         self.analyze_entropy(x_test)
         self.table_generator(x_test, y_test)
 
-    def quantification(self, x_test):
+    def run_quantified(self, x_test):
         if self.quantified_results is None:
             quantifiers = ['pcs', 'mean_softmax', 'predictive_entropy']
             self.quantified_results = self.model.predict_quantified(x_test,
                                                                     quantifier=quantifiers,
-                                                                    batch_size=self.args.batch,
+                                                                    batch_size=self.batch,
                                                                     sample_size=32,
                                                                     verbose=1)
 
@@ -113,20 +117,23 @@ class Analyzer:
 
         # sort the table by predictive entropy
         table = table.sort_values(by='Prediction Entropy', ascending=False)
+        print(table.head(10))
+
+        save_path = input("Enter the path to save the tables or press Enter to use the default path: ").strip()
+        output_dir = save_path if save_path else 'data/tables'
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
         # save the table to a csv file in /data/tables if data/tables does not exist, create it
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename_csv = f"table_{timestamp}.csv"
         filename_xlsx = f"table_{timestamp}.xlsx"
 
-        output_dir = 'data/tables'
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        print(table.head(10))
-
         table.to_csv(os.path.join(output_dir, filename_csv))
         table.to_excel(os.path.join(output_dir, filename_xlsx))
+        logging.info(f"Tables saved to {output_dir}")
+
         return table
 
 

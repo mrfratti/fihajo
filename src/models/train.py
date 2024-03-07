@@ -11,7 +11,7 @@ from tensorflow.keras.metrics import Mean, SparseCategoricalAccuracy, Categorica
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from uncertainty_wizard.models import StochasticMode
-from .model_utils import create_mnist_model, load_and_preprocess_mnist
+from .model_utils import load_and_preprocess_mnist, create_mnist_model
 from src.visualization.visualization import VisualizeTraining
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -130,8 +130,10 @@ class Trainer:
         visualizer.plot_adversarial_training_results(adv_training_history)
 
     def save_model(self):
+        user_input = input("Enter a path to save the model or press Enter to use the default path: ").strip()
+        save_path = user_input if user_input else self._default_save_path()
         try:
-            save_path = self.args.save_path or self._default_save_path()
+            #save_path = self.args.save_path or self._default_save_path()
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
             logging.info(f"Model weights saved to: {save_path}")

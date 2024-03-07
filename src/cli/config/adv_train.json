@@ -1,0 +1,7 @@
+{
+  "command": "train",
+  "epochs": 5,
+  "batch": 1000,
+  "adv": true,
+  "eps": 0.3
+}
