@@ -1,4 +1,6 @@
 {
   "command": "analyze",
+  "dataset": "mnist",
+  "model_path": null,
   "batch": 64
 }

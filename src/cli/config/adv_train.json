@@ -1,5 +1,7 @@
 {
   "command": "train",
+  "dataset": "mnist",
+  "model_path": null,
   "epochs": 5,
   "batch": 1000,
   "adv": true,

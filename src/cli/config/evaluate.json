@@ -1,5 +1,7 @@
 {
   "command": "evaluate",
+  "dataset": "mnist",
+  "model_path": null,
   "adv_eval": true,
   "eps": 0.3
 }

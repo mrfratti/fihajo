@@ -1,7 +1,6 @@
 import argparse
 import logging
 import json
-
 import uncertainty_wizard as uwiz
 from uncertainty_wizard.models import StochasticMode
 from src.datasets.dataset_handler import MnistDatasetHandler, Cifar10DatasetHandler, FashionMnistDatasetHandler
@@ -43,14 +42,8 @@ class CLIApp:
         parser_train.add_argument('--eps', type=self.check_eps, default=0.3,
                                   help='Epsilon value for adversarial training, controlling the perturbation magnitude.')
         parser_train.add_argument('--save-path', type=str, default=None, help='Path to save the model weights')
-        #parser_train.add_argument('--optimizer', type=str, default='adadelta', help='Optimizer for training')
-        #parser_train.add_argument('--learning-rate', type=float, default=1e-3, help='Learning rate for the optimizer')
-        #parser_train.add_argument('--checkpoint-path', type=str, default=None,
-        #                          help='Path to save checkpoints during training')
-        #parser_train.add_argument('--validation-split', type=float, default=0.1,
-        #                          help='Fraction of the training data to be used as validation data')
-
-        #parser_train.set_defaults(func=self.train)
+        parser_train.add_argument('--optimizer', type=str, default='adadelta', choices=['adadelta', 'adam', 'sgd'], help='Optimizer for training')
+        parser_train.add_argument('--learning-rate', type=float, default=None, help='Learning rate for the optimizer')
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser('evaluate', help='Evaluate the model')
@@ -98,12 +91,12 @@ class CLIApp:
 
         # Instantiate the correct model builder based on the command line argument
         model_builders = {
-            'mnist':            MNISTModelBuilder(stochastic_mode),
-            'cifar10':          Cifar10ModelBuilder(stochastic_mode),
-            'fashion_mnist':    FashionMnistModelBuilder(stochastic_mode)
+            'mnist':            MNISTModelBuilder,
+            'cifar10':          Cifar10ModelBuilder,
+            'fashion_mnist':    FashionMnistModelBuilder
         }
 
-        model_builder = model_builders[args.dataset]
+        model_builder = model_builders[args.dataset](stochastic_mode, args.optimizer, args.learning_rate)
 
         (x_train, y_train), (x_test, y_test) = dataset_handler.load_and_preprocess()
 
@@ -145,9 +138,6 @@ class CLIApp:
         model_builder = model_builders[args.dataset]
 
         (x_test, y_test) = dataset_handler.load_and_preprocess()
-
-        #model_path = args.model_path if args.model_path else Evaluator._default_load_path()
-        #logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
 
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
