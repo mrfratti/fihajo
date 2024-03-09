@@ -1,12 +1,9 @@
 import argparse
 import logging
-import os.path
-import pandas as pd
-from sklearn.metrics import classification_report
-from .model_utils import ModelUtils
+import sys
+import time
 from src.visualization.visualization import VisualizeEvaluation
 import numpy as np
-from uncertainty_wizard.models import StochasticMode
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 
@@ -17,42 +14,35 @@ class Evaluator:
     """
     Evaluator class for evaluating a trained model, including support for adversarial evaluation.
     """
-    def __init__(self, args: argparse.Namespace) -> None:
+
+    def __init__(self, model_builder, dataset, args: argparse.Namespace) -> None:
         """
         Initializes the Evaluator object with command-line arguments and loads the trained model.
         :param args: Command-line arguments specifying evaluation parameters.
         """
         self.args = args
-        self.utils = ModelUtils()
-        self.model = self.create_and_load_model(args.model_path)
+        self.model = model_builder.create_model()
+        self.dataset = dataset
 
-    def create_and_load_model(self, model_path: str):
-        """
-        Creates the MNIST model and loads weights from specified path.
-        :param model_path: Path to the model weights.
-        :return: The MNIST model with loaded weights.
-        """
-        stochastic_mode = StochasticMode()
-        model = self.utils.create_mnist_model(stochastic_mode)
-        model_path = self.args.model_path or self._default_load_path()
-        logging.info(f"Loading model weights from {model_path}")
-        model.inner.load_weights(model_path)
-        return model
+        self.load_weights(args.model_path)
 
     @staticmethod
     def _default_load_path() -> str:
-        """
-        Provides a default path for model weight loading if none is specified.
-        :return: A string representing the default model weights path.
-        """
         return 'data/models/model_weights.h5'
+
+    def load_weights(self, model_path=None):
+        if not model_path:
+            model_path = self._default_load_path()
+        self.model.inner.load_weights(model_path)
+        logging.info(f"Model weights loaded from {model_path}")
 
     def evaluate(self):
         """
         Orchestrates the evaluation process, including standard and adversarial evaluation if specified.
         """
-        _, (x_test, y_test) = self.utils.load_and_preprocess_mnist()
+        _, (x_test, y_test) = self.dataset
 
+        self.loading_effect(duration=15, message="Loading model weights")
         self.evaluation(x_test, y_test, plot_results=not self.args.adv_eval)
         if self.args.adv_eval:
             self.adversarial_evaluation(x_test, y_test)
@@ -61,12 +51,13 @@ class Evaluator:
         # Evaluate the model
         loss, acc = self.model.evaluate(x_test, y_test, verbose=1)
         logging.info(f"Evaluation - Loss: {loss * 100:.2f}%, Accuracy: {acc * 100:.2f}%")
+
         if plot_results:
+            visualizer = VisualizeEvaluation()
             y_pred = self.model.predict(x_test)
             y_pred_classes = np.argmax(y_pred, axis=1)
             y_true = np.argmax(y_test, axis=1)
 
-            visualizer = VisualizeEvaluation()
             visualizer.plot_predictions(self.model.inner, x_test, y_true, num_samples=25)
             visualizer.plot_confusion_matrix(y_true, y_pred_classes, classes=[str(i) for i in range(10)])
             visualizer.plot_classification_report(y_true, y_pred_classes)
@@ -93,6 +84,16 @@ class Evaluator:
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
         labels = ['Clean', 'FGSM', 'PGD']
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
+
+    def loading_effect(self, duration=3, message='Evaluating'):
+        print(message, end="")
+        for _ in range(duration):
+            for cursor in '|/-\\':
+                sys.stdout.write(cursor)
+                sys.stdout.flush()
+                time.sleep(0.1)
+                sys.stdout.write('\b')
+        print(" Done!")
 
 
 if __name__ == "__main__":

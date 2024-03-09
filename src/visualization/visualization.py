@@ -98,7 +98,7 @@ class VisualizeEvaluation:
         plt.show()
 
     def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
-        report = classification_report(y_true, y_pred_classes, output_dict=output_dict)
+        report = classification_report(y_true, y_pred_classes, output_dict=output_dict, zero_division=0)
         df_report = pd.DataFrame(report).transpose()
         df_report.drop('support', errors='ignore', inplace=True)
         plt.figure(figsize=(20, 10))

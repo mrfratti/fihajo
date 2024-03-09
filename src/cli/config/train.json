@@ -1,5 +1,6 @@
 {
   "command": "train",
+  "dataset": "mnist",
   "epochs": 5,
   "batch": 1000,
   "adv": false

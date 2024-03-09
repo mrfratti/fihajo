@@ -2,7 +2,8 @@ import argparse
 import logging
 import os
 import platform
-
+import sys
+import time
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ModelCheckpoint, LambdaCallback
@@ -10,8 +11,6 @@ from tensorflow.keras.losses import CategoricalCrossentropy
 from tensorflow.keras.metrics import Mean, SparseCategoricalAccuracy, CategoricalAccuracy
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
-from uncertainty_wizard.models import StochasticMode
-from .model_utils import ModelUtils
 from src.visualization.visualization import VisualizeTraining
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -19,49 +18,51 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 class Trainer:
     """
-    Trainer class for training and evalating a model using both normal and adversarial training methods.
+    Trainer class for training and evaluating a model using both normal and adversarial training methods.
     """
-    def __init__(self, args: argparse.Namespace) -> None:
+    def __init__(self, model_builder, train_dataset, test_dataset, args: argparse.Namespace) -> None:
         """
-        Initializes the Trainer object with command-line arguments and prepares the model for training.
+        Initializes the Trainer object with the model builder, dataset handler, and command-line arguments,
+        and prepares the model for training
         :param args: command-line arguments specifying training parameters.
+        :param model_builder: An instance responsible for building the model
+        :param train_dataset: A tuple containing the training data and labels (x_train, y_train)
+        :param test_dataset: A tuple containing the test data and labels (x_test, y_test)
         """
         self.args = args
-        self.utils = ModelUtils()
-        self.model = self.create_model()
+        self.model = model_builder.create_model()
+        self.train_dataset = train_dataset
+        self.test_dataset = test_dataset
         self.loss_object = CategoricalCrossentropy(from_logits=False)
-
-    def create_model(self):
-        """
-        Creates a MNIST model based on the specified stochastic mode.
-        :return: A TensorFlow model prepared for MNIST training.
-        """
-        stochastic_mode = StochasticMode()
-        return self.utils.create_mnist_model(stochastic_mode)
 
     def train(self):
         """
         Selects the training method based on whether adversarial training is enabled via command-line arguments.
         """
         if self.args.adv:
+            message = "Adversarial training enabled.\n"
+            self.loading_effect(duration=15, message=message)
+            logging.info(f"Starting adversarial training on {self.args.dataset} dataset")
             self.adversarial_training()
         else:
+            message = f"Getting ready for training the model on {self.args.dataset} dataset\n"
+            self.loading_effect(duration=15, message=message)
+            logging.info("Starting training.")
             self.training()
 
     def training(self):
         """
         Executes standard training procedure for the MNIST model, including callbacks for early stopping and logging.
         """
-        logging.info("Starting training...")
+
+        x_train, y_train = self.train_dataset
+
         callbacks = [
             EarlyStopping(patience=3, verbose=1),
             TensorBoard(log_dir='./data/logs', histogram_freq=1),
             LambdaCallback(on_epoch_end=lambda epoch, logs: logging.info(
                 f"Epoch {epoch + 1} completed. Loss: {logs['loss']:.4f}, Accuracy: {logs['accuracy']:.4f}"))
         ]
-
-        # Load and preprocess the MNIST dataset
-        (x_train, y_train), _ = self.utils.load_and_preprocess_mnist()
 
         history = self.model.fit(x_train, y_train,
                                  validation_split=0.1,
@@ -90,8 +91,8 @@ class Trainer:
         else:
             optimizer = tf.keras.optimizers.Adadelta()
 
-        # Load and preprocess the MNIST dataset
-        (x_train, y_train), (x_val, y_val) = self.utils.load_and_preprocess_mnist()
+        x_train, y_train = self.train_dataset
+        x_val, y_val = self.test_dataset
 
         for epoch in range(self.args.epochs):
             print(f"\nEpoch {epoch + 1}/{self.args.epochs}")
@@ -153,7 +154,6 @@ class Trainer:
         user_input = input("Enter a path to save the model or press Enter to use the default path: ").strip()
         save_path = user_input if user_input else self._default_save_path()
         try:
-            #save_path = self.args.save_path or self._default_save_path()
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
             logging.info(f"Model weights saved to: {save_path}")
@@ -166,6 +166,16 @@ class Trainer:
         base_path = 'data/models'
         file_name = 'adv_model_weights.h5' if self.args.adv else 'model_weights.h5'
         return os.path.join(base_path, file_name)
+
+    def loading_effect(self, duration=30, message=""):
+        print(message, end="")
+        for _ in range(duration):
+            for cursor in '|/-\\':
+                sys.stdout.write(cursor)
+                sys.stdout.flush()
+                time.sleep(0.1)  # Adjust sleep time as needed
+                sys.stdout.write('\b')
+        print("Done!")
 
 
 if __name__ == "__main__":

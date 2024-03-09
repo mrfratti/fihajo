@@ -2,6 +2,10 @@ import argparse
 import logging
 import json
 
+import uncertainty_wizard as uwiz
+from uncertainty_wizard.models import StochasticMode
+from src.datasets.dataset_handler import MnistDatasetHandler, Cifar10DatasetHandler, FashionMnistDatasetHandler
+from src.models.model_builders import MNISTModelBuilder, Cifar10ModelBuilder, FashionMnistModelBuilder
 from src.models.train import Trainer
 from src.models.eval import Evaluator
 from src.uncertainty.analyze import Analyzer
@@ -29,6 +33,8 @@ class CLIApp:
 
     def add_train_subparser(self, subparsers):
         parser_train = subparsers.add_parser('train', help='Train the model')
+        parser_train.add_argument('--dataset', type=str, choices=['mnist', 'cifar10', 'fashion_mnist'],
+                                  required=True, help='The dataset to use for training.')
         parser_train.add_argument('--epochs', type=self.check_positive, default=5, help='Number of epochs for '
                                                                                         'training the model')
         parser_train.add_argument('--batch', type=self.check_positive, default=64, help='Batch size for training')
@@ -50,6 +56,8 @@ class CLIApp:
         parser_evaluate = subparsers.add_parser('evaluate', help='Evaluate the model')
         parser_evaluate.add_argument('--model-path', type=str, default=None, help='Path to the the model weights for '
                                                                                   'evaluation')
+        parser_evaluate.add_argument('--dataset', type=str, choices=['mnist', 'cifar10', 'fashion_mnist'],
+                                     required=True, help='The dataset used for training.')
         parser_evaluate.add_argument('--adv-eval', action='store_true', help='Perform adversarial evaluation to test '
                                                                              'model robustness.')
         parser_evaluate.add_argument('--eps', type=self.check_eps, default=0.3, help='Epsilon for adversarial '
@@ -58,6 +66,8 @@ class CLIApp:
 
     def add_analyze_subparser(self, subparsers):
         uncertainty_parser = subparsers.add_parser('analyze', help='Analyze model uncertainty')
+        uncertainty_parser.add_argument('--dataset', type=str, choices=['mnist', 'cifar10', 'fashion_mnist'],
+                                        required=True, help='The dataset used for analysis.')
         uncertainty_parser.add_argument('--model-path', type=str, default=None, help='Path to load the model weights '
                                                                                      'for uncertainty analysis.')
         uncertainty_parser.add_argument('--batch', type=int, default=64, help='Batch size for analyzing.')
@@ -76,24 +86,71 @@ class CLIApp:
         return fvalue
 
     def train(self, args):
+        stochastic_mode = StochasticMode()
+        # Instantiate the correct model builder based on the command line argument
+        dataset_handlers = {
+            'mnist':            MnistDatasetHandler(),
+            'cifar10':          Cifar10DatasetHandler(),
+            'fashion_mnist':    FashionMnistDatasetHandler()
+        }
+
+        dataset_handler = dataset_handlers[args.dataset]
+
+        # Instantiate the correct model builder based on the command line argument
+        model_builders = {
+            'mnist':            MNISTModelBuilder(stochastic_mode),
+            'cifar10':          Cifar10ModelBuilder(stochastic_mode),
+            'fashion_mnist':    FashionMnistModelBuilder(stochastic_mode)
+        }
+
+        model_builder = model_builders[args.dataset]
+
+        (x_train, y_train), (x_test, y_test) = dataset_handler.load_and_preprocess()
+
         try:
-            trainer = Trainer(args)
+            trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
         except Exception as e:
             logging.error(f"An error occurred during training: {e}")
 
     def evaluate(self, args):
-        if not hasattr(args, 'model_path') or not args.model_path:
-            args.model_path = input("Enter the model path for evaluation of press Enter to use the default path: ").strip()
-            if not args.model_path:
-                args.model_path = Evaluator._default_load_path()
+        model_path = args.model_path if hasattr(args, 'model_path') and args.model_path else input(
+            "Enter the model path for analysis or press Enter to use the default path: ").strip()
+        if not model_path:
+            model_path = Evaluator._default_load_path()
+
+        #logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
 
         if not hasattr(args, 'adv_eval'):
             args.adv_eval = False
 
+        stochastic_mode = StochasticMode()
+        # Instantiate the correct model builder based on the command line argument
+        dataset_handlers = {
+            'mnist':            MnistDatasetHandler(),
+            'cifar10':          Cifar10DatasetHandler(),
+            'fashion_mnist':    FashionMnistDatasetHandler()
+        }
+
+        dataset_handler = dataset_handlers[args.dataset]
+
+        # Instantiate the correct model builder based on the command line argument
+        model_builders = {
+            'mnist':            MNISTModelBuilder(stochastic_mode),
+            'cifar10':          Cifar10ModelBuilder(stochastic_mode),
+            'fashion_mnist':    FashionMnistModelBuilder(stochastic_mode)
+        }
+
+        model_builder = model_builders[args.dataset]
+
+        (x_test, y_test) = dataset_handler.load_and_preprocess()
+
+        #model_path = args.model_path if args.model_path else Evaluator._default_load_path()
+        #logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
+
         try:
-            evaluator = Evaluator(args)
+            evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
         except Exception as e:
             logging.error(f"An error occurred during evaluation: {e}")
@@ -105,8 +162,27 @@ class CLIApp:
             model_path = Analyzer._default_load_path()
         batch = getattr(args, 'batch', 64)
 
+        # Instantiate the correct model builder based on the command line argument
+        dataset_handlers = {
+            'mnist':            MnistDatasetHandler(),
+            'cifar10':          Cifar10DatasetHandler(),
+            'fashion_mnist':    FashionMnistDatasetHandler()
+        }
+
+        # Instantiate the correct model builder based on the command line argument
+        model_builders = {
+            'mnist':            MNISTModelBuilder(StochasticMode()),
+            'cifar10':          Cifar10ModelBuilder(StochasticMode()),
+            'fashion_mnist':    FashionMnistModelBuilder(StochasticMode())
+        }
+
+        model_builder = model_builders[args.dataset]
+        dataset_handler = dataset_handlers[args.dataset]
+
+        (x_test, y_test) = dataset_handler.load_and_preprocess()
+
         try:
-            analyzer = Analyzer(model_path=model_path, batch=batch)
+            analyzer = Analyzer(model_builder, (x_test, y_test), batch, args)
             analyzer.analyze()
         except Exception as e:
             logging.error(f"An error occurred during uncertainty analysis: {e}")
@@ -131,30 +207,11 @@ class CLIApp:
         else:
             logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-        #if hasattr(args, 'func'):
-        #    try:
-        #        args.func(args)
-        #    except Exception as e:
-        #        logging.error(f"An error occurred when executing the {args.command} command: {e}")
-        #        self.parser.print_help()
-        #else:
-        #    self.parser.print_help()
-        # ---------------------------------------
-        #if hasattr(args, 'command'):
-        #    if args.command == 'train':
-        #        self.train(args)
-        #    elif args.command == 'evaluate':
-        #        self.evaluate(args)
-        #    elif args.command == 'analyze':
-        #        self.analyze(args)
-        #    else:
-        #        self.parser.print_help()
-        #else:
-        #    self.parser.print_help()
-        if hasattr(self.args, 'command'):
+        if hasattr(self.args, 'command') and self.args.command:
             getattr(self, self.args.command)(self.args)
         else:
             self.parser.print_help()
+            exit(1)
 
 
 if __name__ == "__main__":

@@ -2,13 +2,13 @@ import argparse
 import logging
 import os.path
 import datetime
+import sys
+import time
 import numpy as np
 import tensorflow as tf
 import pandas as pd
 from sklearn.manifold import TSNE
-from src.models.model_utils import ModelUtils
 from src.visualization.visualization import VisualizeUncertainty
-from uncertainty_wizard.models import StochasticMode
 
 
 class Analyzer:
@@ -16,44 +16,41 @@ class Analyzer:
     The Analyzer class is responsible for analyzing a trained model.
     It quantifies uncertainty using various metrics and visualizes them.
     """
-    def __init__(self, model_path: str, batch: int):
+    def __init__(self, model_builder, dataset, batch: int, args: argparse.Namespace):
         """
         Initializes the Analyzer with the model path and batch size.
         :param model_path: Path to the trained model weights.
         :param batch: Batch size for processing data.
         """
-        self.model_path = model_path
+        self.args = args
+        self.model = model_builder.create_model()
+        self.dataset = dataset
         self.batch = batch
-        self.utils = ModelUtils()
-        self.model = self.create_and_load_model(self.model_path)
+        self.load_weights(args.model_path)
         self.quantified_results = None
         self.pcs_mean_softmax_scores = None
         self.entropy_scores = None
         self.mean_softmax_scores = None
         self.pcs_scores = None
 
-    def create_and_load_model(self, model_path: str):
-        """
-        Creates and laods a MNIST model with weights from a specified path.
-        :param model_path: Path to the model weights file.
-        :return: A TensorFlow model with loaded weights.
-        """
-        stochastic_mode = StochasticMode()
-        model = self.utils.create_mnist_model(stochastic_mode)
-        logging.info(f"Loading model weights from {model_path}")
-        model.inner.load_weights(model_path)
-        return model
-
     @staticmethod
-    def _default_load_path():
+    def _default_load_path() -> str:
         return 'data/models/model_weights.h5'
+
+    def load_weights(self, model_path=None):
+        if not model_path:
+            model_path = self._default_load_path()
+        self.model.inner.load_weights(model_path)
+        logging.info(f"Model weights loaded from {model_path}")
 
     def analyze(self):
         """
         Runs the complete analysis, including quantified uncertainty analysis,
         PCS and mean softmax calculation, entropy analysis, and table generation.
         """
-        _, (x_test, y_test) = self.utils.load_and_preprocess_mnist()
+        _, (x_test, y_test) = self.dataset
+
+        self.loading_effect(duration=3, message="Loading model weights")
         self.run_quantified(x_test)
         self.pcs_mean_softmax()
         self.analyze_entropy(x_test)
@@ -124,7 +121,6 @@ class Analyzer:
             print(f"Entropy: {self.entropy_scores[i]:.2f}, Confidence: {predictive_confidence[i]:.2f}")
 
         visualizer = VisualizeUncertainty()
-        # Plot the distribution of entropy scores
         visualizer.plot_dist_entropy_scores(self.entropy_scores)
         visualizer.high_uncertain_inputs(self.entropy_scores, x_test, num_samples=25)
         visualizer.plot_predictive_conf_entropy_scores(predictive_confidence, self.entropy_scores)
@@ -169,6 +165,16 @@ class Analyzer:
         logging.info(f"Tables saved to {output_dir}")
 
         return table
+
+    def loading_effect(self, duration=3, message='Evaluating'):
+        print(message, end="")
+        for _ in range(duration):
+            for cursor in '|/-\\':
+                sys.stdout.write(cursor)
+                sys.stdout.flush()
+                time.sleep(0.1)
+                sys.stdout.write('\b')
+        print(" Done!")
 
 
 if __name__ == "__main__":
