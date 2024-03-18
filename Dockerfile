@@ -4,12 +4,12 @@ USER root
 
 # Why remove the entire apt package lists? 
 RUN apt-get update && \
-  apt-get install -y python3 python3-pip python3-venv && \
+  apt-get install -y python3 python3-pip python3-venv python-is-python3 && \
   ln -s /usr/bin/python3 /usr/bin/python && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* 
+  #apt-get clean && \
+  #rm -rf /var/lib/apt/lists/* 
 
-RUN python3 -m venv /opt/venv
+  RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 
@@ -28,6 +28,8 @@ RUN pip install --no-cache-dir \
   DateTime==5.4 \
   argparse==1.4.0
 
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 
 USER jenkins
+
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+
