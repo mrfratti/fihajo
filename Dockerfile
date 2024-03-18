@@ -28,4 +28,6 @@ RUN pip install --no-cache-dir \
   DateTime==5.4 \
   argparse==1.4.0
 
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+
 USER jenkins
