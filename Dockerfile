@@ -39,6 +39,6 @@ RUN pip install --no-cache-dir \
 USER jenkins
 
 
-WORKDIR "/home/jenkins"
+WORKDIR "/var/jenkins_home/workspace"
 # copy from local machine to docker image
 COPY src/ src/ 
