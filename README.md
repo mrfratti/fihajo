@@ -18,12 +18,11 @@ The tool is containerized using [Docker](https://www.docker.com), ensuring a con
 
 ## Building the Docker Image 
 
-...
-
+docker build -t fihajo .
 
 ## Running the Docker Image
 
-...
+docker run -p 8080:8080 fihajo
 
 
 ## Usage 
