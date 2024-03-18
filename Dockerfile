@@ -2,6 +2,7 @@ FROM jenkins/jenkins:lts
 
 USER root
 
+
 # Why remove the entire apt package lists? 
 RUN apt-get update && \
   apt-get install -y python3 python3-pip python3-venv python-is-python3 && \
@@ -34,3 +35,6 @@ USER jenkins
 
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 
+WORKDIR "/home/jenkins"
+# copy from local machine to docker image
+COPY src/ src/ 
