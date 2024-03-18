@@ -6,19 +6,11 @@ RUN jenkins-plugin-cli --plugins "json-path-api"
 
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 
-
-# Why remove the entire apt package lists? 
 RUN apt-get update && \
   apt-get install -y python3 python3-pip python3-venv python-is-python3 
-#&& \
-#  ln -s /usr/bin/python3 /usr/bin/python  
-# && \ 
-#apt-get clean && \
-#rm -rf /var/lib/apt/lists/* 
 
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-
 
 RUN pip install --no-cache-dir \
   tensorflow==2.15.0 \
@@ -37,7 +29,6 @@ RUN pip install --no-cache-dir \
 
 
 USER jenkins
-
 
 WORKDIR "/var/jenkins_home/workspace"
 # copy from local machine to docker image
