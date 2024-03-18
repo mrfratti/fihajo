@@ -52,5 +52,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 # Contact
 
 - Firat Celebi: firat.celebi@hotmail.com
-- Joakim Hole Polden: joakimpolden@gmail.com
+- Joakim Hole Polden: b3ej8wktk@mozmail.com
 - Harykaran Lambotharan: h.lambotharan@stud.uis.no
