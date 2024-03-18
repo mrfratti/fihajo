@@ -2,6 +2,10 @@ FROM jenkins/jenkins:lts
 
 USER root
 
+RUN jenkins-plugin-cli --plugins "json-path-api"
+
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+
 
 # Why remove the entire apt package lists? 
 RUN apt-get update && \
@@ -34,7 +38,6 @@ RUN pip install --no-cache-dir \
 
 USER jenkins
 
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 
 WORKDIR "/home/jenkins"
 # copy from local machine to docker image
