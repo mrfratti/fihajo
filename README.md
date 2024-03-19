@@ -20,7 +20,7 @@ The tool is containerized using [Docker](https://www.docker.com), ensuring a con
 ```bash
 docker build -t fihajo .
 ```
-## Creating and Running the Docker Image
+## Create and Run the Docker Image
 ```bash
 docker run -p 8080:8080 fihajo
 ```
