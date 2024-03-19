@@ -20,11 +20,14 @@ The tool is containerized using [Docker](https://www.docker.com), ensuring a con
 ```bash
 docker build -t fihajo .
 ```
-## Running the Docker Image
+## Creating and Running the Docker Image
 ```bash
 docker run -p 8080:8080 fihajo
 ```
-
+## Running the Docker Image
+```bash
+docker start image-name
+```
 ## Usage 
 
 <span style="color:red;font-style:italic">Instructions on how to use the command-line tool.</span>
