@@ -1,8 +1,8 @@
 {
   "command": "train",
   "dataset": "mnist",
-  "epochs": 5,
-  "batch": 64,
+  "epochs": 1,
+  "batch": 1000,
   "adv": false,
   "optimizer": "adam",
   "learning_rate": null

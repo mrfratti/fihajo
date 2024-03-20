@@ -2,8 +2,10 @@
   "command": "train",
   "dataset": "mnist",
   "model_path": null,
-  "epochs": 5,
-  "batch": 1000,
+  "epochs": 1,
+  "batch": 64,
   "adv": true,
-  "eps": 0.3
+  "eps": 0.3,
+  "optimizer": null,
+  "learning_rate": null
 }
