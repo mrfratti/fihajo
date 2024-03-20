@@ -17,15 +17,17 @@ The tool is containerized using [Docker](https://www.docker.com), ensuring a con
 
 
 ## Building the Docker Image 
-
-...
-
-
+```bash
+docker build -t fihajo .
+```
+## Create and Run the Docker Image
+```bash
+docker run -p 8080:8080 fihajo
+```
 ## Running the Docker Image
-
-...
-
-
+```bash
+docker start image-name
+```
 ## Usage 
 
 <span style="color:red;font-style:italic">Instructions on how to use the command-line tool.</span>
@@ -53,5 +55,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 # Contact
 
 - Firat Celebi: firat.celebi@hotmail.com
-- Joakim Hole Polden: joakimpolden@gmail.com
+- Joakim Hole Polden: b3ej8wktk@mozmail.com
 - Harykaran Lambotharan: h.lambotharan@stud.uis.no
