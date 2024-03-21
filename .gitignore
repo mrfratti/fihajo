@@ -54,5 +54,7 @@ venv.bak/
 .ipynb_checkpoints
 
 pyproject.toml
+requirements.txt
 poetry.lock
 Archive.txt
+
