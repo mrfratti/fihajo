@@ -60,7 +60,7 @@ pipeline {
                         ]
                     )
     
-                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size}"
+                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size} --dataset mnist"
                 }
             }
         }
@@ -91,7 +91,7 @@ pipeline {
                         ]
                     )
     
-                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size}"
+                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size} --dataset mnist"
                 }
             }
         }
@@ -99,7 +99,7 @@ pipeline {
         
         stage('EVALUATE') {
             steps {
-                sh 'python -m src.cli.main evaluate'
+                sh 'python -m src.cli.main evaluate --dataset mnist'
             }
         }
         
