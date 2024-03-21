@@ -16,7 +16,7 @@ pipeline {
         
         stage('RUN') {
             steps {
-                sh 'python -m src.cli.main train --dataset mnist --epochs 1 --batch 64'
+                 sh 'python -m src.cli.main --config src/cli/config/train.json'
             }
         }
         
