@@ -38,7 +38,7 @@ MANIFEST.in
 pip-wheel-metadata
 /poetry.toml
 
-poetry/core/*
+poetry/*
 
 mnist.csv
 
