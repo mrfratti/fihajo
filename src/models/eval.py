@@ -7,7 +7,9 @@ import numpy as np
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class Evaluator:
@@ -28,7 +30,7 @@ class Evaluator:
 
     @staticmethod
     def _default_load_path() -> str:
-        return 'data/models/model_weights.h5'
+        return "data/models/model.weights.h5"
 
     def load_weights(self, model_path=None):
         if not model_path:
@@ -50,7 +52,9 @@ class Evaluator:
     def evaluation(self, x_test, y_test, plot_results=True):
         # Evaluate the model
         loss, acc = self.model.evaluate(x_test, y_test, verbose=1)
-        logging.info(f"Evaluation - Loss: {loss * 100:.2f}%, Accuracy: {acc * 100:.2f}%")
+        logging.info(
+            f"Evaluation - Loss: {loss * 100:.2f}%, Accuracy: {acc * 100:.2f}%"
+        )
 
         if plot_results:
             visualizer = VisualizeEvaluation()
@@ -58,41 +62,60 @@ class Evaluator:
             y_pred_classes = np.argmax(y_pred, axis=1)
             y_true = np.argmax(y_test, axis=1)
 
-            visualizer.plot_predictions(self.model.inner, x_test, y_true, num_samples=25)
-            visualizer.plot_confusion_matrix(y_true, y_pred_classes, classes=[str(i) for i in range(10)])
+            visualizer.plot_predictions(
+                self.model.inner, x_test, y_true, num_samples=25
+            )
+            visualizer.plot_confusion_matrix(
+                y_true, y_pred_classes, classes=[str(i) for i in range(10)]
+            )
             visualizer.plot_classification_report(y_true, y_pred_classes)
 
     def adversarial_evaluation(self, x_test, y_test):
         # Fast Gradient Sign Method
         loss, acc = self.model.evaluate(x_test, y_test, verbose=1)
-        x_adv_fgsm = fast_gradient_method(self.model.inner, x_test, self.args.eps, np.inf, clip_min=0., clip_max=1.)
+        x_adv_fgsm = fast_gradient_method(
+            self.model.inner, x_test, self.args.eps, np.inf, clip_min=0.0, clip_max=1.0
+        )
         loss_fgsm, acc_fgsm = self.model.evaluate(x_adv_fgsm, y_test, verbose=1)
         predictions_fgsm = self.model.predict(x_adv_fgsm)
-        logging.info(f"Evaluation on FGSM - Loss: {loss_fgsm:.2f}%, Accuracy: {acc_fgsm * 100:.2f}%")
+        logging.info(
+            f"Evaluation on FGSM - Loss: {loss_fgsm:.2f}%, Accuracy: {acc_fgsm * 100:.2f}%"
+        )
 
         # Projected Gradient Descent
-        x_adv_pgd = projected_gradient_descent(self.model.inner, x_test,
-                                               self.args.eps, 0.01, 40,
-                                               np.inf, clip_min=0., clip_max=1.)
+        x_adv_pgd = projected_gradient_descent(
+            self.model.inner,
+            x_test,
+            self.args.eps,
+            0.01,
+            40,
+            np.inf,
+            clip_min=0.0,
+            clip_max=1.0,
+        )
         loss_pgd, acc_pgd = self.model.evaluate(x_adv_pgd, y_test, verbose=1)
         predictions_pgd = self.model.predict(x_adv_pgd)
-        logging.info(f"Evaluation on PGD - Loss: {loss_pgd * 100:.2f}%, Accuracy: {acc_pgd * 100:.2f}%")
+        logging.info(
+            f"Evaluation on PGD - Loss: {loss_pgd * 100:.2f}%, Accuracy: {acc_pgd * 100:.2f}%"
+        )
 
         visualizer = VisualizeEvaluation()
         # Plotting for adversarial evaluation
-        visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, num_samples=25)
+        visualizer.plot_adversarial_examples(
+            self.model, x_test, self.args.eps, num_samples=25
+        )
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
-        labels = ['Clean', 'FGSM', 'PGD']
+        labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
 
-    def loading_effect(self, duration=3, message='Evaluating'):
+    def loading_effect(self, duration=3, message="Evaluating"):
         print(message, end="")
         for _ in range(duration):
-            for cursor in '|/-\\':
+            for cursor in "|/-\\":
                 sys.stdout.write(cursor)
                 sys.stdout.flush()
                 time.sleep(0.1)
-                sys.stdout.write('\b')
+                sys.stdout.write("\b")
         print(" Done!")
 
 
