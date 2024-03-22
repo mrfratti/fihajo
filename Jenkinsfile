@@ -2,26 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('INFO') {
-            steps {
-                script {
-                    echo 'src directory:'
-                    sh 'ls -la src/'
-                    
-                    echo 'src/cli directory:'
-                    sh 'ls -la src/cli/'
-                }
-            }
-        }
-        
-        stage('RUN') {
-            steps {
-                 sh 'python -m src.cli.main --config src/cli/config/train.json'
-            }
-        }
-        
-        
-        
         stage('TRAIN OR ATTACK') {
             steps {
                 script {
@@ -59,8 +39,18 @@ pipeline {
                             string(description: 'Batch size', name: 'BatchSize')
                         ]
                     )
+
+                    def save_path = input(
+                        id: 'userInput',
+                        message: 'Save path:',
+                        defaultValue: null,
+                        parameters: [
+                            string(description: 'Save path', name: 'SavePath')
+                        ]
+                    )
     
-                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size} --dataset mnist"
+                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size} --dataset mnist --save-path ${save_path}"
+
                 }
             }
         }
@@ -99,7 +89,16 @@ pipeline {
         
         stage('EVALUATE') {
             steps {
-                sh 'python -m src.cli.main evaluate --dataset mnist'
+                sh 'python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}'
+
+                def load_path = input(
+                    id: 'userInput',
+                    message: 'Load path',
+                    defaultValue: null,
+                    parameters: [
+                        string(description: 'Path to weights', name:'LoadPath')
+                    ]
+                )
             }
         }
         
