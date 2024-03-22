@@ -43,7 +43,7 @@ pipeline {
                     def save_path = input(
                         id: 'userInput',
                         message: 'Save path:',
-                        defaultValue: '/var/jenkins_home/workspace/test/data/models',
+                        defaultValue: null,
                         parameters: [
                             string(description: 'Save path', name: 'SavePath')
                         ]
@@ -93,7 +93,7 @@ pipeline {
                     def load_path = input(
                         id: 'userInput',
                         message: 'Load path',
-                        defaultValue: '/var/jenkins_home/workspace/test/data/models',
+                        defaultValue: null,
                         parameters: [
                             string(description: 'Path to weights', name:'LoadPath')
                         ]
