@@ -30,7 +30,8 @@ pipeline {
                     def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
                     def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
                     def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue: 'models/mnist_model.h5', description: 'Model save path', name: 'savePath')])
-
+                }
+                docker.image('firats-tensorflow-jenkins:latest').inside {
                     sh "python -m src.cli.main train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
                 }
             }
@@ -52,6 +53,8 @@ pipeline {
             steps {
                 script {
                     def load_path = input(id: 'userInputLoadPath', message: 'Enter the load path for model weights:', parameters: [string(description: 'Model load path', name: 'loadPath', defaultValue: 'models/mnist_model.h5')])
+                }
+                docker.image('firats-tensorflow-jenkins:latest').inside {
                     sh "python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}"
                 }
             }
