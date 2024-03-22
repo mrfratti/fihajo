@@ -99,7 +99,7 @@ pipeline {
         
         stage('EVALUATE') {
             steps {
-                sh 'python -m src.cli.main evaluate --dataset mnist'
+                sh 'python -m src.cli.main --config src/cli/config/evaluate.json'
             }
         }
         
