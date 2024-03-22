@@ -2,104 +2,57 @@ pipeline {
     agent any
 
     stages {
-        stage('TRAIN OR ATTACK') {
+        stage('Setup') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Train or Attack') {
             steps {
                 script {
-                    env.stage_choice = input(id: 'userInput', 
-                    message: 'Choose:', 
-                    parameters: [choice(name: 'STAGE OPTION:', 
-                    choices: ['Train', 'Attack'], 
-                    description: 'Select stage!')])
+                    env.stage_choice = input(id: 'userInput',
+                                             message: 'Choose action:',
+                                             parameters: [choice(name: 'STAGE OPTION',
+                                                                 choices: ['Train', 'Attack'],
+                                                                 description: 'Select stage')])
                 }
             }
         }
-        
+
         stage('TRAIN') {
             when {
                 expression { return env.stage_choice == 'Train' }
             }
             steps {
                 echo 'Running Train...'
-                
                 script {
-                    def epochs = input(
-                        id: 'userInput',
-                        message: 'Number of epochs:',
-                        defaultValue: '10',
-                        parameters: [
-                            string(description: 'Number of epochs', name: 'Epochs')
-                        ]
-                    )
-    
-                    def batch_size = input(
-                        id: 'userInput',
-                        message: 'Batch size:',
-                        defaultValue: '1000',
-                        parameters: [
-                            string(description: 'Batch size', name: 'BatchSize')
-                        ]
-                    )
+                    def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
+                    def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
+                    def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue: 'models/mnist_model.h5', description: 'Model save path', name: 'savePath')])
 
-                    def save_path = input(
-                        id: 'userInput',
-                        message: 'Save path:',
-                        defaultValue: null,
-                        parameters: [
-                            string(description: 'Save path', name: 'SavePath')
-                        ]
-                    )
-    
-                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size} --dataset mnist --save-path ${save_path}"
-
+                    sh "python -m src.cli.main train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
                 }
             }
         }
-        
+
         stage('ATTACK') {
             when {
                 expression { return env.stage_choice == 'Attack' }
             }
             steps {
                 echo 'Running Attack...'
-                
                 script {
-                    def epochs = input(
-                        id: 'userInput',
-                        message: 'Number of epochs:',
-                        defaultValue: '10',
-                        parameters: [
-                            string(description: 'Number of epochs', name: 'Epochs')
-                        ]
-                    )
-    
-                    def batch_size = input(
-                        id: 'userInput',
-                        message: 'Batch size:',
-                        defaultValue: '1000',
-                        parameters: [
-                            string(description: 'Batch size', name: 'BatchSize')
-                        ]
-                    )
-    
-                    sh "python -m src.cli.main train --epochs ${epochs} --batch ${batch_size} --dataset mnist"
+                    sh "echo Attack stage is not yet implemented"
                 }
             }
         }
-        
-        
+
         stage('EVALUATE') {
             steps {
                 script {
-                    def load_path = input(
-                        id: 'userInput',
-                        message: 'Load path',
-                        defaultValue: null,
-                        parameters: [
-                            string(description: 'Path to weights', name:'LoadPath')
-                        ]
-                    )
-
-                sh 'python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}'
+                    def load_path = input(id: 'userInputLoadPath', message: 'Enter the load path for model weights:', parameters: [string(description: 'Model load path', name: 'loadPath', defaultValue: 'models/mnist_model.h5')])
+                    sh "python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}"
                 }
             }
         }
@@ -107,11 +60,11 @@ pipeline {
         stage('HTML Report') {
             steps {
                 publishHTML target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: false,
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: 'reports',
-                    reportFiles: 'report_1.html',
+                    reportFiles: 'index.html',
                     reportName: "HTML Report"
                 ]
             }
