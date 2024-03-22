@@ -43,7 +43,7 @@ pipeline {
                     def save_path = input(
                         id: 'userInput',
                         message: 'Save path:',
-                        defaultValue: null,
+                        defaultValue: '/var/jenkins_home/workspace/test/data/models',
                         parameters: [
                             string(description: 'Save path', name: 'SavePath')
                         ]
@@ -89,19 +89,21 @@ pipeline {
         
         stage('EVALUATE') {
             steps {
-                sh 'python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}'
+                script {
+                    def load_path = input(
+                        id: 'userInput',
+                        message: 'Load path',
+                        defaultValue: '/var/jenkins_home/workspace/test/data/models',
+                        parameters: [
+                            string(description: 'Path to weights', name:'LoadPath')
+                        ]
+                    )
 
-                def load_path = input(
-                    id: 'userInput',
-                    message: 'Load path',
-                    defaultValue: null,
-                    parameters: [
-                        string(description: 'Path to weights', name:'LoadPath')
-                    ]
-                )
+                sh 'python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}'
+                }
             }
         }
-        
+
         stage('HTML Report') {
             steps {
                 publishHTML target: [
