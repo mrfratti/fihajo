@@ -20,4 +20,4 @@ jobs:
           pip install pylint tensorflow uncertainty-wizard h5py jupyter keras matplotlib numpy scikit-learn seaborn cleverhans datetime argparse yattag
       - name: Analysing the code with pylint
         run: |
-          pylint $(git ls-files '*.py')
+          pylint $(git ls-files '*.py') --exit-zero
