@@ -16,6 +16,7 @@ class Analyzer:
     The Analyzer class is responsible for analyzing a trained model.
     It quantifies uncertainty using various metrics and visualizes them.
     """
+
     def __init__(self, model_builder, dataset, batch: int, args: argparse.Namespace):
         """
         Initializes the Analyzer with the model path and batch size.
@@ -35,7 +36,7 @@ class Analyzer:
 
     @staticmethod
     def _default_load_path() -> str:
-        return 'data/models/model_weights.h5'
+        return "data/models/model_weights.h5"
 
     def load_weights(self, model_path=None):
         if not model_path:
@@ -62,12 +63,14 @@ class Analyzer:
         :param x_test: (np.array): Test dataset inputs.
         """
         if self.quantified_results is None:
-            quantifiers = ['pcs', 'mean_softmax', 'predictive_entropy']
-            self.quantified_results = self.model.predict_quantified(x_test,
-                                                                    quantifier=quantifiers,
-                                                                    batch_size=self.batch,
-                                                                    sample_size=32,
-                                                                    verbose=1)
+            quantifiers = ["pcs", "mean_softmax", "predictive_entropy"]
+            self.quantified_results = self.model.predict_quantified(
+                x_test,
+                quantifier=quantifiers,
+                batch_size=self.batch,
+                sample_size=32,
+                verbose=1,
+            )
 
             # Extract the results from the quantified tuples
             self.pcs_scores = self.quantified_results[0][1]
@@ -92,8 +95,10 @@ class Analyzer:
         predictive_confidence = np.max(self.model.predict(x_test), axis=1)
 
         # Extracting features from second last layer (dense) for t-SNE visualization
-        feature_model = tf.keras.Model(inputs=self.model.inner.inputs,
-                                       outputs=self.model.inner.get_layer('dense').output)
+        feature_model = tf.keras.Model(
+            inputs=self.model.inner.inputs,
+            outputs=self.model.inner.get_layer("dense").output,
+        )
 
         features = feature_model.predict(x_test)
         tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
@@ -113,17 +118,23 @@ class Analyzer:
         # Print confidence and entropy for the most uncertain samples
         print("\nMost uncertain samples:")
         for i in np.argsort(self.entropy_scores)[-5:]:
-            print(f"Entropy: {self.entropy_scores[i]:.2f}, Confidence: {predictive_confidence[i]:.2f}")
+            print(
+                f"Entropy: {self.entropy_scores[i]:.2f}, Confidence: {predictive_confidence[i]:.2f}"
+            )
 
         # Print confidence and entropy for the first 5 samples
         print("\nConfidence and entropy score for the first 5 samples:")
         for i in range(5):
-            print(f"Entropy: {self.entropy_scores[i]:.2f}, Confidence: {predictive_confidence[i]:.2f}")
+            print(
+                f"Entropy: {self.entropy_scores[i]:.2f}, Confidence: {predictive_confidence[i]:.2f}"
+            )
 
         visualizer = VisualizeUncertainty()
         visualizer.plot_dist_entropy_scores(self.entropy_scores)
         visualizer.high_uncertain_inputs(self.entropy_scores, x_test, num_samples=25)
-        visualizer.plot_predictive_conf_entropy_scores(predictive_confidence, self.entropy_scores)
+        visualizer.plot_predictive_conf_entropy_scores(
+            predictive_confidence, self.entropy_scores
+        )
         visualizer.plot_tsne_entropy(tsne_results, self.entropy_scores)
 
     def table_generator(self, x_test, y_test):
@@ -133,25 +144,32 @@ class Analyzer:
         :param y_test:(np.array): Test dataset labels.
         """
         true_labels = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
-        predicted_labels = np.argmax(self.model.predict(x_test), axis=1)  # y_pred_classes
-        #self.pcs_scores = -self.pcs_scores
-        #self.mean_softmax_scores = -self.mean_softmax_scores
+        predicted_labels = np.argmax(
+            self.model.predict(x_test), axis=1
+        )  # y_pred_classes
+        # self.pcs_scores = -self.pcs_scores
+        # self.mean_softmax_scores = -self.mean_softmax_scores
         # predictive_confidence = np.max(self.model.predict(x_test), axis=1) # Mean Softmax Probability
 
         # Create a table with the following columns
-        table = pd.DataFrame({'True Label': true_labels,
-                              'Predicted Label': predicted_labels,
-                              'Predictive Confidence': self.pcs_scores,
-                              'Mean Softmax Probability': self.mean_softmax_scores,
-                              'Prediction Entropy': self.entropy_scores
-                              })
+        table = pd.DataFrame(
+            {
+                "True Label": true_labels,
+                "Predicted Label": predicted_labels,
+                "Predictive Confidence": self.pcs_scores,
+                "Mean Softmax Probability": self.mean_softmax_scores,
+                "Prediction Entropy": self.entropy_scores,
+            }
+        )
 
         # sort the table by predictive entropy
-        table = table.sort_values(by='Prediction Entropy', ascending=False)
+        table = table.sort_values(by="Prediction Entropy", ascending=False)
         print(table.head(10))
 
-        save_path = input("Enter the path to save the tables or press Enter to use the default path: ").strip()
-        output_dir = save_path if save_path else 'data/tables'
+        save_path = input(
+            "Enter the path to save the tables or press Enter to use the default path: "
+        ).strip()
+        output_dir = save_path if save_path else "data/tables"
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -166,16 +184,12 @@ class Analyzer:
 
         return table
 
-    def loading_effect(self, duration=3, message='Evaluating'):
+    def loading_effect(self, duration=3, message="Evaluating"):
         print(message, end="")
         for _ in range(duration):
-            for cursor in '|/-\\':
+            for cursor in "|/-\\":
                 sys.stdout.write(cursor)
                 sys.stdout.flush()
                 time.sleep(0.1)
-                sys.stdout.write('\b')
+                sys.stdout.write("\b")
         print(" Done!")
-
-
-if __name__ == "__main__":
-    pass

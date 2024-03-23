@@ -1,7 +1,6 @@
 import argparse
 import logging
 import json
-import uncertainty_wizard as uwiz
 from uncertainty_wizard.models import StochasticMode
 from src.datasets.dataset_handler import (
     MnistDatasetHandler,
