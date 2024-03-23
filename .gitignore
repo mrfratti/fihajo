@@ -58,4 +58,5 @@ requirements.txt
 poetry.lock
 Archive.txt
 data/*
+.html
 

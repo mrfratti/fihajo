@@ -1,0 +1,33 @@
+html, body {
+    margin: 0;
+    padding: 0;
+
+}
+body {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
+    grid-template-rows: repeat(8,auto);
+  }
+
+header,
+footer {
+  position: sticky;
+  background-image: linear-gradient(
+    to right,
+    rgb(0, 61, 141),
+    rgb(0, 122, 151)
+  );
+}
+.section{
+    width:70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+main{
+
+    background-color: beige;
+}
+main img {
+    width: 50%;
+}
