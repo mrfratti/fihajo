@@ -6,25 +6,14 @@ import sys
 import time
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.callbacks import (
-    EarlyStopping,
-    TensorBoard,
-    ModelCheckpoint,
-    LambdaCallback,
-)
+from tensorflow.keras.callbacks import EarlyStopping, TensorBoard, ModelCheckpoint, LambdaCallback
 from tensorflow.keras.losses import CategoricalCrossentropy
-from tensorflow.keras.metrics import (
-    Mean,
-    SparseCategoricalAccuracy,
-    CategoricalAccuracy,
-)
+from tensorflow.keras.metrics import Mean, SparseCategoricalAccuracy, CategoricalAccuracy
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.visualization.visualization import VisualizeTraining
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class Trainer:
@@ -32,9 +21,7 @@ class Trainer:
     Trainer class for training and evaluating a model using both normal and adversarial training methods.
     """
 
-    def __init__(
-        self, model_builder, train_dataset, test_dataset, args: argparse.Namespace
-    ) -> None:
+    def __init__(self, model_builder, train_dataset, test_dataset, args: argparse.Namespace) -> None:
         """
         Initializes the Trainer object with the model builder, dataset handler, and command-line arguments,
         and prepares the model for training
@@ -56,14 +43,10 @@ class Trainer:
         if self.args.adv:
             message = "Adversarial training enabled.\n"
             self.loading_effect(duration=15, message=message)
-            logging.info(
-                f"Starting adversarial training on {self.args.dataset} dataset"
-            )
+            logging.info(f"Starting adversarial training on {self.args.dataset} dataset")
             self.adversarial_training()
         else:
-            message = (
-                f"Getting ready for training the model on {self.args.dataset} dataset\n"
-            )
+            message = f"Getting ready for training the model on {self.args.dataset} dataset\n"
             self.loading_effect(duration=15, message=message)
             logging.info("Starting training.")
             self.training()
