@@ -1,4 +1,6 @@
+import datetime
 from yattag import Doc
+
 
 doc, tag, text = Doc().tagtext()
 
@@ -12,7 +14,7 @@ class htmlReport:
     def generate(self):
         with tag("html"):
             with tag("head"):
-                doc.stag("link", rel="stylesheet", href="./style.css")
+                doc.stag("link", rel="stylesheet", href="../report/style.css")
             with tag("body"):
                 with tag("main"):
                     if len(self._inputApi) < 1:
@@ -30,20 +32,14 @@ class htmlReport:
 
     @property
     def setData(self, data):
-        self._ = data
+        self._data = data
 
-    def writeHtml(self):
+    def writeHtml(self, filename="report"):
         try:
-            file = open("report.html", "w", encoding="UTF()")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+            filename = f"{filename}_{timestamp}.html"
+            file = open(f"./report/{filename}", "w", encoding="UTF()")
             file.write(self.generate())
             file.close()
         except Exception as e:
             print(f"En feil oppstod {e}")
-
-
-testdata = {
-    "header": "bilde",
-    "image": "../../data/plots/training/val_acc_and_loss_20240322-191851.png",
-    "text": "Dette er en test",
-}
-test = htmlReport([testdata, testdata, testdata]).writeHtml()

@@ -7,7 +7,9 @@ import numpy as np
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class Evaluator:
@@ -115,7 +117,3 @@ class Evaluator:
                 time.sleep(0.1)
                 sys.stdout.write("\b")
         print(" Done!")
-
-
-if __name__ == "__main__":
-    pass
