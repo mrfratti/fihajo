@@ -6,7 +6,6 @@ doc, tag, text = Doc().tagtext()
 
 
 class htmlReport:
-
     # Contstructor
     def __init__(self, inputApi=[]):
         self._inputApi = inputApi
