@@ -1,5 +1,6 @@
 import datetime
 import os
+from matplotlib.testing import set_font_settings_for_testing
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -15,47 +16,51 @@ class VisualizeTraining:
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plotFileNames = []
 
-    def plot_training_results(self, history):
-        # Plot training & validation accuracy and loss
-        # Accuracy
-        plt.figure(dpi=1200)
+    def _plot_results_accuracy(
+        self, history, title="Training Accuracy", xlabel="Epoch", ylabel="Accuracy"
+    ):
+        """Plot training & validation accuracy"""
         plt.subplot(1, 2, 1)
         plt.plot(history.history["accuracy"], label="Train Accuracy")
         plt.plot(history.history["val_accuracy"], label="Validation Accuracy")
-        plt.title("Model Accuracy")
-        plt.ylabel("Accuracy")
-        plt.xlabel("Epoch")
+        plt.title(title)
+        plt.ylabel(ylabel)
+        plt.xlabel(xlabel)
         plt.legend()
 
-        # Loss
+    def _plot_results_loss(
+        self, history, title="Model loss", xlabel="Epoch", ylabel="Loss"
+    ):
+        """Plot training & validation loss"""
         plt.subplot(1, 2, 2)
         plt.plot(history.history["loss"], label="Train Loss")
         plt.plot(history.history["val_loss"], label="Validation Loss")
-        plt.title("Model Loss")
-        plt.ylabel("Loss")
-        plt.xlabel("Epoch")
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
         plt.legend()
+
+    def plot_training_results(self, history):
+        # Plot training & validation accuracy and loss
+        plt.figure(dpi=1200)
+        # Accuracy
+        self._plot_results_accuracy(history)
+        # Loss
+        self._plot_results_loss(history)
         filename = self._save_plot("val_acc_and_loss")
         plt.show()
         self._plotFileNames.append({"training": filename})
 
     def plot_adversarial_training_results(self, history):
+        """_summary_"""
         plt.figure(dpi=1200)
-        plt.subplot(1, 2, 1)
-        plt.plot(history["accuracy"], label="Train Accuracy")
-        plt.plot(history["val_accuracy"], label="Validation Accuracy")
-        plt.xlabel("Epoch")
-        plt.ylabel("Accuracy")
-        plt.title("Adversarial Training Accuracy")
-        plt.legend()
 
-        plt.subplot(1, 2, 2)
-        plt.plot(history["loss"], label="Train Loss")
-        plt.plot(history["val_loss"], label="Validation Loss")
-        plt.xlabel("Epoch")
-        plt.ylabel("Loss")
-        plt.title("Adversarial Training Loss")
-        plt.legend()
+        # Accuracy
+        self._plot_results_accuracy(history, title="Adversarial Training Accuracy")
+
+        # loss
+        self._plot_results_loss(history, title="Adversarial Training Loss")
+
         filename = self._save_plot("adv_train_acc_loss")
         plt.show()
         self._plotFileNames.append({"adversarialTraining": filename})
@@ -76,6 +81,7 @@ class VisualizeEvaluation:
     def __init__(self, plot_dir="data/plots/evaluation"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
+        self._plotFileNames = []
 
     def plot_predictions(self, model, x_test, y_true, num_samples=25):
         predictions = model.predict(x_test[:num_samples])
@@ -195,6 +201,7 @@ class VisualizeEvaluation:
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
+        return filename
 
 
 class VisualizeUncertainty:
