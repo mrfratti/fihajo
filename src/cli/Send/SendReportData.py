@@ -25,13 +25,13 @@ class SendReportData:
     def send(self, report_location="", report_filename=""):
         images = []
 
-        for image in self._fileNames:
+        for image in self._filenames:
             if image["training"]:
                 images.append(
                     {
                         "image_header": "Training",
-                        "image_location": f"../data/plots/training/{image['training']}",
-                        "text": "lorem ipsum",
+                        "image_location": f"training/{image['training']}",
+                        "about_image": "lorem ipsum",
                     }
                 )
         ReportGenApi(

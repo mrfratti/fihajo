@@ -22,16 +22,16 @@ class ImageData:
             raise TypeError("Image location needs to be a string")
         if len(location) < 1:
             raise ValueError("Missing input for image location")
-        self._report_store_location = location
+        self._image_location = f"../../data/plots/{location}"
 
     @about_image.setter  # noqa: F821
     def about_image(self, text):
         if not isinstance(text, str):
             raise TypeError("info about the image needs to be a string")
-        self._report_store_location = text
+        self._about_image = text
 
     @header_image.setter  # noqa: F821
     def header_image(self, text):
         if not isinstance(text, str):
             raise TypeError("header for image needs to be a string")
-        self._report_store_location = text
+        self._header_image = text

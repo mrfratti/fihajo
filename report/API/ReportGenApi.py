@@ -10,10 +10,10 @@ class ReportGenApi:
         self._report.filename = report_filename
         self._generator = HtmlGenerator()
         self._generator.html_report = self._report
-        self._generator.image_data = self._image
         for image in images:
-            imagedata = ImageData()
-            imagedata.header_image = image["image_header"]
-            imagedata.image_location = image["image_location"]
-            imagedata.about_image = image["about_image"]
+            image_data = ImageData()
+            image_data.header_image = image["image_header"]
+            image_data.image_location = image["image_location"]
+            image_data.about_image = image["about_image"]
+            self._generator.image_data = image_data
         self._generator.writeHtml()

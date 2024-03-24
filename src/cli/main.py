@@ -294,6 +294,7 @@ class CLIApp:
             try:
                 send = SendReportData()
                 send.filenames = self._plotFileNames
+                send.send()
             except ValueError as e:
                 logging.warning(e)
                 pass

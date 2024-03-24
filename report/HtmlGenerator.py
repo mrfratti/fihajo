@@ -13,7 +13,7 @@ doc, tag, text = Doc().tagtext()
 class HtmlGenerator:
     def __init__(self):
         self._image_data_list = []
-        self._html_report
+        self._html_report = HtmlData()
 
     @property
     def image_data(self):
@@ -52,16 +52,16 @@ class HtmlGenerator:
                         for data in self._image_data_list:
                             with tag("div", klass="section"):
                                 with tag("h1"):
-                                    text(ImageData.header_image)
-                                doc.stag(
-                                    "img", src=ImageData.image_location, klass="photo"
-                                )
+                                    text(data.header_image)
+                                doc.stag("img", src=data.image_location, klass="photo")
                                 with tag("p"):
-                                    text(ImageData.about_image)
+                                    text(data.about_image)
         return doc.getvalue()
 
     def writeHtml(self):
         try:
+            if len(self._image_data_list) < 1:
+                logging.warning(format.message("No images where supplied"))
             file = open(
                 f"{self._html_report.html_store_location}{self._html_report.filename}",
                 "w",

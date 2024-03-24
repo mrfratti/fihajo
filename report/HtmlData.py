@@ -14,7 +14,7 @@ class HtmlData:
     def filename(self, filename):
         if not isinstance(filename, str):
             raise TypeError("filename for html report needs to be a string")
-        if filename < 1:
+        if len(filename) < 1:
             timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             self._filename = f"{filename}_{timestamp}.html"
         else:
