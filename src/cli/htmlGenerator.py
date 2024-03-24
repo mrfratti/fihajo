@@ -1,5 +1,7 @@
 import datetime
+import logging
 from yattag import Doc
+from src.cli.stringformat import String_Format as format
 
 
 doc, tag, text = Doc().tagtext()
@@ -29,10 +31,6 @@ class htmlReport:
                                     text(data["text"])
         return doc.getvalue()
 
-    @property
-    def setData(self, data):
-        self._data = data
-
     def writeHtml(self, filename="report"):
         try:
             timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -41,4 +39,4 @@ class htmlReport:
             file.write(self.generate())
             file.close()
         except Exception as e:
-            print(f"En feil oppstod {e}")
+            logging.warning(format.message(f"En feil oppstod {e}"))

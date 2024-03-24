@@ -1,6 +1,6 @@
 import datetime
+import logging
 import os
-from matplotlib.testing import set_font_settings_for_testing
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -8,6 +8,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 import numpy as np
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
+from src.cli.stringformat import String_Format as format
 
 
 class VisualizeTraining:
@@ -75,7 +76,11 @@ class VisualizeTraining:
 
     @property
     def GetPlotFileNames(self):
-        return self._plotFileNames
+        filenames = self._plotFileNames
+        if isinstance(filenames, list) and len(filenames) < 1:
+            logging.warning(format.message("missing filenames for plots"))
+            return
+        return filenames
 
 
 class VisualizeEvaluation:
@@ -95,8 +100,9 @@ class VisualizeEvaluation:
             plt.title(f"True: {y_true[i]}, Predicted: {predicted_labels[i]}")
             plt.axis("off")
         plt.tight_layout()
-        self._save_plot("predictions")
+        filename = self._save_plot("predictions")
         plt.show()
+        self._plotFileNames.append({"predictions": filename})
 
     def plot_confusion_matrix(self, y_true, y_pred, classes):
         # Compute confusion matrix
@@ -115,9 +121,9 @@ class VisualizeEvaluation:
         plt.title("Confusion Matrix")
         plt.ylabel("True Label")
         plt.xlabel("Predicted Label")
-
-        self._save_plot("confusion_matrix")
+        filename = self._save_plot("confusion_matrix")
         plt.show()
+        self._plotFileNames.append({"confuision_matrix": filename})
 
     def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
         report = classification_report(
@@ -133,8 +139,9 @@ class VisualizeEvaluation:
             fmt=".2f",
         )
         plt.title("Classification Report")
-        self._save_plot("classification_report")
+        filename = self._save_plot("classification_report")
         plt.show()
+        self._plotFileNames.append({"classification_report": filename})
 
     def plot_adversarial_examples(self, model, x_test, eps, num_samples=25):
         # Generate FGSM adversarial examples
@@ -178,8 +185,9 @@ class VisualizeEvaluation:
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
 
-        self._save_plot("adv_examples")
+        filename = self._save_plot("adv_examples")
         plt.show()
+        self._plotFileNames.append({"adverserial_ex": filename})
 
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
         plt.figure(figsize=(8, 6))
@@ -194,8 +202,9 @@ class VisualizeEvaluation:
         for i, acc in enumerate(accuracies):
             plt.text(i, acc + 2, f"{acc:.2f}", ha="center", va="bottom")
 
-        self._save_plot("accuracy_comparison")
+        filename = self._save_plot("accuracy_comparison")
         plt.show()
+        self._plotFileNames.append({"accuracy_comparison": filename})
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -203,6 +212,14 @@ class VisualizeEvaluation:
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
         return filename
+
+    @property
+    def GetPlotFileNames(self):
+        filenames = self._plotFileNames
+        if isinstance(filenames, list) and len(filenames) < 1:
+            logging.warning(format.message("missing filenames for plots"))
+            return
+        return filenames
 
 
 class VisualizeUncertainty:
@@ -227,8 +244,9 @@ class VisualizeUncertainty:
         plt.ylabel("Frequency")
         plt.title("Distribution of Mean Softmax Scores")
         plt.tight_layout()
-        self._save_plot("pcs_meansoftmax")
+        filename = self._save_plot("pcs_meansoftmax")
         plt.show()
+        self._plotFileNames.append({"pcs_meansoftmax": filename})
 
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
@@ -248,8 +266,9 @@ class VisualizeUncertainty:
         plt.ylabel("Frequency")
         plt.title("Distribution of PCS and Mean Softmax Scores")
         plt.legend()
-        self._save_plot("dist_pcs_meansoftmax")
+        filename = self._save_plot("dist_pcs_meansoftmax")
         plt.show()
+        self._plotFileNames.append({"distrubution_meansoftmax": filename})
 
     def plot_pcs_ms_inverse(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
@@ -300,8 +319,9 @@ class VisualizeUncertainty:
         plt.title("Distribution of Mean Softmax Scores as Uncertainty", fontsize=18)
         plt.legend()
         plt.tight_layout()
-        self._save_plot("pcs_ms_inverse")
+        filename = self._save_plot("pcs_ms_inverse")
         plt.show()
+        self._plotFileNames.append({"pcs_inverse": filename})
 
     def plot_dist_entropy_scores(self, entropy_scores):
         plt.figure(figsize=(20, 10))
@@ -319,8 +339,9 @@ class VisualizeUncertainty:
         plt.ylabel("Frequency", fontsize=14)
         plt.title("Histogram of Predictive Entropy", fontsize=18)
         plt.legend()
-        self._save_plot("dist_entropy")
+        filename = self._save_plot("dist_entropy")
         plt.show()
+        self._plotFileNames.append({"entropy_distrubution": filename})
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
         # Sort the indices of the entropy scores in descending order
@@ -334,8 +355,9 @@ class VisualizeUncertainty:
             plt.title(f"Entropy: {entropy_scores[sorted_indices[i]]:.2f}")
             plt.axis("off")
         plt.tight_layout()
-        self._save_plot("high_uncertain_inputs")
+        filename = self._save_plot("high_uncertain_inputs")
         plt.show()
+        self._plotFileNames.append({"higly_uncertain_inputs": filename})
 
     def plot_predictive_conf_entropy_scores(
         self, predictive_confidence, entropy_scores
@@ -352,8 +374,9 @@ class VisualizeUncertainty:
         plt.xlabel("Predictive Confidence")
         plt.ylabel("Entropy Score")
         plt.title("Predictive Confidence vs Entropy Score")
-        self._save_plot("pred_vs_entropy")
+        filename = self._save_plot("pred_vs_entropy")
         plt.show()
+        self._plotFileNames.append({"prediction_vs_entrophy": filename})
 
     def plot_tsne_entropy(self, tsne_results, entropy_scores):
         # Plot the t-SNE results
@@ -370,11 +393,21 @@ class VisualizeUncertainty:
         plt.xlabel("t-SNE Dimension 1")
         plt.ylabel("t-SNE Dimension 2")
         plt.title("t-SNE Visualization of Predictive Entropy")
-        self._save_plot("tsne_entropy")
+        filename = self._save_plot("tsne_entropy")
         plt.show()
+        self._plotFileNames.append({"tsne_entropy": filename})
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
+        return filename
+
+    @property
+    def GetPlotFileNames(self):
+        filenames = self._plotFileNames
+        if isinstance(filenames, list) and len(filenames) < 1:
+            logging.warning(format.message("missing filenames for plots"))
+            return
+        return filenames

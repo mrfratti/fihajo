@@ -24,9 +24,6 @@ class CLIApp:
         self._plotFileNames = []
 
     def _appendPlotFileNames(self, fileNameList=[]):
-        if len(fileNameList) < 1:
-            logging.warn("FileNames missing")
-            return
         for filename in fileNameList:
             self._plotFileNames.append(filename)
 
