@@ -16,37 +16,39 @@ class VisualizeTraining:
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plotFileNames = []
 
-    def _plot_results_accuracy(
-        self, history, title="Training Accuracy", xlabel="Epoch", ylabel="Accuracy"
+    def _plot_results(
+        self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]
     ):
         """Plot training & validation accuracy"""
-        plt.subplot(1, 2, 1)
-        plt.plot(history.history["accuracy"], label="Train Accuracy")
-        plt.plot(history.history["val_accuracy"], label="Validation Accuracy")
+        if mode == "accuracy":
+            plt.subplot(1, 2, 1)
+            historytags.append({"data": "accuracy", "label": "Train Accuracy"})
+            historytags.append({"data": "val_accuracy", "label": "Validation Accuracy"})
+            ylabel = "Accuracy"
+        if mode == "loss":
+            plt.subplot(1, 2, 2)
+            historytags.append({"data": "loss", "label": "Train Loss"})
+            historytags.append({"data": "val_loss", "label": "Validation Loss"})
+            ylabel = "Loss"
+        for tag in historytags:
+            plt.plot(history.history[tag["data"]], label=tag["label"])
+        historytags.clear()
         plt.title(title)
         plt.ylabel(ylabel)
         plt.xlabel(xlabel)
-        plt.legend()
-
-    def _plot_results_loss(
-        self, history, title="Model loss", xlabel="Epoch", ylabel="Loss"
-    ):
-        """Plot training & validation loss"""
-        plt.subplot(1, 2, 2)
-        plt.plot(history.history["loss"], label="Train Loss")
-        plt.plot(history.history["val_loss"], label="Validation Loss")
-        plt.title(title)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
         plt.legend()
 
     def plot_training_results(self, history):
         # Plot training & validation accuracy and loss
         plt.figure(dpi=1200)
         # Accuracy
-        self._plot_results_accuracy(history)
+        self._plot_results(
+            history,
+            mode="accuracy",
+            title="Training Accuracy",
+        )
         # Loss
-        self._plot_results_loss(history)
+        self._plot_results(history, mode="loss", title="Model loss")
         filename = self._save_plot("val_acc_and_loss")
         plt.show()
         self._plotFileNames.append({"training": filename})
@@ -54,13 +56,12 @@ class VisualizeTraining:
     def plot_adversarial_training_results(self, history):
         """_summary_"""
         plt.figure(dpi=1200)
-
         # Accuracy
-        self._plot_results_accuracy(history, title="Adversarial Training Accuracy")
-
+        self._plot_results(
+            history, mode="accuracy", title="Adversarial Training Accuracy"
+        )
         # loss
-        self._plot_results_loss(history, title="Adversarial Training Loss")
-
+        self._plot_results(history, mode="loss", title="Adversarial Training Loss")
         filename = self._save_plot("adv_train_acc_loss")
         plt.show()
         self._plotFileNames.append({"adversarialTraining": filename})
