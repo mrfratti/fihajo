@@ -46,8 +46,8 @@ class HtmlGenerator:
                         with tag("div", klass="error"):
                             with tag("h1"):
                                 text("Oops!")
-                                with tag("p"):
-                                    text("No data to show")
+                            with tag("p"):
+                                text("No data to show")
                     else:
                         for data in self._image_data_list:
                             with tag("div", klass="section"):
