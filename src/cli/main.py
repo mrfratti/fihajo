@@ -1,7 +1,6 @@
 import argparse
 import logging
 import json
-import tensorflow as tf
 from uncertainty_wizard.models import StochasticMode
 from src.cli.Send.SendReportData import SendReportData
 from src.datasets.dataset_handler import (
@@ -22,12 +21,8 @@ from src.uncertainty.analyze import Analyzer
 class CLIApp:
     def __init__(self):
         self.parser = self.setup_parser()
-        self._plotFileNames = []
+        self._plot_file_names = []
         self._reportgen = True
-
-    def _appendPlotFileNames(self, fileNameList=[]):
-        for filename in fileNameList:
-            self._plotFileNames.append(filename)
 
     def setup_parser(self):
         parser = argparse.ArgumentParser(
@@ -204,7 +199,7 @@ class CLIApp:
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
-            self._appendPlotFileNames(trainer.GetPlotFileNames)
+            self._plot_file_names.extend(trainer._plot_file_names)
 
         except Exception as e:
             logging.error(f"An error occurred during training: {e}")
@@ -249,6 +244,7 @@ class CLIApp:
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
+            self._plot_file_names.extend(evaluator._plot_file_names)
         except Exception as e:
             logging.error(f"An error occurred during evaluation: {e}")
 
@@ -293,7 +289,7 @@ class CLIApp:
         if self._reportgen:
             try:
                 send = SendReportData()
-                send.filenames = self._plotFileNames
+                send.filenames = self._plot_file_names
                 send.send()
             except ValueError as e:
                 logging.warning(e)

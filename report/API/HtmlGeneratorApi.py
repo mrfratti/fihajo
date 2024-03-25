@@ -3,7 +3,9 @@ from report.HtmlGenerator import HtmlGenerator
 from report.ImageData import ImageData
 
 
-class ReportGenApi:
+class HtmlGeneratorApi:
+    """API for HtmlGenerator"""
+
     def __init__(self, report_location, report_filename, images):
         self._report = HtmlData()
         self._report.html_store_location = report_location
@@ -16,4 +18,4 @@ class ReportGenApi:
             image_data.image_location = image["image_location"]
             image_data.about_image = image["about_image"]
             self._generator.image_data = image_data
-        self._generator.writeHtml()
+        self._generator.write_html()

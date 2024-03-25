@@ -22,7 +22,7 @@ from tensorflow.keras.metrics import (
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.visualization.visualization import VisualizeTraining
-from src.cli.stringformat import String_Format as format
+
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -50,18 +50,12 @@ class Trainer:
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
         self.loss_object = CategoricalCrossentropy(from_logits=False)
-        self._plotFileNames = []
-
-    def _appendPlotFileNames(self, fileNameList=[]):
-        if len(fileNameList) < 1:
-            logging.warn(format.message("FileNames missing"))
-            return
-        for filename in fileNameList:
-            self._plotFileNames.append(filename)
+        self._plot_file_names = []
 
     @property
-    def GetPlotFileNames(self):
-        return self._plotFileNames
+    def plot_file_names(self):
+        """List of plot filenames"""
+        return self._plot_file_names
 
     def train(self):
         """
@@ -111,7 +105,7 @@ class Trainer:
 
         visualizer = VisualizeTraining()
         visualizer.plot_training_results(history)
-        self._appendPlotFileNames(visualizer.GetPlotFileNames)
+        self._plot_file_names.extend(visualizer.plot_file_names)
 
     def adversarial_training(self):
         """
@@ -212,7 +206,7 @@ class Trainer:
 
         visualizer = VisualizeTraining()
         visualizer.plot_adversarial_training_results(adv_training_history)
-        self._appendPlotFileNames(visualizer.GetPlotFileNames)
+        self._plot_file_names.extend(visualizer.plot_file_names)
 
     def save_model(self):
         user_input = input(
@@ -222,9 +216,9 @@ class Trainer:
         try:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
-            logging.info(f"Model weights saved to: {save_path}")
+            logging.info("Model weights saved to: %s", save_path)
         except Exception as e:
-            logging.error(f"Error saving the model weights: {e}")
+            logging.error("Error saving the model weights: %s", e)
             raise
 
     def _default_save_path(self) -> str:
