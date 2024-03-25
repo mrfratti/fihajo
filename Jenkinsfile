@@ -4,6 +4,11 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
+                //create directories
+                dir('data/plots/training')
+                dir('data/models')
+                dir('data/logs')
+                dir('report/reports')
                 checkout scm
             }
         }
