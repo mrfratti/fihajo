@@ -17,9 +17,11 @@ class SendReportData:
     @filenames.setter
     def filenames(self, filename_list):
         if not isinstance(filename_list, list):
-            raise TypeError("The filnames to be sent needs to be in a list")
+            raise TypeError(
+                "Send report: The filnames to be sent needs to be in a list"
+            )
         if len(filename_list) < 1:
-            raise ValueError("No filenames in filename list")
+            raise ValueError("Send report: No filenames for images in filename list")
         self._filenames = filename_list
 
     def send(self, report_location="", report_filename=""):
