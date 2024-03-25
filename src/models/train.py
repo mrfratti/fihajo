@@ -7,19 +7,17 @@ import sys
 import time
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.callbacks import (
+from keras.callbacks import (
     EarlyStopping,
     TensorBoard,
-    ModelCheckpoint,
     LambdaCallback,
 )
-from tensorflow.keras.losses import CategoricalCrossentropy
-from tensorflow.keras.metrics import (
+from keras.losses import CategoricalCrossentropy
+from keras.metrics import (
     Mean,
-    SparseCategoricalAccuracy,
     CategoricalAccuracy,
 )
-from tensorflow.keras.utils import Progbar
+from keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.visualization.visualization import VisualizeTraining
 
@@ -65,7 +63,7 @@ class Trainer:
             message = "Adversarial training enabled.\n"
             self.loading_effect(duration=15, message=message)
             logging.info(
-                f"Starting adversarial training on {self.args.dataset} dataset"
+                "Starting adversarial training on %s dataset", self.args.dataset
             )
             self.adversarial_training()
         else:
@@ -164,13 +162,13 @@ class Trainer:
                 progbar.update(
                     batch_index + 1,
                     values=[
-                        ("loss", train_loss.result()),
-                        ("accuracy", train_accuracy.result()),
+                        ("loss", train_loss.result),
+                        ("accuracy", train_accuracy.result),
                     ],
                 )
 
-            adv_training_history["loss"].append(train_loss.result().numpy())
-            adv_training_history["accuracy"].append(train_accuracy.result().numpy())
+            adv_training_history["loss"].append(np.array(train_loss.result))
+            adv_training_history["accuracy"].append(np.array(train_accuracy.result))
 
             # Validation phase after each epoch
             for x_batch, y_batch in tf.data.Dataset.from_tensor_slices(
@@ -186,14 +184,14 @@ class Trainer:
                 val_loss(batch_val_loss)
                 val_accuracy(y_batch, val_predictions)
 
-            adv_training_history["val_loss"].append(val_loss.result().numpy())
-            adv_training_history["val_accuracy"].append(val_accuracy.result().numpy())
+            adv_training_history["val_loss"].append(np.array(val_loss.result))
+            adv_training_history["val_accuracy"].append(np.array(val_accuracy.result))
 
             logging.info(
-                f"Epoch {epoch + 1} completed. Loss: {train_loss.result().numpy():.3f}, "
-                f"Accuracy: {train_accuracy.result().numpy():.3f}, "
-                f"Validation Loss: {val_loss.result().numpy():.3f}, "
-                f"Validation Accuracy: {val_accuracy.result().numpy():.3f}"
+                f"Epoch {epoch + 1} completed. Loss: {np.array(train_loss.result):.3f}, "
+                f"Accuracy: {np.array(train_accuracy.result):.3f}, "
+                f"Validation Loss: {np.array(val_loss.result):.3f}, "
+                f"Validation Accuracy: {np.array(val_accuracy.result):.3f}"
             )
 
             # Reset metrics at the end of each epoch
@@ -209,6 +207,7 @@ class Trainer:
         self._plot_file_names.extend(visualizer.plot_file_names)
 
     def save_model(self):
+        """saving model weights"""
         user_input = input(
             "Enter a path to save the model or press Enter to use the default path: "
         ).strip()
@@ -228,6 +227,7 @@ class Trainer:
         return os.path.join(base_path, file_name)
 
     def loading_effect(self, duration=30, message=""):
+        """Loading effect for cli"""
         print(message, end="")
         for _ in range(duration):
             for cursor in "|/-\\":

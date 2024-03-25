@@ -123,7 +123,7 @@ class VisualizeEvaluation:
         plt.xlabel("Predicted Label")
         filename = self._save_plot("confusion_matrix")
         plt.show()
-        self._plot_file_names.append({"confuision_matrix": filename})
+        self._plot_file_names.append({"confusion_matrix": filename})
 
     def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
         report = classification_report(

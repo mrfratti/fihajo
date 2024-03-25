@@ -1,6 +1,7 @@
 import argparse
 import logging
 import json
+import tensorflow as tf
 from uncertainty_wizard.models import StochasticMode
 from src.cli.Send.SendReportData import SendReportData
 from src.datasets.dataset_handler import (
@@ -20,6 +21,7 @@ from src.uncertainty.analyze import Analyzer
 
 class CLIApp:
     def __init__(self):
+        tf.config.set_visible_devices([], "GPU")
         self.parser = self.setup_parser()
         self._plot_file_names = []
         self._reportgen = True
@@ -199,12 +201,13 @@ class CLIApp:
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
-            self._plot_file_names.extend(trainer._plot_file_names)
+            self._plot_file_names.extend(trainer.plot_file_names)
 
         except Exception as e:
-            logging.error(f"An error occurred during training: {e}")
+            logging.error("An error occurred during training: %s", e)
 
     def evaluate(self, args):
+        """Runs evaluation attack on model"""
         model_path = (
             args.model_path
             if hasattr(args, "model_path") and args.model_path
@@ -244,7 +247,7 @@ class CLIApp:
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
-            self._plot_file_names.extend(evaluator._plot_file_names)
+            self._plot_file_names.extend(evaluator.plot_file_names)
         except Exception as e:
             logging.error(f"An error occurred during evaluation: {e}")
 
@@ -292,13 +295,10 @@ class CLIApp:
                 send.filenames = self._plot_file_names
                 send.send()
             except ValueError as e:
-                logging.warning(e)
-                pass
+                logging.warning("main.report: %s", e)
+
             except TypeError as e:
-                logging.warning(e)
-                pass
-            except Exception as e:
-                logging.error(f"An error occoured during generating report {e}")
+                logging.warning("main.report: %s", e)
 
     def load_config(self, file_path):
         with open(file_path, "r") as f:
