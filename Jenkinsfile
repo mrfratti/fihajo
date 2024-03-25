@@ -4,12 +4,13 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                //create directories
-                dir('data/plots/training')
-                dir('data/models')
-                dir('data/logs')
-                dir('report/reports')
                 checkout scm
+                
+                //create directories
+                dir('data/plots/training'){writeFile file: "temp", text =""}
+                dir('data/models'){writeFile file: "temp", text =""}
+                dir('data/logs'){writeFile file: "temp", text =""}
+                dir('report/reports'){writeFile file: "temp", text =""}
             }
         }
 
