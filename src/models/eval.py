@@ -70,7 +70,7 @@ class Evaluator:
                 y_true, y_pred_classes, classes=[str(i) for i in range(10)]
             )
             visualizer.plot_classification_report(y_true, y_pred_classes)
-            self._plot_file_names.append(visualizer.plot_file_names)
+            self._plot_file_names.extend(visualizer.plot_file_names)
 
     def adversarial_evaluation(self, x_test, y_test):
         # Fast Gradient Sign Method

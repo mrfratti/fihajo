@@ -17,7 +17,7 @@ class HtmlGenerator:
         self._html_report = HtmlData()
 
     @property
-    def image_data(self):
+    def image_data(self) -> int:
         """Returns a count of images"""
         return len(self._image_data_list)
 
@@ -80,7 +80,7 @@ class HtmlGenerator:
             file.write(self._generate())
             file.close()
         except ValueError as e:
-            logging.warning(e)
+            logging.warning("htmlgenerator: %s", e)
 
         except TypeError as e:
-            logging.warning(e)
+            logging.warning("htmlgenerator: %s", e)
