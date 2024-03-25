@@ -7,10 +7,10 @@ pipeline {
                 checkout scm
                 
                 //create directories
-                dir('data/plots/training'){writeFile file: "temp", text =""}
-                dir('data/models'){writeFile file: "temp", text =""}
-                dir('data/logs'){writeFile file: "temp", text =""}
-                dir('report/reports'){writeFile file: "temp", text =""}
+                dir('data/plots/training'){sh 'pwd -P'}
+                dir('data/models'){sh 'pwd -P'}
+                dir('data/logs'){sh 'pwd -P'}
+                dir('report/reports'){sh 'pwd -P'}
             }
         }
 
