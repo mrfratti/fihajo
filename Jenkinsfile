@@ -29,7 +29,7 @@ pipeline {
                 script {
                     def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
                     def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
-                    def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue: './data/models/mnist.model.h5', description: 'Model save path', name: 'savePath')])
+                    def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:{$WORKSPACE}'/data/models/mnist.model.h5', description: 'Model save path', name: 'savePath')])
 
                     sh "python -m src.cli.main train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
                 }
@@ -51,7 +51,7 @@ pipeline {
         stage('EVALUATE') {
             steps {
                 script {
-                    def load_path = input(id: 'userInputLoadPath', message: 'Enter the load path for model weights:', parameters: [string(description: 'Model load path', name: 'loadPath', defaultValue: './data/models/mnist.model.h5')])
+                    def load_path = input(id: 'userInputLoadPath', message: 'Enter the load path for model weights:', parameters: [string(description: 'Model load path', name: 'loadPath', defaultValue: {$WORKSPACE}'/data/models/mnist.model.h5')])
                     sh "python -m src.cli.main evaluate --dataset mnist --model-path ${load_path}"
                 }
             }
