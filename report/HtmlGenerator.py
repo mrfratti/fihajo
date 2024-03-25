@@ -1,6 +1,7 @@
 import datetime
 from email import message
 import logging
+import os
 from yattag import Doc
 from report.HtmlData import HtmlData
 from report.ImageData import ImageData
@@ -62,6 +63,11 @@ class HtmlGenerator:
         try:
             if len(self._image_data_list) < 1:
                 logging.warning(format.message("No images where supplied"))
+            if not os.path.exists(self._html_report.html_store_location):
+                os.mkdir(self._html_report.html_store_location)
+                logging.info(
+                    f"Dirctory {self._html_report.html_store_location} did not exist making directory"
+                )
             file = open(
                 f"{self._html_report.html_store_location}{self._html_report.filename}",
                 "w",
