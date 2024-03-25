@@ -21,7 +21,6 @@ from src.uncertainty.analyze import Analyzer
 
 class CLIApp:
     def __init__(self):
-        tf.config.set_visible_devices([], "GPU")
         self.parser = self.setup_parser()
         self._plotFileNames = []
         self._reportgen = True
