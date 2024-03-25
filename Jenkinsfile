@@ -1,6 +1,7 @@
 pipeline {
     agent any
-
+    def defaultfile = "data/models/mnist.model.h5"
+    def fullpath ="${env.WORKSPACE}/${defaultfile}"
     stages {
         stage('Setup') {
             steps {
@@ -27,8 +28,7 @@ pipeline {
             steps {
                 echo 'Running Train...'
                 script {
-                    def defaultfile = "data/models/mnist.model.h5"
-                    def fullpath ="${env.WORKSPACE}/${defaultfile}"
+
                     def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
                     def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
                     def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
