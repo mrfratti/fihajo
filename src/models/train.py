@@ -1,4 +1,5 @@
 import argparse
+from email import message
 import logging
 import os
 import platform
@@ -21,6 +22,7 @@ from tensorflow.keras.metrics import (
 from tensorflow.keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.visualization.visualization import VisualizeTraining
+from src.cli.stringformat import String_Format as format
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -52,7 +54,7 @@ class Trainer:
 
     def _appendPlotFileNames(self, fileNameList=[]):
         if len(fileNameList) < 1:
-            logging.warn("FileNames missing")
+            logging.warn(format.message("FileNames missing"))
             return
         for filename in fileNameList:
             self._plotFileNames.append(filename)
@@ -210,7 +212,7 @@ class Trainer:
 
         visualizer = VisualizeTraining()
         visualizer.plot_adversarial_training_results(adv_training_history)
-        self._appendPlotFileNames(visualizer.GetPlotFileNames())
+        self._appendPlotFileNames(visualizer.GetPlotFileNames)
 
     def save_model(self):
         user_input = input(

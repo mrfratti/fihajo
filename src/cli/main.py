@@ -1,7 +1,9 @@
 import argparse
 import logging
 import json
+from exceptiongroup import catch
 from uncertainty_wizard.models import StochasticMode
+from src.cli.Send.SendReportData import SendReportData
 from src.datasets.dataset_handler import (
     MnistDatasetHandler,
     Cifar10DatasetHandler,
@@ -15,18 +17,15 @@ from src.models.model_builders import (
 from src.models.train import Trainer
 from src.models.eval import Evaluator
 from src.uncertainty.analyze import Analyzer
-from src.cli.htmlGenerator import htmlReport
 
 
 class CLIApp:
     def __init__(self):
         self.parser = self.setup_parser()
         self._plotFileNames = []
+        self._reportgen = True
 
     def _appendPlotFileNames(self, fileNameList=[]):
-        if len(fileNameList) < 1:
-            logging.warn("FileNames missing")
-            return
         for filename in fileNameList:
             self._plotFileNames.append(filename)
 
@@ -54,6 +53,7 @@ class CLIApp:
         self.add_train_subparser(subparsers)
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
+        self.add_report_subparser(subparsers)
 
         return parser
 
@@ -156,6 +156,9 @@ class CLIApp:
             "--batch", type=int, default=64, help="Batch size for analyzing."
         )
         uncertainty_parser.set_defaults(func=self.analyze)
+
+    def add_report_subparser(self, subparsers):
+        report_parser = subparsers.add_parser("report", help="Genereate report")
 
     def check_positive(self, value):
         ivalue = int(value)
@@ -286,6 +289,21 @@ class CLIApp:
         except Exception as e:
             logging.error(f"An error occurred during uncertainty analysis: {e}")
 
+    def report(self, args=""):
+        if self._reportgen:
+            try:
+                send = SendReportData()
+                send.filenames = self._plotFileNames
+                send.send()
+            except ValueError as e:
+                logging.warning(e)
+                pass
+            except TypeError as e:
+                logging.warning(e)
+                pass
+            except Exception as e:
+                logging.error(f"An error occoured during generating report {e}")
+
     def load_config(self, file_path):
         with open(file_path, "r") as f:
             return json.load(f)
@@ -318,22 +336,8 @@ class CLIApp:
             self.parser.print_help()
             exit(1)
 
-    def runReport(self):
-        htmldata = []
-        for data in self._plotFileNames:
-            if data["training"]:
-                htmldata.append(
-                    {
-                        "header": "Training",
-                        "image": f"../data/plots/training/{data['training']}",
-                        "text": "lorem ipsum",
-                    }
-                )
-
-        htmlReport(htmldata).writeHtml()
-
 
 if __name__ == "__main__":
     app = CLIApp()
     app.run()
-    app.runReport()
+    app.report()
