@@ -25,6 +25,7 @@ class Evaluator:
         self.args = args
         self.model = model_builder.create_model()
         self.dataset = dataset
+        self._plot_file_names = []
 
         self.load_weights(args.model_path)
 
@@ -69,7 +70,7 @@ class Evaluator:
                 y_true, y_pred_classes, classes=[str(i) for i in range(10)]
             )
             visualizer.plot_classification_report(y_true, y_pred_classes)
-            
+            self._plot_file_names.append(visualizer.plot_file_names)
 
     def adversarial_evaluation(self, x_test, y_test):
         # Fast Gradient Sign Method
@@ -118,3 +119,7 @@ class Evaluator:
                 time.sleep(0.1)
                 sys.stdout.write("\b")
         print(" Done!")
+
+    @property
+    def plot_file_names(self):
+        return self._plot_file_names
