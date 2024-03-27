@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint
-      - name: Analysing the code with pylint tensorflow yattag keras numpy cleverhans uncertainty_wizard pandas scikit-learn seaborn
+          pip install pylint tensorflow yattag keras numpy cleverhans uncertainty_wizard pandas scikit-learn seaborn
+      - name: Analysing the code with pylint
         run: |
-          pylint $(git ls-files '*.py') --fail-under 5 --fail-on E
+          pylint $(git ls-files '*.py') --fail-under 7 --fail-on E
