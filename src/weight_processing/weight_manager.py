@@ -6,6 +6,7 @@ import logging
 import sys
 import time
 
+from src.cli.StringStyling import StringStyling
 from src.models import model_builders
 
 
@@ -36,10 +37,21 @@ class WeightManager:
 
     def load_weights(self, model_path=None):
         """loads the weights"""
-        if not model_path:
-            model_path = self._DEFAULT_PATH
-        self.current_model.inner.load_weights(model_path)
-        logging.info("Model weights loaded from %s", model_path)
+        try:
+            if not model_path:
+                model_path = self._DEFAULT_PATH
+            self.current_model.inner.load_weights(model_path)
+            logging.info("Model weights loaded from %s", model_path)
+        except FileNotFoundError:
+            print(StringStyling.box_style("The specified weight file was not found"))
+        except PermissionError:
+            print(
+                StringStyling.box_style(
+                    "Cannot open weight file missing permission to read"
+                )
+            )
+        except IsADirectoryError:
+            print(StringStyling("Please specify a file instead of a directory"))
 
     def loading_effect(self, duration=3, message="Evaluating"):
         """loading effect for loading weights"""
