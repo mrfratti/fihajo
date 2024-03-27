@@ -216,7 +216,7 @@ class CLIApp:
             ).strip()
         )
         if not model_path:
-            model_path = Evaluator._default_load_path()
+            model_path = Evaluator.default_path
 
         # logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
 
@@ -260,7 +260,8 @@ class CLIApp:
             ).strip()
         )
         if not model_path:
-            model_path = Analyzer._default_load_path()
+            model_path = Analyzer.default_path
+
         batch = getattr(args, "batch", 64)
 
         # Instantiate the correct model builder based on the command line argument

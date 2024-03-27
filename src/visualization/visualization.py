@@ -12,6 +12,10 @@ from src.cli.StringStyling import StringStyling
 
 
 class VisualizeTraining:
+    """_summary_
+    generate plot and storing plots
+    """
+
     def __init__(self, plot_dir="data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)

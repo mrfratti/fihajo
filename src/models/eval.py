@@ -1,9 +1,8 @@
 import argparse
 import logging
-import sys
-import time
 from src.visualization.visualization import VisualizeEvaluation
 import numpy as np
+from src.weight_processing.weight_manager import WeightManager
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 
@@ -25,19 +24,16 @@ class Evaluator:
         self.args = args
         self.model = model_builder.create_model()
         self.dataset = dataset
+        self._weightmanager = WeightManager()
+        self._weightmanager.current_model = model_builder
+        self._weightmanager.load_weights(args.model_path)
+        self.model = self._weightmanager.current_model
         self._plot_file_names = []
 
-        self.load_weights(args.model_path)
-
-    @staticmethod
-    def _default_load_path() -> str:
-        return "data/models/model.weights.h5"
-
-    def load_weights(self, model_path=None):
-        if not model_path:
-            model_path = self._default_load_path()
-        self.model.inner.load_weights(model_path)
-        logging.info(f"Model weights loaded from {model_path}")
+    @property
+    def default_path(self) -> str:
+        """returns the default path of wheights storing location"""
+        return self._weightmanager.default_path
 
     def evaluate(self):
         """
@@ -45,7 +41,7 @@ class Evaluator:
         """
         _, (x_test, y_test) = self.dataset
 
-        self.loading_effect(duration=15, message="Loading model weights")
+        self._weightmanager.loading_effect(duration=15, message="Loading model weights")
         self.evaluation(x_test, y_test, plot_results=not self.args.adv_eval)
         if self.args.adv_eval:
             self.adversarial_evaluation(x_test, y_test)
@@ -109,16 +105,6 @@ class Evaluator:
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
         labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
-
-    def loading_effect(self, duration=3, message="Evaluating"):
-        print(message, end="")
-        for _ in range(duration):
-            for cursor in "|/-\\":
-                sys.stdout.write(cursor)
-                sys.stdout.flush()
-                time.sleep(0.1)
-                sys.stdout.write("\b")
-        print(" Done!")
 
     @property
     def plot_file_names(self):
