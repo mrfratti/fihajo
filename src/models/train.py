@@ -226,12 +226,14 @@ class Trainer:
                     "File path not found or cannot open weight file"
                 )
             )
+            sys.exit(1)
         except PermissionError:
             print(
                 StringStyling.box_style(
                     "Missing writing permissions, cannot write weight file"
                 )
             )
+            sys.exit(1)
 
     def _default_save_path(self) -> str:
         """Generate a default save path for the model based on training type"""
