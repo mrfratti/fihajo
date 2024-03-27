@@ -1,7 +1,6 @@
 import argparse
 import logging
 import json
-import tensorflow as tf
 from uncertainty_wizard.models import StochasticMode
 from src.cli.Send.SendReportData import SendReportData
 from src.datasets.dataset_handler import (
