@@ -301,7 +301,7 @@ class CLIApp:
                 logging.warning("main.report: %s", e)
 
     def load_config(self, file_path):
-        with open(file_path, "r") as f:
+        with open(file_path, "r", encoding="UTF-8") as f:
             return json.load(f)
 
     def run(self):

@@ -74,7 +74,7 @@ class HtmlGenerator:
             file = open(
                 f"{self._html_report.html_store_location}{self._html_report.filename}",
                 "w",
-                encoding="UTF()",
+                encoding="UTF-8",
             )
             logging.info(StringStyling.box_style("Writing report"))
             file.write(self._generate())
