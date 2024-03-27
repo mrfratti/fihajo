@@ -34,7 +34,7 @@ class Evaluator:
         self._weightmanager.current_model = model_builder
         self._weightmanager.load_weights(args.model_path)
         self.model = self._weightmanager.current_model
-        self._plot_file_names = []
+        self._plot_file_names = {}
 
     @property
     def default_path(self) -> str:
@@ -72,7 +72,7 @@ class Evaluator:
                 y_true, y_pred_classes, classes=[str(i) for i in range(10)]
             )
             visualizer.plot_classification_report(y_true, y_pred_classes)
-            self._plot_file_names.extend(visualizer.plot_file_names)
+            self._plot_file_names.update(visualizer.plot_file_names)
 
     def adversarial_evaluation(self, x_test, y_test):
         # Fast Gradient Sign Method
@@ -113,5 +113,5 @@ class Evaluator:
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
 
     @property
-    def plot_file_names(self):
+    def plot_file_names(self) -> dict:
         return self._plot_file_names
