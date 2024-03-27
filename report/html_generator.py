@@ -41,7 +41,7 @@ class HtmlGenerator:
     def _generate(self) -> str:
         with tag("html"):
             with tag("head"):
-                doc.stag("link", rel="stylesheet", href="../dist/style.css")
+                doc.stag("link", rel="stylesheet", href="dist/style.css")
             with tag("body"):
                 with tag("header"):
                     with tag("h1"):
