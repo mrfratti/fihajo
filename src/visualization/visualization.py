@@ -416,5 +416,4 @@ class VisualizeUncertainty:
         filenames = self._plot_file_names
         if isinstance(filenames, list) and len(filenames) < 1:
             logging.warning(StringStyling.box_style("missing filenames for plots"))
-            return
         return filenames
