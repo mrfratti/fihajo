@@ -16,7 +16,7 @@ class VisualizeTraining:
     generate plot and storing plots
     """
 
-    def __init__(self, plot_dir="data/plots/training"):
+    def __init__(self, plot_dir="report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = []
@@ -88,7 +88,7 @@ class VisualizeTraining:
 
 
 class VisualizeEvaluation:
-    def __init__(self, plot_dir="data/plots/evaluation"):
+    def __init__(self, plot_dir="report/reports/data/plots/evaluation"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = []
@@ -229,7 +229,7 @@ class VisualizeEvaluation:
 
 
 class VisualizeUncertainty:
-    def __init__(self, plot_dir="./data/plots/analyze"):
+    def __init__(self, plot_dir="report/reports/data/plots/analyze"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = []

@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Noticia+Text:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+$background: #eeeeee;
+$font_color: #222831;
+$border_color: #76abae;
+$header_color: #31363f;
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: $font_color;
+}
+header {
+  width: 100%;
+  background-color: $header_color;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+header h1 {
+  font-size: 2.2rem;
+  color: $border_color;
+}
+main {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1em;
+  padding: 0.8em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: $header_color;
+  font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  border-bottom: 2px solid $header_color;
+  height: fit-content;
+}
+.section {
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+.section h1,
+h2,
+h3,
+img {
+  display: flex;
+  justify-content: center;
+}
+.section img {
+  width: 100%;
+  border-radius: 1rem;
+}
+.section p {
+  margin: 1rem;
+  font-size: 1rem;
+  font-family: "Noticia Text", serif;
+  font-weight: 700;
+  font-style: normal;
+}

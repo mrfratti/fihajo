@@ -59,5 +59,6 @@ poetry.lock
 Archive.txt
 data/*
 notebooks/data/*
+report/reports/data/*
 *.html
 

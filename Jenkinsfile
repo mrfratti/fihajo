@@ -39,7 +39,7 @@ pipeline {
                     def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
                     def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
 
-                    sh "python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
+                    sh "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
                 }
             }
         }
@@ -62,7 +62,7 @@ pipeline {
                     def defaultfile = "data/models/mnist.model.h5"
                     def fullpath ="${env.WORKSPACE}/${defaultfile}"
                     def load_path = input(id: 'userInputLoadPath', message: 'Enter the load path for model weights:', parameters: [string(description: 'Model load path', name: 'loadPath', defaultValue: fullpath)])
-                    sh "python -m src.cli.main --verbose evaluate --dataset mnist --model-path ${load_path}"
+                    sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist"
                 }
             }
         }

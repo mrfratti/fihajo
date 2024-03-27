@@ -7,6 +7,18 @@ class HtmlData:
     def __init__(self):
         self._html_store_location = ""
         self._filename = ""
+        self._header_text = "Model Report"
+
+    @property
+    def header_text(self) -> str:
+        """header text for html report"""
+        return self._header_text
+
+    @header_text.setter
+    def header_text(self, text):
+        if len(text) < 1 or not isinstance(text, str):
+            raise ValueError("Header text for html document needs to be a string")
+        self._header_text = text
 
     @property
     def filename(self):
@@ -18,10 +30,9 @@ class HtmlData:
         if not isinstance(filename, str):
             raise TypeError("filename for html report needs to be a string")
         if len(filename) < 1:
-            timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-            self._filename = f"{filename}_{timestamp}.html"
+            self._filename = "index.html"
         else:
-            self._filename = filename
+            self._filename = f"{filename}.html"
 
     @property
     def html_store_location(self):

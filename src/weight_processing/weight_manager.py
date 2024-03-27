@@ -43,7 +43,11 @@ class WeightManager:
             self.current_model.inner.load_weights(model_path)
             logging.info("Model weights loaded from %s", model_path)
         except FileNotFoundError:
-            print(StringStyling.box_style("The specified weight file was not found"))
+            print(
+                StringStyling.box_style(
+                    "The specified weight file was not found: %s", model_path
+                )
+            )
             sys.exit(1)
         except PermissionError:
             print(
