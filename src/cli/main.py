@@ -289,6 +289,7 @@ class CLIApp:
             logging.error(f"An error occurred during uncertainty analysis: {e}")
 
     def report(self, args=""):
+        """Run report generation"""
         if self._reportgen:
             try:
                 send = SendReportData()
@@ -301,6 +302,7 @@ class CLIApp:
                 logging.warning("main.report: %s", e)
 
     def load_config(self, file_path):
+        """loading predefined configuration file in json format"""
         with open(file_path, "r", encoding="UTF-8") as f:
             return json.load(f)
 

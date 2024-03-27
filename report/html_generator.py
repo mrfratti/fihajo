@@ -41,19 +41,22 @@ class HtmlGenerator:
     def _generate(self) -> str:
         with tag("html"):
             with tag("head"):
-                doc.stag("link", rel="stylesheet", href="../style.css")
+                doc.stag("link", rel="stylesheet", href="../dist/style.css")
             with tag("body"):
+                with tag("header"):
+                    with tag("h1"):
+                        text(self._html_report.header_text)
                 with tag("main"):
                     if len(self._image_data_list) < 1:
                         with tag("div", klass="error"):
-                            with tag("h1"):
+                            with tag("h2"):
                                 text("Oops!")
                             with tag("p"):
                                 text("No data to show")
                     else:
                         for data in self._image_data_list:
                             with tag("div", klass="section"):
-                                with tag("h1"):
+                                with tag("h2"):
                                     text(data.header_image)
                                 doc.stag("img", src=data.image_location, klass="photo")
                                 with tag("p"):
