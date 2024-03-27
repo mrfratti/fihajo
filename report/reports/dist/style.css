@@ -22,9 +22,18 @@ header h1 {
   color: #76abae;
 }
 
+@media (pointer: none), (pointer: coarse) {
+  main {
+    grid-template-columns: auto;
+  }
+}
+@media (pointer: none), (pointer: fine) {
+  main {
+    grid-template-columns: auto auto;
+  }
+}
 main {
   display: grid;
-  grid-template-columns: auto auto;
   gap: 1em;
   padding: 0.8em;
 }
