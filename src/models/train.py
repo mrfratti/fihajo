@@ -20,6 +20,7 @@ from keras.metrics import (
 from keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.visualization.visualization import VisualizeTraining
+from src.weight_processing.weight_manager import WeightManager
 
 
 logging.basicConfig(
@@ -44,7 +45,9 @@ class Trainer:
         :param test_dataset: A tuple containing the test data and labels (x_test, y_test)
         """
         self.args = args
-        self.model = model_builder.create_model()
+        self._weightmanager = WeightManager()
+        self._weightmanager.current_model = model_builder
+        self.model = self._weightmanager.current_model
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
         self.loss_object = CategoricalCrossentropy(from_logits=False)
@@ -61,7 +64,7 @@ class Trainer:
         """
         if self.args.adv:
             message = "Adversarial training enabled.\n"
-            self.loading_effect(duration=15, message=message)
+            self._weightmanager.loading_effect(duration=15, message=message)
             logging.info(
                 "Starting adversarial training on %s dataset", self.args.dataset
             )
@@ -70,7 +73,7 @@ class Trainer:
             message = (
                 f"Getting ready for training the model on {self.args.dataset} dataset\n"
             )
-            self.loading_effect(duration=15, message=message)
+            self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting training.")
             self.training()
 
@@ -218,21 +221,9 @@ class Trainer:
             logging.info("Model weights saved to: %s", save_path)
         except Exception as e:
             logging.error("Error saving the model weights: %s", e)
-            raise
 
     def _default_save_path(self) -> str:
         """Generate a default save path for the model based on training type"""
         base_path = "data/models"
         file_name = "adv_model.weights.h5" if self.args.adv else "model.weights.h5"
         return os.path.join(base_path, file_name)
-
-    def loading_effect(self, duration=30, message=""):
-        """Loading effect for cli"""
-        print(message, end="")
-        for _ in range(duration):
-            for cursor in "|/-\\":
-                sys.stdout.write(cursor)
-                sys.stdout.flush()
-                time.sleep(0.1)  # Adjust sleep time as needed
-                sys.stdout.write("\b")
-        print("Done!")

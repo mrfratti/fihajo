@@ -1,7 +1,6 @@
 import argparse
 import logging
 import json
-import tensorflow as tf
 from uncertainty_wizard.models import StochasticMode
 from src.cli.Send.SendReportData import SendReportData
 from src.datasets.dataset_handler import (
@@ -21,7 +20,7 @@ from src.uncertainty.analyze import Analyzer
 
 class CLIApp:
     def __init__(self):
-        tf.config.set_visible_devices([], "GPU")
+        # tf.config.set_visible_devices([], "GPU") # uncomment to disable gpu
         self.parser = self.setup_parser()
         self._plot_file_names = []
         self._reportgen = True
@@ -216,7 +215,7 @@ class CLIApp:
             ).strip()
         )
         if not model_path:
-            model_path = Evaluator._default_load_path()
+            model_path = Evaluator.default_path
 
         # logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
 
@@ -260,7 +259,8 @@ class CLIApp:
             ).strip()
         )
         if not model_path:
-            model_path = Analyzer._default_load_path()
+            model_path = Analyzer.default_path
+
         batch = getattr(args, "batch", 64)
 
         # Instantiate the correct model builder based on the command line argument
