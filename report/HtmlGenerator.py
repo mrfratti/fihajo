@@ -81,10 +81,10 @@ class HtmlGenerator:
             file.close()
         except ValueError as e:
             logging.warning("htmlgenerator: %s", e)
-
+            return
         except TypeError as e:
             logging.warning("htmlgenerator: %s", e)
-
+            return
         except FileNotFoundError:
             print(
                 StringStyling.box_style("cannot open html file or filepath not found")
