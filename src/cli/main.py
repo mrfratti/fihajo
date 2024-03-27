@@ -1,6 +1,7 @@
 import argparse
 import logging
 import json
+import tensorflow as tf
 from uncertainty_wizard.models import StochasticMode
 from src.cli.send.send_report_data import SendReportData
 from src.datasets.dataset_handler import (
@@ -20,9 +21,9 @@ from src.uncertainty.analyze import Analyzer
 
 class CLIApp:
     def __init__(self):
-        # tf.config.set_visible_devices([], "GPU") # uncomment to disable gpu
+        # tf.config.set_visible_devices([], "GPU")  # uncomment to disable gpu
         self.parser = self.setup_parser()
-        self._plot_file_names = []
+        self._plot_file_names = {}
         self._reportgen = True
 
     def setup_parser(self):
@@ -200,7 +201,7 @@ class CLIApp:
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
-            self._plot_file_names.extend(trainer.plot_file_names)
+            self._plot_file_names.update(trainer.plot_file_names)
 
         except Exception as e:
             logging.error("An error occurred during training: %s", e)
@@ -246,7 +247,7 @@ class CLIApp:
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
-            self._plot_file_names.extend(evaluator.plot_file_names)
+            self._plot_file_names.update(evaluator.plot_file_names)
         except Exception as e:
             logging.error(f"An error occurred during evaluation: {e}")
 

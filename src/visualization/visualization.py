@@ -19,7 +19,7 @@ class VisualizeTraining:
     def __init__(self, plot_dir="report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
-        self._plot_file_names = []
+        self._plot_file_names = {}
 
     def _plot_results(
         self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]
@@ -56,7 +56,7 @@ class VisualizeTraining:
         self._plot_results(history, mode="loss", title="Model loss")
         filename = self._save_plot("val_acc_and_loss")
         plt.show()
-        self._plot_file_names.append({"training": filename})
+        self._plot_file_names["training"] = filename
 
     def plot_adversarial_training_results(self, history):
         """_summary_"""
@@ -69,7 +69,7 @@ class VisualizeTraining:
         self._plot_results(history, mode="loss", title="Adversarial Training Loss")
         filename = self._save_plot("adv_train_acc_loss")
         plt.show()
-        self._plot_file_names.append({"adversarialTraining": filename})
+        self._plot_file_names["adversarialTraining"] = filename
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -79,19 +79,26 @@ class VisualizeTraining:
         return filename
 
     @property
-    def plot_file_names(self):
-        filenames = self._plot_file_names
-        if isinstance(filenames, list) and len(filenames) < 1:
-            logging.warning(StringStyling.box_style("missing filenames for plots"))
-            return
-        return filenames
+    def plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._plot_file_names
 
 
 class VisualizeEvaluation:
     def __init__(self, plot_dir="report/reports/data/plots/evaluation"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
-        self._plot_file_names = []
+        self._plot_file_names = {}
 
     def plot_predictions(self, model, x_test, y_true, num_samples=25):
         predictions = model.predict(x_test[:num_samples])
@@ -106,7 +113,7 @@ class VisualizeEvaluation:
         plt.tight_layout()
         filename = self._save_plot("predictions")
         plt.show()
-        self._plot_file_names.append({"predictions": filename})
+        self._plot_file_names["predictions"] = filename
 
     def plot_confusion_matrix(self, y_true, y_pred, classes):
         # Compute confusion matrix
@@ -127,7 +134,7 @@ class VisualizeEvaluation:
         plt.xlabel("Predicted Label")
         filename = self._save_plot("confusion_matrix")
         plt.show()
-        self._plot_file_names.append({"confusion_matrix": filename})
+        self._plot_file_names["confusion_matrix"] = filename
 
     def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
         report = classification_report(
@@ -145,7 +152,7 @@ class VisualizeEvaluation:
         plt.title("Classification Report")
         filename = self._save_plot("classification_report")
         plt.show()
-        self._plot_file_names.append({"classification_report": filename})
+        self._plot_file_names["classification_report"] = filename
 
     def plot_adversarial_examples(self, model, x_test, eps, num_samples=25):
         # Generate FGSM adversarial examples
@@ -191,7 +198,7 @@ class VisualizeEvaluation:
 
         filename = self._save_plot("adv_examples")
         plt.show()
-        self._plot_file_names.append({"adverserial_ex": filename})
+        self._plot_file_names["adverserial_ex"] = filename
 
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
         plt.figure(figsize=(8, 6))
@@ -208,7 +215,7 @@ class VisualizeEvaluation:
 
         filename = self._save_plot("accuracy_comparison")
         plt.show()
-        self._plot_file_names.append({"accuracy_comparison": filename})
+        self._plot_file_names["accuracy_comparison"] = filename
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -218,21 +225,26 @@ class VisualizeEvaluation:
         return filename
 
     @property
-    def plot_file_names(self):
-        filenames = self._plot_file_names
-        if isinstance(filenames, list) and len(filenames) < 1:
-            logging.warning(
-                StringStyling.box_style(message="missing filenames for plots")
+    def plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
             )
-            return
-        return filenames
+        if len(self._plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._plot_file_names
 
 
 class VisualizeUncertainty:
     def __init__(self, plot_dir="report/reports/data/plots/analyze"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
-        self._plot_file_names = []
+        self._plot_file_names = {}
 
     def plot_pcs_mean_softmax(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
@@ -253,7 +265,7 @@ class VisualizeUncertainty:
         plt.tight_layout()
         filename = self._save_plot("pcs_meansoftmax")
         plt.show()
-        self._plot_file_names.append({"pcs_meansoftmax": filename})
+        self._plot_file_names["pcs_meansoftmax"] = filename
 
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
@@ -275,7 +287,7 @@ class VisualizeUncertainty:
         plt.legend()
         filename = self._save_plot("dist_pcs_meansoftmax")
         plt.show()
-        self._plot_file_names.append({"distrubution_meansoftmax": filename})
+        self._plot_file_names["distrubution_meansoftmax"] = filename
 
     def plot_pcs_ms_inverse(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
@@ -328,7 +340,7 @@ class VisualizeUncertainty:
         plt.tight_layout()
         filename = self._save_plot("pcs_ms_inverse")
         plt.show()
-        self._plot_file_names.append({"pcs_inverse": filename})
+        self._plot_file_names["pcs_inverse"] = filename
 
     def plot_dist_entropy_scores(self, entropy_scores):
         plt.figure(figsize=(20, 10))
@@ -348,7 +360,7 @@ class VisualizeUncertainty:
         plt.legend()
         filename = self._save_plot("dist_entropy")
         plt.show()
-        self._plot_file_names.append({"entropy_distrubution": filename})
+        self._plot_file_names["entropy_distrubution"] = filename
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
         # Sort the indices of the entropy scores in descending order
@@ -364,7 +376,7 @@ class VisualizeUncertainty:
         plt.tight_layout()
         filename = self._save_plot("high_uncertain_inputs")
         plt.show()
-        self._plot_file_names.append({"higly_uncertain_inputs": filename})
+        self._plot_file_names["higly_uncertain_inputs"] = filename
 
     def plot_predictive_conf_entropy_scores(
         self, predictive_confidence, entropy_scores
@@ -383,7 +395,7 @@ class VisualizeUncertainty:
         plt.title("Predictive Confidence vs Entropy Score")
         filename = self._save_plot("pred_vs_entropy")
         plt.show()
-        self._plot_file_names.append({"prediction_vs_entrophy": filename})
+        self._plot_file_names["prediction_vs_entrophy"] = filename
 
     def plot_tsne_entropy(self, tsne_results, entropy_scores):
         # Plot the t-SNE results
@@ -402,7 +414,7 @@ class VisualizeUncertainty:
         plt.title("t-SNE Visualization of Predictive Entropy")
         filename = self._save_plot("tsne_entropy")
         plt.show()
-        self._plot_file_names.append({"tsne_entropy": filename})
+        self._plot_file_names["tsne_entropy"] = filename
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -412,8 +424,16 @@ class VisualizeUncertainty:
         return filename
 
     @property
-    def plot_file_names(self):
-        filenames = self._plot_file_names
-        if isinstance(filenames, list) and len(filenames) < 1:
-            logging.warning(StringStyling.box_style("missing filenames for plots"))
-        return filenames
+    def plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._plot_file_names

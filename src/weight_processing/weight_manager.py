@@ -60,7 +60,7 @@ class WeightManager:
             print(StringStyling("Please specify a file instead of a directory"))
             sys.exit(1)
 
-    def loading_effect(self, duration=3, message="Evaluating"):
+    def loading_effect(self, duration=0.1, message="Evaluating"):
         """loading effect for loading weights"""
         print(message, end="")
         for _ in range(duration):
