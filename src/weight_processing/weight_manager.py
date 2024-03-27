@@ -6,7 +6,7 @@ import logging
 import sys
 import time
 
-from src.cli.StringStyling import StringStyling
+from src.cli.string_styling import StringStyling
 from src.models import model_builders
 
 

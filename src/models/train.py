@@ -19,7 +19,7 @@ from keras.metrics import (
 )
 from keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
-from src.cli.StringStyling import StringStyling
+from src.cli.string_styling import StringStyling
 from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 

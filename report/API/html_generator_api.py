@@ -1,6 +1,6 @@
-from report.HtmlData import HtmlData
-from report.HtmlGenerator import HtmlGenerator
-from report.ImageData import ImageData
+from report.html_data import HtmlData
+from report.html_generator import HtmlGenerator
+from report.image_data import ImageData
 
 
 class HtmlGeneratorApi:
