@@ -8,7 +8,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 import numpy as np
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
-from src.cli.StringStyling import StringStyling
+from src.cli.string_styling import StringStyling
 
 
 class VisualizeTraining:

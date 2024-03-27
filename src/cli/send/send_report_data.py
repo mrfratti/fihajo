@@ -1,7 +1,7 @@
 import logging
 
 
-from report.API.HtmlGeneratorApi import HtmlGeneratorApi
+from report.API.html_generator_api import HtmlGeneratorApi
 
 
 class SendReportData:

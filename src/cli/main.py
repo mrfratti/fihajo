@@ -2,7 +2,7 @@ import argparse
 import logging
 import json
 from uncertainty_wizard.models import StochasticMode
-from src.cli.Send.SendReportData import SendReportData
+from src.cli.send.send_report_data import SendReportData
 from src.datasets.dataset_handler import (
     MnistDatasetHandler,
     Cifar10DatasetHandler,

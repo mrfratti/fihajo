@@ -1,9 +1,9 @@
 import logging
 import os
 from yattag import Doc
-from report.HtmlData import HtmlData
-from report.ImageData import ImageData
-from src.cli.StringStyling import StringStyling
+from report.html_data import HtmlData
+from report.image_data import ImageData
+from src.cli.string_styling import StringStyling
 
 
 doc, tag, text = Doc().tagtext()
