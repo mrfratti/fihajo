@@ -19,6 +19,7 @@ from keras.metrics import (
 )
 from keras.utils import Progbar
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
+from src.cli.StringStyling import StringStyling
 from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 
@@ -219,8 +220,18 @@ class Trainer:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
             logging.info("Model weights saved to: %s", save_path)
-        except Exception as e:
-            logging.error("Error saving the model weights: %s", e)
+        except FileNotFoundError:
+            print(
+                StringStyling.box_style(
+                    "File path not found or cannot open weight file"
+                )
+            )
+        except PermissionError:
+            print(
+                StringStyling.box_style(
+                    "Missing writing permissions, cannot write weight file"
+                )
+            )
 
     def _default_save_path(self) -> str:
         """Generate a default save path for the model based on training type"""

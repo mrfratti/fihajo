@@ -84,3 +84,10 @@ class HtmlGenerator:
 
         except TypeError as e:
             logging.warning("htmlgenerator: %s", e)
+
+        except FileNotFoundError:
+            print(
+                StringStyling.box_style("cannot open html file or filepath not found")
+            )
+        except PermissionError:
+            print(StringStyling.box_style("Missing permission to write html file"))
