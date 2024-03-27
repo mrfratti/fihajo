@@ -27,7 +27,7 @@ class ImageData:
             raise TypeError("Image location needs to be a string")
         if len(location) < 1:
             raise ValueError("Missing input for image location")
-        self._image_location = f"../../data/plots/{location}"
+        self._image_location = f"data/plots/{location}"
 
     @about_image.setter  # noqa: F821
     def about_image(self, text):
