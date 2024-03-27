@@ -1,10 +1,16 @@
+"""arguments for saving and loding model"""
+
 import argparse
+
 import logging
-from src.visualization.visualization import VisualizeEvaluation
 import numpy as np
-from src.weight_processing.weight_manager import WeightManager
+
 from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
+
+from src.visualization.visualization import VisualizeEvaluation
+from src.weight_processing.weight_manager import WeightManager
+
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
