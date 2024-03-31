@@ -16,6 +16,7 @@ from keras.metrics import (
     CategoricalAccuracy,
 )
 from keras.utils import Progbar
+from keras import optimizers
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.cli.string_styling import StringStyling
 from src.visualization.visualization import VisualizeTraining
@@ -125,9 +126,9 @@ class Trainer:
         val_accuracy = CategoricalAccuracy(name="val_accuracy")
 
         if platform.system() == "Darwin" and platform.processor() == "arm":
-            optimizer = tf.keras.optimizers.legacy.Adadelta()
+            optimizer = optimizers.legacy.Adadelta()
         else:
-            optimizer = tf.keras.optimizers.Adadelta()
+            optimizer = optimizers.Adadelta()
 
         x_train, y_train = self.train_dataset
         x_val, y_val = self.test_dataset
