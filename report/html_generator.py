@@ -1,5 +1,11 @@
 import logging
 import os
+import numpy as np
+import pandas as pd
+from mpld3 import fig_to_html, plugins
+
+import matplotlib.pyplot as plt
+
 from yattag import Doc
 from report.html_data import HtmlData
 from report.image_data import ImageData
@@ -15,6 +21,27 @@ class HtmlGenerator:
     def __init__(self) -> None:
         self._image_data_list = []
         self._html_report = HtmlData()
+
+    def _plotfig(self) -> str:
+        fig, ax = plt.subplots(subplot_kw=dict(facecolor="#EEEEEE"))
+        N = 100
+
+        scatter = ax.scatter(
+            np.random.normal(size=N),
+            np.random.normal(size=N),
+            c=np.random.random(size=N),
+            s=1000 * np.random.random(size=N),
+            alpha=0.3,
+        )
+        ax.grid(color="white", linestyle="solid")
+
+        ax.set_title("Scatter Plot Example", size=20)
+
+        labels = ["point {0}".format(i + 1) for i in range(N)]
+        tooltip = plugins.PointLabelTooltip(scatter, labels=labels)
+        plugins.connect(fig, tooltip)
+
+        return str(fig_to_html(fig))
 
     @property
     def image_data(self) -> int:
@@ -61,6 +88,8 @@ class HtmlGenerator:
                                 doc.stag("img", src=data.image_location, klass="photo")
                                 with tag("p"):
                                     text(data.about_image)
+                        with tag("div", klass="section"):
+                            doc.stag(self._plotfig())
         return doc.getvalue()
 
     def write_html(self) -> None:
