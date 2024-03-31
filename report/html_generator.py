@@ -74,14 +74,14 @@ class HtmlGenerator:
                     "Htmlgenerator: Dirctory %s did not exist making directory",
                     self._html_report.html_store_location,
                 )
-            file = open(
+            with open(
                 f"{self._html_report.html_store_location}{self._html_report.filename}",
                 "w",
                 encoding="UTF-8",
-            )
-            logging.info(StringStyling.box_style("Writing report"))
-            file.write(self._generate())
-            file.close()
+            ) as file:
+                logging.info(StringStyling.box_style("Writing report"))
+                file.write(self._generate())
+                file.close()
         except ValueError as e:
             logging.warning("htmlgenerator: %s", e)
             return

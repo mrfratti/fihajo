@@ -3,7 +3,7 @@ import logging
 import os.path
 import datetime
 import numpy as np
-import tensorflow as tf
+from keras import Model
 import pandas as pd
 from sklearn.manifold import TSNE
 from src.visualization.visualization import VisualizeUncertainty
@@ -91,7 +91,7 @@ class Analyzer:
         predictive_confidence = np.max(self.model.predict(x_test), axis=1)
 
         # Extracting features from second last layer (dense) for t-SNE visualization
-        feature_model = tf.keras.Model(
+        feature_model = Model(
             inputs=self.model.inner.inputs,
             outputs=self.model.inner.get_layer("dense").output,
         )
@@ -176,6 +176,6 @@ class Analyzer:
 
         table.to_csv(os.path.join(output_dir, filename_csv))
         table.to_excel(os.path.join(output_dir, filename_xlsx))
-        logging.info(f"Tables saved to {output_dir}")
+        logging.info("Tables saved to %s", output_dir)
 
         return table

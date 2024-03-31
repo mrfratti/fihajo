@@ -1,6 +1,3 @@
-import datetime
-
-
 class HtmlData:
     """Defines data about the html"""
 
