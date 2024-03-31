@@ -1,7 +1,6 @@
 import logging
 import os
 import numpy as np
-import pandas as pd
 from mpld3 import fig_to_html, plugins
 
 import matplotlib.pyplot as plt
