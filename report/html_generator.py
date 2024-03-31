@@ -65,6 +65,7 @@ class HtmlGenerator:
         self._html_report = report
 
     def _generate(self) -> str:
+        doc.asis("<!DOCTYPE html>")
         with tag("html"):
             with tag("head"):
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
