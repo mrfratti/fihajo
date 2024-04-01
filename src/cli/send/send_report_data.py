@@ -1,4 +1,8 @@
+import json
 import logging
+import os
+
+from matplotlib.font_manager import json_load
 
 
 from report.API.html_generator_api import HtmlGeneratorApi
@@ -30,19 +34,26 @@ class SendReportData:
             raise ValueError("Send report: No filenames for images in filename list")
         self._filenames.update(filenames)
 
+    def _img(self, filenames):
+        return {
+            "image_header": "Model Training",
+            "image_location": f"training/{filenames['training']}",
+            "about_image": " loss in the model ...",
+        }
+
     def send(self, report_location="", report_filename=""):
         """send to api"""
         images = []
-
+        path = "data/send.json"
         if "training" in self._filenames.keys():
-            images.append(
-                {
-                    "image_header": "Model Training",
-                    "image_location": f"training/{self._filenames['training']}",
-                    "about_image": " loss in the model ...",
-                }
-            )
+            images.append(self._img(self._filenames))
+            with open(path, "w", encoding="UTF-8") as file:
+                json.dump(self._filenames, file)
+
         if "predictions" in self._filenames.keys():
+            if os.path.isfile(path):
+                with open(path, "r", encoding="UTF-8") as file:
+                    images.append(self._img(json.load(file)))
             images.append(
                 {
                     "image_header": "Model Prediction ",
