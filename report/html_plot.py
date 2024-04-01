@@ -13,17 +13,16 @@ class HtmlPlot:
         return str(fig_to_html(self._fig))
 
     @plot.setter
-    def plot(self):
-        N = 100
+    def plot(self, sizeN=100):
         scatter = self._ax.scatter(
-            np.random.normal(size=N),
-            np.random.normal(size=N),
-            c=np.random.random(size=N),
-            s=1000 * np.random.random(size=N),
+            np.random.normal(size=sizeN),
+            np.random.normal(size=sizeN),
+            c=np.random.random(size=sizeN),
+            s=1000 * np.random.random(size=sizeN),
             alpha=0.3,
         )
         self._ax.grid(color="white", linestyle="solid")
         self._ax.set_title("Scatter Plot Example", size=20)
-        labels = ["point {0}".format(i + 1) for i in range(N)]
+        labels = ["point {0}".format(i + 1) for i in range(sizeN)]
         tooltip = plugins.PointLabelTooltip(scatter, labels=labels)
         plugins.connect(self._fig, tooltip)
