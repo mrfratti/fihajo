@@ -12,8 +12,11 @@ class HtmlPlot:
     @property
     def plot(self) -> str:
         """Returns html code of an plot"""
-
-        return str(fig_to_html(self._fig))
+        plot = ""
+        for line in fig_to_html(self._fig).splitlines():
+            if -1 == line.find("//") or -1 != line.find("https://"):
+                plot += line.replace("<style>", "").replace("</style>", "")
+        return plot
 
     @plot.setter
     def plot(self, sizeN=100):
