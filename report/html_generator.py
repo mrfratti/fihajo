@@ -1,10 +1,5 @@
 import logging
 import os
-import numpy as np
-from mpld3 import fig_to_html, plugins
-
-import matplotlib.pyplot as plt
-
 from yattag import Doc
 from report.html_data import HtmlData
 from report.html_plot import HtmlPlot
@@ -21,7 +16,8 @@ class HtmlGenerator:
     def __init__(self) -> None:
         self._image_data_list = []
         self._html_report = HtmlData()
-        self._html_plot = HtmlPlot().plot
+        self._html_plot = HtmlPlot()
+        self._html_plot.plot = 100
 
     @property
     def image_data(self) -> int:
@@ -70,7 +66,7 @@ class HtmlGenerator:
                                 with tag("p"):
                                     text(data.about_image)
                         with tag("div", klass="section"):
-                            doc.stag(self._html_plot)
+                            doc.stag(self._html_plot.plot)
         return doc.getvalue()
 
     def write_html(self) -> None:
