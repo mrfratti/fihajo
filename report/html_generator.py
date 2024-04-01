@@ -79,7 +79,7 @@ class HtmlGenerator:
         with tag("div", klass="section"):
             with tag("h1"):
                 text(self._html_plot.header)
-            doc.stag(self._html_plot.plot)
+            doc.asis(self._html_plot.plot)
 
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""
