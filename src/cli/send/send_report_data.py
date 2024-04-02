@@ -1,9 +1,5 @@
 import json
-import logging
 import os
-
-from matplotlib.font_manager import json_load
-
 
 from report.API.html_generator_api import HtmlGeneratorApi
 
