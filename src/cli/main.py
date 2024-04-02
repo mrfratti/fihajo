@@ -2,6 +2,7 @@ import argparse
 import logging
 import json
 import tensorflow as tf
+from tomlkit import boolean
 from uncertainty_wizard.models import StochasticMode
 from src.cli.send.send_report_data import SendReportData
 from src.datasets.dataset_handler import (
@@ -103,6 +104,9 @@ class CLIApp:
             default=None,
             help="Learning rate for the optimizer",
         )
+        parser_train.add_argument(
+            "--report", action="store_true", help="Generate report"
+        )
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser("evaluate", help="Evaluate the model")
@@ -130,6 +134,9 @@ class CLIApp:
             default=0.3,
             help="Epsilon for adversarial " "perturbation during evaluation",
         )
+        parser_evaluate.add_argument(
+            "--report", action="store_true", help="Generate report"
+        )
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
@@ -156,6 +163,7 @@ class CLIApp:
 
     def add_report_subparser(self, subparsers):
         report_parser = subparsers.add_parser("report", help="Genereate report")
+        report_parser.set_defaults(func=self.report)
 
     def check_positive(self, value):
         ivalue = int(value)
@@ -202,7 +210,8 @@ class CLIApp:
             trainer.train()
             trainer.save_model()
             self._plot_file_names.update(trainer.plot_file_names)
-
+            if args.report:
+                self.report()
         except Exception as e:
             logging.error("An error occurred during training: %s", e)
 
@@ -248,8 +257,10 @@ class CLIApp:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
             self._plot_file_names.update(evaluator.plot_file_names)
+            if args.report:
+                self.report()
         except Exception as e:
-            logging.error(f"An error occurred during evaluation: {e}")
+            logging.error("An error occurred during evaluation: %s", e)
 
     def analyze(self, args):
         model_path = (
@@ -287,9 +298,9 @@ class CLIApp:
             analyzer = Analyzer(model_builder, (x_test, y_test), batch, args)
             analyzer.analyze()
         except Exception as e:
-            logging.error(f"An error occurred during uncertainty analysis: {e}")
+            logging.error("An error occurred during uncertainty analysis: %s", e)
 
-    def report(self, args=""):
+    def report(self):
         """Run report generation"""
         if self._reportgen:
             try:
@@ -339,4 +350,3 @@ class CLIApp:
 if __name__ == "__main__":
     app = CLIApp()
     app.run()
-    app.report()
