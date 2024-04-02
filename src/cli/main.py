@@ -24,7 +24,6 @@ class CLIApp:
         # tf.config.set_visible_devices([], "GPU")  # uncomment to disable gpu
         self.parser = self.setup_parser()
         self._plot_file_names = {}
-        self._reportgen = True
 
     def setup_parser(self):
         parser = argparse.ArgumentParser(
@@ -301,16 +300,15 @@ class CLIApp:
 
     def report(self):
         """Run report generation"""
-        if self._reportgen:
-            try:
-                send = SendReportData()
-                send.filenames = self._plot_file_names
-                send.send()
-            except ValueError as e:
-                logging.warning("main.report: %s", e)
+        try:
+            send = SendReportData()
+            send.filenames = self._plot_file_names
+            send.send()
+        except ValueError as e:
+            logging.warning("main.report: %s", e)
 
-            except TypeError as e:
-                logging.warning("main.report: %s", e)
+        except TypeError as e:
+            logging.warning("main.report: %s", e)
 
     def load_config(self, file_path):
         """loading predefined configuration file in json format"""
