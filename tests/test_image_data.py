@@ -1,6 +1,5 @@
 import unittest
 
-from tomlkit import value
 from report.image_data import ImageData
 
 
