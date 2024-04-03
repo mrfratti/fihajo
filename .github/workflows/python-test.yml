@@ -26,5 +26,6 @@ jobs:
           pip install pytest
 
       - name: Run unittest
+        continue-on-error: false
         run: |
           python -m unittest discover -v -s ./tests

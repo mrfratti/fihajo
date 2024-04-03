@@ -25,5 +25,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint tensorflow yattag keras numpy cleverhans uncertainty_wizard pandas scikit-learn seaborn mpld3
       - name: Analysing the code with pylint
+        continue-on-error: false
         run: |
           pylint $(git ls-files '*.py') --fail-under 8 --fail-on E
