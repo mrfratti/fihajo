@@ -1,6 +1,12 @@
 name: Python unittest CI
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -20,5 +26,6 @@ jobs:
           pip install pytest
 
       - name: Run unittest
+        continue-on-error: false
         run: |
           python -m unittest discover -v -s ./tests
