@@ -1,7 +1,7 @@
 import argparse
 import logging
 import json
-import tensorflow as tf
+
 from uncertainty_wizard.models import StochasticMode
 from src.cli.send.send_report_data import SendReportData
 from src.datasets.dataset_handler import (
@@ -21,7 +21,6 @@ from src.uncertainty.analyze import Analyzer
 
 class CLIApp:
     def __init__(self):
-        # tf.config.set_visible_devices([], "GPU")  # uncomment to disable gpu
         self.parser = self.setup_parser()
         self._plot_file_names = {}
 
