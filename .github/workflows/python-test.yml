@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          ip install pylint tensorflow yattag keras numpy cleverhans uncertainty_wizard pandas scikit-learn seaborn mpld3
+          pip install pylint tensorflow yattag keras numpy cleverhans uncertainty_wizard pandas scikit-learn seaborn mpld3
 
       - name: Run unittest
         continue-on-error: false
