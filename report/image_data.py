@@ -21,7 +21,7 @@ class ImageData:
         """returns the header for an image"""
         return self._header_image
 
-    @image_location.setter  # noqa: F821
+    @image_location.setter
     def image_location(self, location):
         if not isinstance(location, str):
             raise TypeError("Image location needs to be a string")
@@ -29,13 +29,13 @@ class ImageData:
             raise ValueError("Missing input for image location")
         self._image_location = f"data/plots/{location}"
 
-    @about_image.setter  # noqa: F821
+    @about_image.setter
     def about_image(self, text):
         if not isinstance(text, str):
             raise TypeError("info about the image needs to be a string")
         self._about_image = text
 
-    @header_image.setter  # noqa: F821
+    @header_image.setter
     def header_image(self, text):
         if not isinstance(text, str):
             raise TypeError("header for image needs to be a string")
