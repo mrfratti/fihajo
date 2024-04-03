@@ -23,7 +23,7 @@ class TestCLIApp(unittest.TestCase):
         },
     )
     @patch("src.cli.main.CLIApp.train")
-    def test_run_train_command(self, mock_train):
+    def test_run_train_command(self, mock_train, mock_load_config, mock_parse_args):
         app = CLIApp()
         status_code = app.run()  # pylint: disable=E1111
         mock_train.assert_called_once_with(app.args)
