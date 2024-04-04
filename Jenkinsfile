@@ -69,7 +69,7 @@ pipeline {
 
         stage('HTML Report') {
             steps {
-                publishHTML target: [
+                publishHTML( target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
@@ -77,7 +77,13 @@ pipeline {
                     reportFiles: 'index.html',
                     reportName: "HTML Report"
                 ]
+    
+            script {
+                def reportURL = "${env.BUILD_URL}HTMLReport/"
+                echo "<a href='${reportURL}' target='_blank'>Open HTML Report</a>"
             }
-        }
+            
+            )
+        }}
     }
-}
+})
