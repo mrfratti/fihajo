@@ -397,25 +397,6 @@ class VisualizeUncertainty:
         plt.show()
         self._plot_file_names["prediction_vs_entrophy"] = filename
 
-    def plot_tsne_entropy(self, tsne_results, entropy_scores):
-        # Plot the t-SNE results
-        plt.figure(figsize=(10, 7))
-        scatter = plt.scatter(
-            tsne_results[:, 0],
-            tsne_results[:, 1],
-            c=entropy_scores,
-            cmap="viridis_r",
-            alpha=0.6,
-        )
-        cbar = plt.colorbar(scatter)
-        cbar.set_label("Entropy Score")
-        plt.xlabel("t-SNE Dimension 1")
-        plt.ylabel("t-SNE Dimension 2")
-        plt.title("t-SNE Visualization of Predictive Entropy")
-        filename = self._save_plot("tsne_entropy")
-        plt.show()
-        self._plot_file_names["tsne_entropy"] = filename
-
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.png"
