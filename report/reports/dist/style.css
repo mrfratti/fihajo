@@ -22,14 +22,14 @@ header h1 {
   color: #76abae;
 }
 
-@media (pointer: none), (pointer: coarse) {
+@media (pointer: coarse) {
   main {
     grid-template-columns: auto;
   }
 }
-@media (pointer: none), (pointer: fine) {
+@media (pointer: fine){
   main {
-    grid-template-columns: auto auto;
+    grid-template-columns: repeat(auto-fill, minmax(1000px, 1fr));
   }
 }
 main {
