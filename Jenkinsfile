@@ -70,7 +70,7 @@ pipeline {
                 script {
                     def defaultfile = "data/models/mnist.model.h5"
                     def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                    sh "echo | python -m src.cli.main --verbose analyze --dataset mnist"
+                    sh "echo | python -m src.cli.main analyze --dataset mnist"
                 }
             }
         }

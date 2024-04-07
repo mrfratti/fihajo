@@ -36,7 +36,7 @@ class Analyzer:
 
     @property
     def default_path(self) -> str:
-        """returns the default path of wheights storing location"""
+        """returns the default path of weights storing location"""
         return self._weightmanager.default_path
 
     def analyze(self):
