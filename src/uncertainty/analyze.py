@@ -158,7 +158,7 @@ class Analyzer:
             output_dir = save_path if save_path else "data/tables"
 
         except EOFError as e:
-            logging.error("error with input from user console: %s", e)
+            logging.error("analyze: error with input from user console: %s", e)
             output_dir = "data/tables"
             pass
 
