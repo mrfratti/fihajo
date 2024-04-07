@@ -73,6 +73,8 @@ class HtmlGenerator:
                 doc.stag("img", src=data.image_location, klass="photo")
                 with tag("p"):
                     text(data.about_image)
+                with tag("a", href=data.image_location):
+                    text("Image link")
 
     def _plot(self):
         with tag("div", klass="section"):

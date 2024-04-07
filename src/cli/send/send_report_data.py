@@ -56,6 +56,10 @@ class SendReportData:
         """send to api"""
         images = []
         self._filenames = self._load_json()
+        if self._filenames is None or len(self._filenames) < 1:
+            raise ValueError(
+                "No plots to generate report from, run train, analyze or evaluate first."
+            )
         if "training" in self._filenames.keys():
             images.append(self._img(self._filenames))
 
