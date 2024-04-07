@@ -13,7 +13,7 @@ class HtmlPlot:
     def plot(self) -> str:
         """Returns html code of an plot"""
         plot = ""
-        for line in fig_to_html(self._fig).splitlines():
+        for line in fig_to_html(self._fig, include_libraries=True).splitlines():
             if -1 == line.find("//") or -1 != line.find("https://"):
                 plot += line.replace("<style>", "").replace("</style>", "")
         return plot

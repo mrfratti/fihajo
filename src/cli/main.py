@@ -32,7 +32,7 @@ class CLIApp:
             "--config",
             type=str,
             help="Path to a JSON configuration file. Command line arguments "
-            "override config file values.",
+                 "override config file values.",
         )
         parser.add_argument(
             "--verbose", action="store_true", help="Increase output verbosity."
@@ -77,7 +77,7 @@ class CLIApp:
             "--adv",
             action="store_true",
             help="Enable adversarial training to improve model "
-            "robustness against adversarial examples.",
+                 "robustness against adversarial examples.",
         )
         parser_train.add_argument(
             "--eps",
@@ -137,16 +137,9 @@ class CLIApp:
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
-        uncertainty_parser = subparsers.add_parser(
-            "analyze", help="Analyze model uncertainty"
-        )
-        uncertainty_parser.add_argument(
-            "--dataset",
-            type=str,
-            choices=["mnist", "cifar10", "fashion_mnist"],
-            required=True,
-            help="The dataset used for analysis.",
-        )
+        uncertainty_parser = subparsers.add_parser("analyze", help="Analyze model uncertainty")
+        uncertainty_parser.add_argument("--dataset", type=str, choices=["mnist", "cifar10", "fashion_mnist"],
+                                        required=True, help="The dataset used for analysis.")
         uncertainty_parser.add_argument(
             "--model-path",
             type=str,

@@ -4,6 +4,8 @@
 
 This repository contains the AI Model Uncertainty Analysis Tool, a command-line tool developed as part of a bachelor's thesis. The tool is designed to access the reliability of AI model predictions by analyzing the uncertainty of the models. It generates informative reports, including histograms of uncertainty distribution, highlights highly uncertain inputs, their corresponding uncertainty values, and the model's predictions. 
 
+[![Pylint](https://github.com/mrfratti/fihajo/actions/workflows/pylint.yml/badge.svg)](https://github.com/mrfratti/fihajo/actions/workflows/pylint.yml)
+[![Python unittest CI](https://github.com/mrfratti/fihajo/actions/workflows/python-test.yml/badge.svg)](https://github.com/mrfratti/fihajo/actions/workflows/python-test.yml)
 ## Features 
 
 - **Uncertainty Quantification:** Leverages the Uncertainty Wizard library to quantify the uncertainty in AI models.

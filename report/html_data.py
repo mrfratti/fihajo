@@ -13,8 +13,10 @@ class HtmlData:
 
     @header_text.setter
     def header_text(self, text):
-        if len(text) < 1 or not isinstance(text, str):
-            raise ValueError("Header text for html document needs to be a string")
+        if not isinstance(text, str):
+            raise TypeError("Header text for html document needs to be a string")
+        if len(text) < 1:
+            raise ValueError("Header text for html is missing")
         self._header_text = text
 
     @property

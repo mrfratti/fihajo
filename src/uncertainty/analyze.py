@@ -92,16 +92,6 @@ class Analyzer:
         """
         predictive_confidence = np.max(self.model.predict(x_test), axis=1)
 
-        # Extracting features from second last layer (dense) for t-SNE visualization
-        feature_model = Model(
-            inputs=self.model.inner.inputs,
-            outputs=self.model.inner.get_layer("dense").output,
-        )
-
-        features = feature_model.predict(x_test)
-        tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
-        tsne_results = tsne.fit_transform(features)
-
         # Compute statistics for the entropy scores
         print("Statistics for Entropy scores:")
         print("Mean:", np.mean(self.entropy_scores))
@@ -133,7 +123,6 @@ class Analyzer:
         visualizer.plot_predictive_conf_entropy_scores(
             predictive_confidence, self.entropy_scores
         )
-        visualizer.plot_tsne_entropy(tsne_results, self.entropy_scores)
         self._plot_file_names.update(visualizer.plot_file_names)
 
     def table_generator(self, x_test, y_test):
