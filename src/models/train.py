@@ -211,14 +211,22 @@ class Trainer:
 
     def save_model(self):
         """saving model weights"""
-        user_input = input(
-            "Enter a path to save the model or press Enter to use the default path: "
-        ).strip()
-        save_path = user_input if user_input else self._default_save_path()
+
+        try:
+            user_input = input(
+                "Enter a path to save the model or press Enter to use the default path: "
+            ).strip()
+            save_path = user_input if user_input else self._default_save_path()
+
+        except EOFError as e:
+            logging.error("train: error with input from user console: %s", e)
+            user_input = self._default_save_path
+
         try:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
             logging.info("Model weights saved to: %s", save_path)
+
         except FileNotFoundError:
             print(
                 StringStyling.box_style(

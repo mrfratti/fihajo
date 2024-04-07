@@ -160,7 +160,6 @@ class Analyzer:
         except EOFError as e:
             logging.error("analyze: error with input from user console: %s", e)
             output_dir = "data/tables"
-            pass
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
