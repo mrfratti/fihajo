@@ -37,7 +37,7 @@ header h1 {
 }
 @media (pointer: fine) {
   main {
-    grid-template-columns: repeat(auto-fill, minmax(1000px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(700px, 1fr));
   }
 }
 main {

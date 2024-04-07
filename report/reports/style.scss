@@ -42,7 +42,7 @@ header h1 {
 }
 @media (pointer: fine) {
   main {
-    grid-template-columns: repeat(auto-fill, minmax(1000px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(700px, 1fr));
   }
 }
 main {
@@ -66,6 +66,7 @@ h4 {
 .section {
   display: grid;
   grid-template-rows: auto auto auto;
+  justify-content: center;
 }
 .section h1,
 h2,
@@ -75,11 +76,11 @@ img {
   justify-content: center;
 }
 .section img {
-  width: 100%;
+  max-width: 100%;
   border-radius: 1rem;
   display: flex;
   justify-content: center;
-  max-height: 100vh;
+  max-height: 80vh;
 }
 .section p {
   margin: 1rem;
