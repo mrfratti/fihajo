@@ -3,9 +3,7 @@ import logging
 import os.path
 import datetime
 import numpy as np
-from keras import Model
 import pandas as pd
-from sklearn.manifold import TSNE
 from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 

@@ -131,14 +131,6 @@ class SendReportData:
                     "about_image": "lorem",
                 }
             )
-        if "tsne_entropy" in self._filenames.keys():
-            images.append(
-                {
-                    "image_header": "tsne entropy",
-                    "image_location": self._filenames["tsne_entropy"],
-                    "about_image": "lorem",
-                }
-            )
         if len(images) < 1:
             raise ValueError(
                 "sendreport: unknown filnames skipping sending (not making any report)"
