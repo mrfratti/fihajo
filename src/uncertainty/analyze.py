@@ -34,6 +34,7 @@ class Analyzer:
         self.entropy_scores = None
         self.mean_softmax_scores = None
         self.pcs_scores = None
+        self._plot_file_names = {}
 
     @property
     def default_path(self) -> str:
@@ -82,6 +83,7 @@ class Analyzer:
         visualizer.plot_pcs_mean_softmax(self.pcs_mean_softmax_scores)
         visualizer.plot_distribution_pcs_ms_scores(self.pcs_mean_softmax_scores)
         visualizer.plot_pcs_ms_inverse(self.pcs_mean_softmax_scores)
+        self._plot_file_names.update(visualizer.plot_file_names)
 
     def analyze_entropy(self, x_test):
         """
@@ -132,6 +134,7 @@ class Analyzer:
             predictive_confidence, self.entropy_scores
         )
         visualizer.plot_tsne_entropy(tsne_results, self.entropy_scores)
+        self._plot_file_names.update(visualizer.plot_file_names)
 
     def table_generator(self, x_test, y_test):
         """
@@ -179,3 +182,7 @@ class Analyzer:
         logging.info("Tables saved to %s", output_dir)
 
         return table
+
+    @property
+    def plot_file_names(self) -> dict:
+        return self._plot_file_names

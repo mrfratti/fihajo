@@ -77,7 +77,7 @@ class HtmlGenerator:
 
     def _plot(self):
         with tag("div", klass="section"):
-            with tag("h1"):
+            with tag("h2"):
                 text(self._html_plot.header)
             doc.asis(self._html_plot.plot)
 

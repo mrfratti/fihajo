@@ -1,5 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Noticia+Text:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@font-face {
+  font-family: "Lora";
+  src: url(../fonts/Lora/static/Lora-Regular.ttf);
+}
+
 $background: #eeeeee;
 $font_color: #222831;
 $border_color: #76abae;
@@ -37,15 +40,16 @@ header h1 {
     grid-template-columns: auto;
   }
 }
-@media (pointer: none), (pointer: fine) {
+@media (pointer: fine) {
   main {
-    grid-template-columns: repeat(auto-fill, minmax(min(50%, 600px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(1000px, 1fr));
   }
 }
 main {
   display: grid;
   gap: 1em;
   padding: 0.8em;
+  align-items: stretch;
 }
 
 h1,

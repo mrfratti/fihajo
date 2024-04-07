@@ -156,6 +156,9 @@ class CLIApp:
         uncertainty_parser.add_argument(
             "--batch", type=int, default=64, help="Batch size for analyzing."
         )
+        uncertainty_parser.add_argument(
+            "--report", action="store_true", help="Generate report"
+        )
         uncertainty_parser.set_defaults(func=self.analyze)
 
     def add_report_subparser(self, subparsers):
@@ -206,7 +209,7 @@ class CLIApp:
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
-            self._plot_file_names.update(trainer.plot_file_names)
+            SendReportData().filenames = trainer.plot_file_names
             if args.report:
                 self.report()
         except Exception as e:
@@ -253,7 +256,7 @@ class CLIApp:
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
-            self._plot_file_names.update(evaluator.plot_file_names)
+            SendReportData().filenames = evaluator.plot_file_names
             if args.report:
                 self.report()
         except Exception as e:
@@ -294,15 +297,16 @@ class CLIApp:
         try:
             analyzer = Analyzer(model_builder, (x_test, y_test), batch, args)
             analyzer.analyze()
+            SendReportData().filenames = analyzer.plot_file_names
+            if args.report:
+                self.report()
         except Exception as e:
             logging.error("An error occurred during uncertainty analysis: %s", e)
 
-    def report(self):
+    def report(self, args=""):
         """Run report generation"""
         try:
-            send = SendReportData()
-            send.filenames = self._plot_file_names
-            send.send()
+            SendReportData().send()
         except ValueError as e:
             logging.warning("main.report: %s", e)
 

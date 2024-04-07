@@ -1,5 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Noticia+Text:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@font-face {
+  font-family: "Lora";
+  src: url(../fonts/Lora/static/Lora-Regular.ttf);
+}
 html,
 body {
   height: 100%;
@@ -22,12 +24,18 @@ header h1 {
   color: #76abae;
 }
 
-@media (pointer: coarse) {
+/* Media query for smaller screens */
+@media screen and (max-width: 768px), (max-resolution: 192dpi), (max-resolution: 2dppx) {
   main {
     grid-template-columns: auto;
   }
 }
-@media (pointer: fine){
+@media (pointer: none), (pointer: coarse) {
+  main {
+    grid-template-columns: auto;
+  }
+}
+@media (pointer: fine) {
   main {
     grid-template-columns: repeat(auto-fill, minmax(1000px, 1fr));
   }
@@ -36,6 +44,7 @@ main {
   display: grid;
   gap: 1em;
   padding: 0.8em;
+  align-items: stretch;
 }
 
 h1,

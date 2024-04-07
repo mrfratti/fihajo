@@ -76,7 +76,7 @@ class VisualizeTraining:
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
-        return filename
+        return f"{self.plot_dir}/{filename}"
 
     @property
     def plot_file_names(self) -> dict:
@@ -222,7 +222,7 @@ class VisualizeEvaluation:
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
-        return filename
+        return f"{self.plot_dir}/{filename}"
 
     @property
     def plot_file_names(self) -> dict:
@@ -421,7 +421,7 @@ class VisualizeUncertainty:
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
-        return filename
+        return f"{self.plot_dir}/{filename}"
 
     @property
     def plot_file_names(self) -> dict:
