@@ -151,11 +151,16 @@ class Analyzer:
         # sort the table by predictive entropy
         table = table.sort_values(by="Prediction Entropy", ascending=False)
         print(table.head(10))
+        try:
+            save_path = input(
+                "Enter the path to save the tables or press Enter to use the default path: "
+            ).strip()
+            output_dir = save_path if save_path else "data/tables"
 
-        save_path = input(
-            "Enter the path to save the tables or press Enter to use the default path: "
-        ).strip()
-        output_dir = save_path if save_path else "data/tables"
+        except EOFError as e:
+            logging.error("error with input from user console: %s", e)
+            output_dir = "data/tables"
+            pass
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
