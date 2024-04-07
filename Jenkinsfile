@@ -70,7 +70,7 @@ pipeline {
                 script {
                     def defaultfile = "data/models/mnist.model.h5"
                     def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                    sh "echo | python -m src.cli.main analyze --dataset mnist"
+                    sh "echo | echo | python -m src.cli.main analyze --dataset mnist"
                 }
             }
         }
@@ -78,7 +78,7 @@ pipeline {
         stage('HTML Report') {
             steps {
                 script{
-                    sh "echo | echo | python -m src.cli.main report"
+                    sh "echo | python -m src.cli.main report"
                 }
                 publishHTML target: [
                     allowMissing: false,
