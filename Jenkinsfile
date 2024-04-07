@@ -78,7 +78,7 @@ pipeline {
         stage('HTML Report') {
             steps {
                 script{
-                    sh "echo | python -m src.cli.main report"
+                    sh "echo | echo | python -m src.cli.main report"
                 }
                 publishHTML target: [
                     allowMissing: false,
