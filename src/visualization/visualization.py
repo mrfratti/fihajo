@@ -254,8 +254,8 @@ class VisualizeUncertainty:
         plt.figure(figsize=(20, 10))
         plt.subplot(1, 2, 1)
         sns.histplot(pcs_scores, bins=50, kde=True, color="skyblue")
-        plt.xlabel("PCS Score")
-        plt.ylabel("Frequency")
+        plt.xlabel("PCS Score", fontsize=18)
+        plt.ylabel("Frequency", fontsize=18)
         plt.title("Distribution of PCS Scores")
         plt.subplot(1, 2, 2)
         sns.histplot(mean_softmax_scores, bins="auto", kde=True, color="lightgreen")
@@ -354,9 +354,9 @@ class VisualizeUncertainty:
             linewidth=2,
             label="Mean",
         )
-        plt.xlabel("Predictive Entropy", fontsize=14)
-        plt.ylabel("Frequency", fontsize=14)
-        plt.title("Histogram of Predictive Entropy", fontsize=18)
+        plt.xlabel("Predictive Entropy", fontsize=18)
+        plt.ylabel("Frequency", fontsize=18)
+        plt.title("Histogram of Predictive Entropy", fontsize=24)
         plt.legend()
         filename = self._save_plot("dist_entropy")
         plt.show()
