@@ -219,7 +219,9 @@ class Trainer:
             save_path = user_input if user_input else self._default_save_path()
 
         except EOFError as e:
-            logging.error("train: error with input from user console: %s", e)
+            logging.error(
+                "train: error with input from user console, using default path: %s", e
+            )
             user_input = self._default_save_path
 
         try:

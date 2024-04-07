@@ -158,7 +158,9 @@ class Analyzer:
             output_dir = save_path if save_path else "data/tables"
 
         except EOFError as e:
-            logging.error("analyze: error with input from user console: %s", e)
+            logging.error(
+                "analyze: error with input from user console, using default path: %s", e
+            )
             output_dir = "data/tables"
 
         if not os.path.exists(output_dir):
