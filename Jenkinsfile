@@ -67,9 +67,6 @@ pipeline {
             }
         }
         stage('ANALYZE') {
-            when {
-                expression { return env.stage_choice == 'Analyze' }
-            }
             steps {
                 script {
                     def defaultfile = "data/models/mnist.model.h5"
