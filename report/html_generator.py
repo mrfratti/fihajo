@@ -48,10 +48,6 @@ class HtmlGenerator:
                 with tag("meta", charset="UTF-8"):
                     pass
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
-                with tag("meta", http_equiv="Content-Security-Policy"):
-                    doc.attr(
-                        content="default-src 'self'; font-src 'self' http://localhost:8090;"
-                    )
                 with tag(
                     "meta",
                     name="viewport",
@@ -77,7 +73,6 @@ class HtmlGenerator:
                     text("No data to show")
         else:
             self._img()
-            self._plot()
 
     def _img(self):
         for data in self._image_data_list:
@@ -89,12 +84,6 @@ class HtmlGenerator:
                     text(data.about_image)
                 with tag("a", href=data.image_location):
                     text("Image link")
-
-    def _plot(self):
-        with tag("div", klass="section"):
-            with tag("h2"):
-                text(self._html_plot.header)
-            doc.asis(self._html_plot.plot)
 
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""
