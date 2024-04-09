@@ -45,7 +45,20 @@ class HtmlGenerator:
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             with tag("head"):
+                with tag("meta", charset="UTF-8"):
+                    pass
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
+                with tag("meta", http_equiv="Content-Security-Policy"):
+                    doc.attr(
+                        content="default-src 'self'; font-src 'self' http://localhost:8090;"
+                    )
+                with tag(
+                    "meta",
+                    name="viewport",
+                    content="width=device-width, initial-scale=1.0",
+                ):
+                    pass
+
             with tag("body"):
                 with tag("header"):
                     with tag("h1"):
