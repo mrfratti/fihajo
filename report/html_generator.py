@@ -15,7 +15,6 @@ class HtmlGenerator:
     def __init__(self) -> None:
         self._image_data_list = []
         self._html_report = HtmlData()
-        self._html_plot.plot = 100
 
     @property
     def image_data(self) -> int:
