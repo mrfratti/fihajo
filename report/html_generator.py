@@ -77,6 +77,7 @@ class HtmlGenerator:
                     text("No data to show")
         else:
             self._img()
+            self._plot()
 
     def _img(self):
         for data in self._image_data_list:
