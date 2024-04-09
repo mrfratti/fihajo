@@ -2,7 +2,6 @@ import logging
 import os
 from yattag import Doc
 from report.html_data import HtmlData
-from report.html_plot import HtmlPlot
 from report.image_data import ImageData
 from src.cli.string_styling import StringStyling
 
@@ -16,7 +15,6 @@ class HtmlGenerator:
     def __init__(self) -> None:
         self._image_data_list = []
         self._html_report = HtmlData()
-        self._html_plot = HtmlPlot()
         self._html_plot.plot = 100
 
     @property
