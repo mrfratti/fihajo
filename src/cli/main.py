@@ -32,7 +32,7 @@ class CLIApp:
             "--config",
             type=str,
             help="Path to a JSON configuration file. Command line arguments "
-                 "override config file values.",
+            "override config file values.",
         )
         parser.add_argument(
             "--verbose", action="store_true", help="Increase output verbosity."
@@ -77,7 +77,7 @@ class CLIApp:
             "--adv",
             action="store_true",
             help="Enable adversarial training to improve model "
-                 "robustness against adversarial examples.",
+            "robustness against adversarial examples.",
         )
         parser_train.add_argument(
             "--eps",
@@ -137,9 +137,16 @@ class CLIApp:
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
-        uncertainty_parser = subparsers.add_parser("analyze", help="Analyze model uncertainty")
-        uncertainty_parser.add_argument("--dataset", type=str, choices=["mnist", "cifar10", "fashion_mnist"],
-                                        required=True, help="The dataset used for analysis.")
+        uncertainty_parser = subparsers.add_parser(
+            "analyze", help="Analyze model uncertainty"
+        )
+        uncertainty_parser.add_argument(
+            "--dataset",
+            type=str,
+            choices=["mnist", "cifar10", "fashion_mnist"],
+            required=True,
+            help="The dataset used for analysis.",
+        )
         uncertainty_parser.add_argument(
             "--model-path",
             type=str,
@@ -148,6 +155,9 @@ class CLIApp:
         )
         uncertainty_parser.add_argument(
             "--batch", type=int, default=64, help="Batch size for analyzing."
+        )
+        uncertainty_parser.add_argument(
+            "--report", action="store_true", help="Generate report"
         )
         uncertainty_parser.set_defaults(func=self.analyze)
 
@@ -199,7 +209,7 @@ class CLIApp:
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
-            self._plot_file_names.update(trainer.plot_file_names)
+            SendReportData().filenames = trainer.plot_file_names
             if args.report:
                 self.report()
         except Exception as e:
@@ -246,7 +256,7 @@ class CLIApp:
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
-            self._plot_file_names.update(evaluator.plot_file_names)
+            SendReportData().filenames = evaluator.plot_file_names
             if args.report:
                 self.report()
         except Exception as e:
@@ -255,7 +265,7 @@ class CLIApp:
     def analyze(self, args):
         model_path = (
             args.model_path
-            if hasattr(args, "model_path") and args.model_path
+            if (hasattr(args, "model_path") and args.model_path)
             else input(
                 "Enter the model path for analysis or press Enter to use the default path: "
             ).strip()
@@ -287,15 +297,16 @@ class CLIApp:
         try:
             analyzer = Analyzer(model_builder, (x_test, y_test), batch, args)
             analyzer.analyze()
+            SendReportData().filenames = analyzer.plot_file_names
+            if args.report:
+                self.report()
         except Exception as e:
             logging.error("An error occurred during uncertainty analysis: %s", e)
 
-    def report(self):
+    def report(self, args=""):
         """Run report generation"""
         try:
-            send = SendReportData()
-            send.filenames = self._plot_file_names
-            send.send()
+            SendReportData().send()
         except ValueError as e:
             logging.warning("main.report: %s", e)
 

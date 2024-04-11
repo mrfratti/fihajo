@@ -2,7 +2,6 @@ import logging
 import os
 from yattag import Doc
 from report.html_data import HtmlData
-from report.html_plot import HtmlPlot
 from report.image_data import ImageData
 from src.cli.string_styling import StringStyling
 
@@ -16,8 +15,6 @@ class HtmlGenerator:
     def __init__(self) -> None:
         self._image_data_list = []
         self._html_report = HtmlData()
-        self._html_plot = HtmlPlot()
-        self._html_plot.plot = 100
 
     @property
     def image_data(self) -> int:
@@ -45,7 +42,16 @@ class HtmlGenerator:
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             with tag("head"):
+                with tag("meta", charset="UTF-8"):
+                    pass
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
+                with tag(
+                    "meta",
+                    name="viewport",
+                    content="width=device-width, initial-scale=1.0",
+                ):
+                    pass
+
             with tag("body"):
                 with tag("header"):
                     with tag("h1"):
@@ -64,7 +70,6 @@ class HtmlGenerator:
                     text("No data to show")
         else:
             self._img()
-            self._plot()
 
     def _img(self):
         for data in self._image_data_list:
@@ -74,12 +79,8 @@ class HtmlGenerator:
                 doc.stag("img", src=data.image_location, klass="photo")
                 with tag("p"):
                     text(data.about_image)
-
-    def _plot(self):
-        with tag("div", klass="section"):
-            with tag("h1"):
-                text(self._html_plot.header)
-            doc.asis(self._html_plot.plot)
+                with tag("a", href=data.image_location):
+                    text("Image link")
 
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""

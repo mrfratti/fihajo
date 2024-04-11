@@ -61,15 +61,26 @@ pipeline {
                 script {
                     def defaultfile = "data/models/mnist.model.h5"
                     def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                    def load_path = input(id: 'userInputLoadPath', message: 'Enter the load path for model weights:', parameters: [string(description: 'Model load path', name: 'loadPath', defaultValue: fullpath)])
-                    sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist --report"
+                    sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist"
+                }
+            }
+        }
+        stage('ANALYZE') {
+            steps {
+                script {
+                    def defaultfile = "data/models/mnist.model.h5"
+                    def fullpath ="${env.WORKSPACE}/${defaultfile}"
+                    sh "echo | python -m src.cli.main analyze --dataset mnist"
                 }
             }
         }
 
         stage('HTML Report') {
             steps {
-                publishHTML( target: [
+                script{
+                    sh "echo | python -m src.cli.main report"
+                }
+                publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
@@ -77,13 +88,7 @@ pipeline {
                     reportFiles: 'index.html',
                     reportName: "HTML Report"
                 ]
-    
-            script {
-                def reportURL = "${env.BUILD_URL}HTMLReport/"
-                echo "<a href='${reportURL}' target='_blank'>Open HTML Report</a>"
             }
-            
-            )
-        }}
+        }
     }
-})
+}

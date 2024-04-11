@@ -3,9 +3,7 @@ import logging
 import os.path
 import datetime
 import numpy as np
-from keras import Model
 import pandas as pd
-from sklearn.manifold import TSNE
 from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
@@ -34,10 +32,11 @@ class Analyzer:
         self.entropy_scores = None
         self.mean_softmax_scores = None
         self.pcs_scores = None
+        self._plot_file_names = {}
 
     @property
     def default_path(self) -> str:
-        """returns the default path of wheights storing location"""
+        """returns the default path of weights storing location"""
         return self._weightmanager.default_path
 
     def analyze(self):
@@ -82,6 +81,7 @@ class Analyzer:
         visualizer.plot_pcs_mean_softmax(self.pcs_mean_softmax_scores)
         visualizer.plot_distribution_pcs_ms_scores(self.pcs_mean_softmax_scores)
         visualizer.plot_pcs_ms_inverse(self.pcs_mean_softmax_scores)
+        self._plot_file_names.update(visualizer.plot_file_names)
 
     def analyze_entropy(self, x_test):
         """
@@ -121,6 +121,7 @@ class Analyzer:
         visualizer.plot_predictive_conf_entropy_scores(
             predictive_confidence, self.entropy_scores
         )
+        self._plot_file_names.update(visualizer.plot_file_names)
 
     def table_generator(self, x_test, y_test):
         """
@@ -150,11 +151,17 @@ class Analyzer:
         # sort the table by predictive entropy
         table = table.sort_values(by="Prediction Entropy", ascending=False)
         print(table.head(10))
+        try:
+            save_path = input(
+                "Enter the path to save the tables or press Enter to use the default path: "
+            ).strip()
+            output_dir = save_path if save_path else "data/tables"
 
-        save_path = input(
-            "Enter the path to save the tables or press Enter to use the default path: "
-        ).strip()
-        output_dir = save_path if save_path else "data/tables"
+        except EOFError as e:
+            logging.error(
+                "analyze: error with input from user console, using default path: %s", e
+            )
+            output_dir = "data/tables"
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -168,3 +175,7 @@ class Analyzer:
         logging.info("Tables saved to %s", output_dir)
 
         return table
+
+    @property
+    def plot_file_names(self) -> dict:
+        return self._plot_file_names
