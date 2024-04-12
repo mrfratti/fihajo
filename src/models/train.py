@@ -126,7 +126,7 @@ class Trainer:
         val_accuracy = CategoricalAccuracy(name="val_accuracy")
 
         if platform.system() == "Darwin" and platform.processor() == "arm":
-            optimizer = optimizers.legacy.Adadelta()
+            optimizer = optimizers.legacy.Adadelta()  # pylint: disable=E1101
         else:
             optimizer = optimizers.Adadelta()
 
