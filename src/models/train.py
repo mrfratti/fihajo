@@ -126,7 +126,7 @@ class Trainer:
         val_accuracy = CategoricalAccuracy(name="val_accuracy")
 
         if platform.system() == "Darwin" and platform.processor() == "arm":
-            optimizer = optimizers.legacy.Adadelta()
+            optimizer = optimizers.legacy.Adadelta()  # pylint: disable=E1101
         else:
             optimizer = optimizers.Adadelta()
 
@@ -137,8 +137,8 @@ class Trainer:
             print(f"\nEpoch {epoch + 1}/{self.args.epochs}")
             # Initialize progress bar
             progbar = Progbar(target=len(x_train) // self.args.batch, unit_name="batch")
-            train_loss.reset_states()
-            train_accuracy.reset_states()
+            train_loss.reset_state()
+            train_accuracy.reset_state()
 
             for batch_index, (x_batch, y_batch) in enumerate(
                 tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(
@@ -165,13 +165,13 @@ class Trainer:
                 progbar.update(
                     batch_index + 1,
                     values=[
-                        ("loss", train_loss.result),
-                        ("accuracy", train_accuracy.result),
+                        ("loss", train_loss.result()),
+                        ("accuracy", train_accuracy.result()),
                     ],
                 )
 
-            adv_training_history["loss"].append(np.array(train_loss.result))
-            adv_training_history["accuracy"].append(np.array(train_accuracy.result))
+            adv_training_history["loss"].append(np.array(train_loss.result()))
+            adv_training_history["accuracy"].append(np.array(train_accuracy.result()))
 
             # Validation phase after each epoch
             for x_batch, y_batch in tf.data.Dataset.from_tensor_slices(
@@ -187,21 +187,21 @@ class Trainer:
                 val_loss(batch_val_loss)
                 val_accuracy(y_batch, val_predictions)
 
-            adv_training_history["val_loss"].append(np.array(val_loss.result))
-            adv_training_history["val_accuracy"].append(np.array(val_accuracy.result))
+            adv_training_history["val_loss"].append(np.array(val_loss.result()))
+            adv_training_history["val_accuracy"].append(np.array(val_accuracy.result()))
 
             logging.info(
                 f"Epoch {epoch + 1} completed. Loss: {np.array(train_loss.result):.3f}, "
-                f"Accuracy: {np.array(train_accuracy.result):.3f}, "
-                f"Validation Loss: {np.array(val_loss.result):.3f}, "
-                f"Validation Accuracy: {np.array(val_accuracy.result):.3f}"
+                f"Accuracy: {np.array(train_accuracy.result()):.3f}, "
+                f"Validation Loss: {np.array(val_loss.result()):.3f}, "
+                f"Validation Accuracy: {np.array(val_accuracy.result()):.3f}"
             )
 
             # Reset metrics at the end of each epoch
-            train_loss.reset_states()
-            train_accuracy.reset_states()
-            val_loss.reset_states()
-            val_accuracy.reset_states()
+            train_loss.reset_state()
+            train_accuracy.reset_state()
+            val_loss.reset_state()
+            val_accuracy.reset_state()
 
         logging.info("Adversarial training completed")
 

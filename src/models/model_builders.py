@@ -73,7 +73,7 @@ class MNISTModelBuilder(ModelBuilderInterface):
                     else optimizers.legacy.SGD(learning_rate=self.learning_rate)
                 )
             else:
-                opt = optimizers.legacy.Adadelta()
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
         else:
             if self.optimizer_name == "adam":
                 opt = (
@@ -149,7 +149,7 @@ class Cifar10ModelBuilder(ModelBuilderInterface):
                     else optimizers.legacy.SGD(learning_rate=self.learning_rate)
                 )
             else:
-                opt = optimizers.legacy.Adadelta()
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
         else:
             if self.optimizer_name == "adam":
                 opt = (
@@ -216,7 +216,7 @@ class FashionMnistModelBuilder(ModelBuilderInterface):
                     else optimizers.legacy.SGD(learning_rate=self.learning_rate)
                 )
             else:
-                opt = optimizers.legacy.Adadelta()
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
         else:
             if self.optimizer_name == "adam":
                 opt = (
