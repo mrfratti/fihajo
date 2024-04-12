@@ -14,13 +14,13 @@ pipeline {
             }
         }
 
-        stage('Train or Attack') {
+        stage('Train or Adverserial Training') {
             steps {
                 script {
                     env.stage_choice = input(id: 'userInput',
                                              message: 'Choose action:',
                                              parameters: [choice(name: 'STAGE OPTION',
-                                                                 choices: ['Train', 'Attack'],
+                                                                 choices: ['Train', 'Adverserial'],
                                                                  description: 'Select stage')])
                 }
             }
@@ -44,14 +44,14 @@ pipeline {
             }
         }
 
-        stage('ATTACK') {
+        stage('ADVERSERIAL TRAINING') {
             when {
-                expression { return env.stage_choice == 'Attack' }
+                expression { return env.stage_choice == 'Adverserial' }
             }
             steps {
-                echo 'Running Attack...'
+                echo 'Running Adverserial....'
                 script {
-                    sh "echo Attack stage is not yet implemented"
+                    sh "echo | python -m src.cli.main --verbose train --adv --dataset mnist"
                 }
             }
         }
@@ -75,7 +75,7 @@ pipeline {
             }
         }
 
-        stage('HTML Report') {
+        stage('HTML REPORT') {
             steps {
                 script{
                     sh "echo | python -m src.cli.main report"
