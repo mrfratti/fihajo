@@ -63,6 +63,15 @@ class SendReportData:
         if "training" in self._filenames.keys():
             images.append(self._img(self._filenames))
 
+        if "adversarialTraining" in self._filenames.keys():
+            images.append(
+                {
+                    "image_header": "Adverserial Training",
+                    "image_location": self._filenames["adversarialTraining"],
+                    "about_image": "lorem",
+                }
+            )
+
         if "predictions" in self._filenames.keys():
             images.append(
                 {
@@ -136,14 +145,6 @@ class SendReportData:
                 }
             )
 
-        if "adversarialTraining" in self._filenames.keys():
-            images.append(
-                {
-                    "image_header": "Adverserial Training",
-                    "image_location": self._filenames["adversarialTraining"],
-                    "about_image": "lorem",
-                }
-            )
         if len(images) < 1:
             raise ValueError(
                 "sendreport: unknown filnames skipping sending (not making any report)"
