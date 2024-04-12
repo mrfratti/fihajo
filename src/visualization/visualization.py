@@ -36,7 +36,10 @@ class VisualizeTraining:
             historytags.append({"data": "val_loss", "label": "Validation Loss"})
             ylabel = "Loss"
         for tag in historytags:
-            plt.plot(history.history[tag["data"]], label=tag["label"])
+            if isinstance(history, dict):
+                plt.plot(history[tag["data"]], label=tag["label"])
+            else:
+                plt.plot(history.history[tag["data"]], label=tag["label"])
         historytags.clear()
         plt.title(title)
         plt.ylabel(ylabel)
