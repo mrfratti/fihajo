@@ -191,7 +191,7 @@ class Trainer:
             adv_training_history["val_accuracy"].append(np.array(val_accuracy.result()))
 
             logging.info(
-                f"Epoch {epoch + 1} completed. Loss: {np.array(train_loss.result()):.3f}"
+                f"\n Epoch {epoch + 1} completed. Loss: {np.array(train_loss.result()):.3f}"
                 f"Accuracy: {np.array(train_accuracy.result()):.3f}\n "
                 f"Validation Loss: {np.array(val_loss.result()):.3f}\n "
                 f"Validation Accuracy: {np.array(val_accuracy.result()):.3f} \n"
