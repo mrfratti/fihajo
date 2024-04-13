@@ -25,7 +25,8 @@ RUN pip install --no-cache-dir \
   seaborn==0.13.2 \
   cleverhans==4.0.0 \
   DateTime==5.4 \
-  argparse==1.4.0
+  argparse==1.4.0 \
+  yattag==1.15.2
 
 
 USER jenkins
