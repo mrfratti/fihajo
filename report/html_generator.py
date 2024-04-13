@@ -83,11 +83,13 @@ class HtmlGenerator:
             with tag("h2"):
                 text(data.header_image)
             doc.stag("img", src=data.image_location)
-            with tag("a", href=data.image_location):
-                with tag("button"):
-                    text("Open Image File")
-            with tag("p"):
-                text(data.about_image)
+            with tag("div", klass="info"):
+                with tag("div"):
+                    with tag("p"):
+                        text(data.about_image)
+                with tag("a", href=data.image_location):
+                    with tag("button"):
+                        text("Open Image File")
 
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""

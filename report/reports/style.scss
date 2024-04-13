@@ -1,7 +1,7 @@
 $background: #eeeeee;
 $font_color: #222831;
-$border_color: #76abae;
-$header_color: #31363f;
+$border_color: #eee;
+$header_color: #000;
 html,
 body {
   height: 100%;
@@ -9,6 +9,8 @@ body {
   margin: 0;
   padding: 0;
   color: $font_color;
+  background-color: #eee;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 header {
   width: 100%;
@@ -20,6 +22,7 @@ header {
 header h1 {
   font-size: 2.2rem;
   color: $border_color;
+  font-weight: 300;
 }
 /* Media query for smaller screens */
 @media screen and (max-width: 768px),
@@ -37,7 +40,7 @@ header h1 {
 }
 @media (pointer: fine) {
   main {
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
   }
 }
 main {
@@ -45,6 +48,7 @@ main {
   gap: 1em;
   padding: 0.8em;
   align-items: stretch;
+  justify-items: center;
 }
 
 h1,
@@ -52,99 +56,125 @@ h2,
 h3,
 h4 {
   color: $header_color;
-  font-family: serif;
-  font-optical-sizing: auto;
-  font-style: normal;
 
+  font-optical-sizing: auto;
+  font-weight: 300;
   text-align: center;
 }
-main h2 {
-  margin-top: 1rem;
-}
+
 .right,
 .left {
-  border-top: 0.07em solid $header_color;
   display: grid;
+  grid-template-rows: 1fr 4fr 2fr;
   width: 100%;
-}
-.left img {
-  display: flex;
-  justify-content: center;
-}
-.right img {
-  display: flex;
-  justify-content: center;
+  background-color: #fff;
+  border-radius: 0.5rem;
+
+  h2 {
+    margin-top: 1.5rem;
+    border-width: 0.1em;
+    border-style: solid;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-image: linear-gradient(to right, rgb(0, 0, 0), darkorchid) 1;
+    height: fit-content;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  img {
+    max-width: 90%;
+    border-radius: 1rem;
+    display: flex;
+    justify-self: center;
+    max-height: 80vh;
+    transition: transform 0.3s ease;
+  }
+  p {
+    background-color: #eee;
+    margin: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    font-family: "Noticia Text", serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  button {
+    width: 140px;
+    height: 50px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    font-weight: 500;
+    gap: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s;
+    overflow: hidden;
+    position: relative;
+    bottom: 0;
+  }
+  button::before {
+    width: 140px;
+    height: 140px;
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    border-radius: 50%;
+    transition-duration: 0.4s;
+    left: -100%;
+    top: 0;
+
+    mix-blend-mode: difference;
+  }
+
+  button:hover::before {
+    transition-duration: 0.4s;
+    transform: translate(100%, -50%);
+    border-radius: 0;
+  }
+
+  button:active {
+    transform: translate(5px, 5px);
+    transition-duration: 0.4s;
+  }
+  a {
+    justify-self: center;
+    align-self: center;
+    text-decoration: none;
+  }
+  .info {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 10px;
+    min-height: 10vh;
+    display: grid;
+    grid-template-columns: auto;
+    a {
+      margin-bottom: 0.5em;
+    }
+    div {
+      display: flex;
+      width: 100%;
+    }
+    p {
+      top: 0;
+      width: 100%;
+      margin: 0.5em;
+    }
+  }
 }
 
-.right img,
-.left img {
-  max-width: 100%;
-  border-radius: 1rem;
-  display: flex;
-  justify-self: center;
-  max-height: 80vh;
-  transition: transform 0.3s ease;
-}
-.right p,
-.left p {
-  margin: 1rem;
-  font-size: 1rem;
-  font-family: "Noticia Text", serif;
-  font-weight: 700;
-  font-style: normal;
-}
 .left img:hover {
-  transform: translate(-15%, -7%) scale(1.1);
+  transform: translate(0, -7%) scale(1.1);
 }
 .right img:hover {
-  transform: translate(15%, -7%) scale(1.1);
-}
-button {
-  margin-bottom: 1rem;
-  width: 140px;
-  height: 50px;
-
-  background-color: #000000;
-  color: white;
-  border: none;
-  font-weight: 500;
-  gap: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.4s;
-  overflow: hidden;
-  position: relative;
-}
-button::before {
-  width: 140px;
-  height: 140px;
-  content: "";
-  position: absolute;
-  background-color: #eee;
-  border-radius: 50%;
-  transition-duration: 0.4s;
-  left: -100%;
-  top: 0;
-  mix-blend-mode: difference;
+  transform: translate(0, -7%) scale(1.1);
 }
 
-button:hover::before {
-  transition-duration: 0.4s;
-  transform: translate(100%, -50%);
-  border-radius: 0;
-}
-
-button:active {
-  transform: translate(5px, 5px);
-  transition-duration: 0.4s;
-}
-main a {
-  justify-self: center;
-  align-self: center;
-  text-decoration: none;
-}
 .mpld3-figure {
   display: flex;
   width: 70%;
