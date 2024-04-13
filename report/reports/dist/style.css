@@ -29,12 +29,12 @@ header h1 {
     grid-template-columns: auto;
   }
 }
-@media (pointer: none), (pointer: coarse) {
+@media only screen and (max-width: 1000px) and (pointer: none), only screen and (max-width: 1000px) and (pointer: coarse), (max-resolution: 192dpi) and (pointer: none), (max-resolution: 192dpi) and (pointer: coarse), (max-resolution: 2dppx) and (pointer: none), (max-resolution: 2dppx) and (pointer: coarse) {
   main {
     grid-template-columns: auto;
   }
 }
-@media (pointer: fine) and (min-width: 1000px) {
+@media only screen and (max-width: 1000px) and (pointer: fine) and (min-width: 1000px), (max-resolution: 192dpi) and (pointer: fine) and (min-width: 1000px), (max-resolution: 2dppx) and (pointer: fine) and (min-width: 1000px) {
   main {
     grid-template-columns: 1fr 1fr;
   }
@@ -45,6 +45,11 @@ header h1 {
 
   .right img:hover {
     transform: translate(0, -7%) scale(1.1);
+  }
+
+  .right img,
+.left img {
+    max-height: 80vh;
   }
 }
 main {
@@ -95,7 +100,6 @@ h4 {
   display: flex;
   justify-self: center;
   align-self: center;
-  max-height: 80vh;
   transition: transform 0.3s ease;
 }
 .right p,
