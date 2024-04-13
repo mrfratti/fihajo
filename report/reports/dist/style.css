@@ -24,17 +24,17 @@ header h1 {
 }
 
 /* Media query for smaller screens */
-@media only screen and (max-width: 1000px), (max-resolution: 192dpi), (max-resolution: 2dppx) {
+@media only screen and (max-width: 1500px), (max-resolution: 192dpi), (max-resolution: 2dppx) {
   main {
     grid-template-columns: auto;
   }
 }
-@media only screen and (max-width: 1000px) and (pointer: none), only screen and (max-width: 1000px) and (pointer: coarse), (max-resolution: 192dpi) and (pointer: none), (max-resolution: 192dpi) and (pointer: coarse), (max-resolution: 2dppx) and (pointer: none), (max-resolution: 2dppx) and (pointer: coarse) {
+@media (pointer: none), (pointer: coarse) {
   main {
     grid-template-columns: auto;
   }
 }
-@media only screen and (max-width: 1000px) and (pointer: fine) and (min-width: 1000px), (max-resolution: 192dpi) and (pointer: fine) and (min-width: 1000px), (max-resolution: 2dppx) and (pointer: fine) and (min-width: 1000px) {
+@media (pointer: fine) and (min-width: 1500px) {
   main {
     grid-template-columns: 1fr 1fr;
   }
