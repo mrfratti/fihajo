@@ -33,7 +33,7 @@ header h1 {
 }
 @media (pointer: fine) {
   main {
-    grid-template-columns: repeat(auto-fill, minmax(700px, 1fr));
+    grid-template-columns: auto auto;
   }
 }
 main {
@@ -51,38 +51,103 @@ h4 {
   font-family: serif;
   font-optical-sizing: auto;
   font-style: normal;
-  border-bottom: 2px solid #31363f;
-  height: fit-content;
+  text-align: center;
 }
 
-.section {
+main h2 {
+  margin-top: 1rem;
+}
+
+.right,
+.left {
+  border-top: 0.07em solid #31363f;
   display: grid;
-  grid-template-rows: auto auto auto;
-  justify-content: center;
+  width: 100%;
 }
 
-.section h1,
-h2,
-h3,
-img {
+.left img {
   display: flex;
   justify-content: center;
 }
 
-.section img {
+.right img {
+  display: flex;
+  justify-content: center;
+}
+
+.right img,
+.left img {
   max-width: 100%;
   border-radius: 1rem;
   display: flex;
-  justify-content: center;
+  justify-self: center;
   max-height: 80vh;
+  transition: transform 0.3s ease;
 }
 
-.section p {
+.right p,
+.left p {
   margin: 1rem;
   font-size: 1rem;
   font-family: "Noticia Text", serif;
   font-weight: 700;
   font-style: normal;
+}
+
+.left img:hover {
+  transform: translate(-15%, -7%) scale(1.1);
+}
+
+.right img:hover {
+  transform: translate(15%, -7%) scale(1.1);
+}
+
+button {
+  margin-bottom: 1rem;
+  width: 140px;
+  height: 50px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  font-weight: 500;
+  gap: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s;
+  overflow: hidden;
+  position: relative;
+}
+
+button::before {
+  width: 140px;
+  height: 140px;
+  content: "";
+  position: absolute;
+  background-color: #eee;
+  border-radius: 50%;
+  transition-duration: 0.4s;
+  left: -100%;
+  top: 0;
+  mix-blend-mode: difference;
+}
+
+button:hover::before {
+  transition-duration: 0.4s;
+  transform: translate(100%, -50%);
+  border-radius: 0;
+}
+
+button:active {
+  transform: translate(5px, 5px);
+  transition-duration: 0.4s;
+}
+
+main a {
+  justify-self: center;
+  align-self: center;
+  text-decoration: none;
 }
 
 .mpld3-figure {

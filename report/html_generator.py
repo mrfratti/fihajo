@@ -72,15 +72,22 @@ class HtmlGenerator:
             self._img()
 
     def _img(self):
-        for data in self._image_data_list:
-            with tag("div", klass="section"):
-                with tag("h2"):
-                    text(data.header_image)
-                doc.stag("img", src=data.image_location, klass="photo")
-                with tag("p"):
-                    text(data.about_image)
-                with tag("a", href=data.image_location):
-                    text("Image link")
+        for i, data in enumerate(self._image_data_list):
+            if i % 2 == 0:
+                self._img_section(data, "right")
+            else:
+                self._img_section(data, "left")
+
+    def _img_section(self, data, section):
+        with tag("div", klass=section):
+            with tag("h2"):
+                text(data.header_image)
+            doc.stag("img", src=data.image_location)
+            with tag("a", href=data.image_location):
+                with tag("button"):
+                    text("Open Image File")
+            with tag("p"):
+                text(data.about_image)
 
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""
