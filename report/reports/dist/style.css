@@ -18,7 +18,7 @@ header {
 }
 
 header h1 {
-  font-size: 2.2rem;
+  font-size: 2.6rem;
   color: #eee;
   font-weight: 300;
 }
@@ -67,8 +67,9 @@ h4 {
 }
 .right h2,
 .left h2 {
+  font-size: 2rem;
   margin-top: 1.5rem;
-  border-width: 0.1em;
+  border-width: 0.07em;
   border-style: solid;
   border-left: none;
   border-right: none;
@@ -108,6 +109,7 @@ h4 {
   border: none;
   font-weight: 500;
   gap: 10px;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
