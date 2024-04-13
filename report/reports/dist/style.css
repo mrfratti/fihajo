@@ -24,7 +24,7 @@ header h1 {
 }
 
 /* Media query for smaller screens */
-@media screen and (max-width: 768px), (max-resolution: 192dpi), (max-resolution: 2dppx) {
+@media only screen and (max-width: 1000px), (max-resolution: 192dpi), (max-resolution: 2dppx) {
   main {
     grid-template-columns: auto;
   }
@@ -34,9 +34,17 @@ header h1 {
     grid-template-columns: auto;
   }
 }
-@media (pointer: fine) {
+@media (pointer: fine) and (min-width: 1000px) {
   main {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .left img:hover {
+    transform: translate(0, -7%) scale(1.1);
+  }
+
+  .right img:hover {
+    transform: translate(0, -7%) scale(1.1);
   }
 }
 main {
@@ -172,14 +180,6 @@ h4 {
   top: 0;
   width: 100%;
   margin: 0.5em;
-}
-
-.left img:hover {
-  transform: translate(0, -7%) scale(1.1);
-}
-
-.right img:hover {
-  transform: translate(0, -7%) scale(1.1);
 }
 
 .mpld3-figure {
