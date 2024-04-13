@@ -31,6 +31,12 @@ header h1 {
   main {
     grid-template-columns: auto;
   }
+  .right,
+  .left {
+    img {
+      max-height: 100vh;
+    }
+  }
 }
 // mobile
 @media (pointer: none), (pointer: coarse) {

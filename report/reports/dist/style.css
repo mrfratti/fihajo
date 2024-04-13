@@ -28,6 +28,11 @@ header h1 {
   main {
     grid-template-columns: auto;
   }
+
+  .right img,
+.left img {
+    max-height: 100vh;
+  }
 }
 @media (pointer: none), (pointer: coarse) {
   main {
