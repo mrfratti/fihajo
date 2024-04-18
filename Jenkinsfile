@@ -69,7 +69,7 @@ pipeline {
                     else if (env.stage_choice == 'Adverserial') {
                         def defaultfile = "data/models/adv_model.weights.h5"
                         def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist"
+                        sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist "
                     }
 
                 }
@@ -82,13 +82,13 @@ pipeline {
                     if (env.stage_choice == 'Train') {
                         def defaultfile = "data/models/mnist.model.h5"
                         def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main analyze --dataset mnist"
+                        sh "echo | python -m src.cli.main analyze --dataset mnist "
                     }
 
                     else if (env.stage_choice == 'Adverserial') {
                         def defaultfile = "data/models/adv_model.weights.h5"
                         def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main analyze --dataset mnist"
+                        sh "echo | python -m src.cli.main analyze --dataset mnist "
                     }
 
                 }

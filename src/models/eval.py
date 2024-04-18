@@ -13,7 +13,7 @@ from src.weight_processing.weight_manager import WeightManager
 
 
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s"
 )
 
 
@@ -28,11 +28,11 @@ class Evaluator:
         :param args: Command-line arguments specifying evaluation parameters.
         """
         self.args = args
-        self.model = model_builder.create_model()
         self.dataset = dataset
         self._weightmanager = WeightManager()
+        self._weightmanager.model_path = args.model_path
         self._weightmanager.current_model = model_builder
-        self._weightmanager.load_weights(args.model_path)
+        self._weightmanager.load_weights()
         self.model = self._weightmanager.current_model
         self._plot_file_names = {}
 

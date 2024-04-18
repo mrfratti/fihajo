@@ -8,6 +8,11 @@ from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
 
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
+)
+
+
 class Analyzer:
     """
     The Analyzer class is responsible for analyzing a trained model.
@@ -25,7 +30,8 @@ class Analyzer:
         self.batch = batch
         self._weightmanager = WeightManager()
         self._weightmanager.current_model = model_builder
-        self._weightmanager.load_weights(args.model_path)
+        self._weightmanager.model_path = args.model_path
+        self._weightmanager.load_weights()
         self.model = self._weightmanager.current_model
         self.quantified_results = None
         self.pcs_mean_softmax_scores = None

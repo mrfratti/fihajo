@@ -217,17 +217,21 @@ class CLIApp:
 
     def evaluate(self, args):
         """Runs evaluation attack on model"""
-        model_path = (
-            args.model_path
-            if hasattr(args, "model_path") and args.model_path
-            else input(
+
+        if hasattr(args, "model_path") or args.model_path is not None:
+            model_path = args.model_path
+        else:
+            model_path = input(
                 "Enter the model path for analysis or press Enter to use the default path: "
             ).strip()
-        )
+
         if not model_path:
+            logging.info("No path set defaulting to defualt path \n")
             model_path = Evaluator.default_path
 
-        # logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
+        logging.info(
+            "Evaluating model from %s on %s dataset \n", model_path, args.dataset
+        )
 
         if not hasattr(args, "adv_eval"):
             args.adv_eval = False
@@ -265,7 +269,7 @@ class CLIApp:
     def analyze(self, args):
         model_path = (
             args.model_path
-            if (hasattr(args, "model_path") and args.model_path)
+            if (hasattr(args, "model_path") or args.model_path is not None)
             else input(
                 "Enter the model path for analysis or press Enter to use the default path: "
             ).strip()

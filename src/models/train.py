@@ -24,7 +24,7 @@ from src.weight_processing.weight_manager import WeightManager
 
 
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s"
 )
 
 
@@ -89,7 +89,7 @@ class Trainer:
             TensorBoard(log_dir="./data/logs", histogram_freq=1),
             LambdaCallback(
                 on_epoch_end=lambda epoch, logs: logging.info(
-                    f"Epoch {epoch + 1} completed. Loss: {logs['loss']:.4f}, Accuracy: {logs['accuracy']:.4f}"
+                    f"\n Epoch {epoch + 1} completed. Loss: {logs['loss']:.4f}, Accuracy: {logs['accuracy']:.4f}"
                 )
             ),
         ]
