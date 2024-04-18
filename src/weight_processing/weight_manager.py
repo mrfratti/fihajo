@@ -25,7 +25,7 @@ class WeightManager:
     @property
     def current_model(self) -> model_builders:
         """returns the current instace of model"""
-        if self._current_model is str:
+        if self._current_model is None or isinstance(self._current_model, str):
             raise ValueError("No model instance set")
         return self._current_model
 
