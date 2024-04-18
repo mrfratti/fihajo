@@ -23,13 +23,13 @@ class WeightManager:
 
     @property
     def model_path(self):
-        if len(self._model_path) < 1:
-            logging.warning("no default path set")
-        return self.model_path
+        if self._model_path is None or len(self._model_path) < 1:
+            return self._DEFAULT_PATH
+        return self._model_path
 
     @model_path.setter
     def model_path(self, path):
-        if path is None or path == "" or not isinstance(path, str):
+        if path is None or len(path) < 1 or not isinstance(path, str):
             self._model_path = self._DEFAULT_PATH
         self._model_path = path
 
@@ -49,11 +49,12 @@ class WeightManager:
     def load_weights(self):
         """loads the weights"""
         try:
-            model_path = self._model_path
-            self.current_model.inner.load_weights(model_path)
-            logging.info("Model weights loaded from %s", model_path)
+            self.current_model.inner.load_weights(self.model_path)
+            logging.info("Model weights loaded from %s", self.model_path)
         except FileNotFoundError:
-            logging.error("The specified weight file was not found: %s", model_path)
+            logging.error(
+                "The specified weight file was not found: %s", self.model_path
+            )
             sys.exit(1)
         except PermissionError:
             logging.error("Cannot open weight file missing permission to read")

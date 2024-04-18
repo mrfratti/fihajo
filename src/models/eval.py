@@ -30,8 +30,8 @@ class Evaluator:
         self.args = args
         self.dataset = dataset
         self._weightmanager = WeightManager()
-        self._weightmanager.current_model = model_builder
         self._weightmanager.model_path = args.model_path
+        self._weightmanager.current_model = model_builder
         self._weightmanager.load_weights()
         self.model = self._weightmanager.current_model
         self._plot_file_names = {}
