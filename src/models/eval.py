@@ -27,8 +27,7 @@ class Evaluator:
         Initializes the Evaluator object with command-line arguments and loads the trained model.
         :param args: Command-line arguments specifying evaluation parameters.
         """
-        self.args = args
-        self.model = model_builder.create_model()
+        self.args = args|
         self.dataset = dataset
         self._weightmanager = WeightManager()
         self._weightmanager.current_model = model_builder

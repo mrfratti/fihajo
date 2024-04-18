@@ -6,7 +6,6 @@ import logging
 import sys
 import time
 
-from src.cli.string_styling import StringStyling
 from src.models import model_builders
 
 
@@ -38,8 +37,13 @@ class WeightManager:
     def load_weights(self, model_path=None):
         """loads the weights"""
         try:
-            if model_path is None:
+            if (
+                model_path is None
+                or model_path == ""
+                or not isinstance(model_path, str)
+            ):
                 model_path = self._DEFAULT_PATH
+
             self.current_model.inner.load_weights(model_path)
             logging.info("Model weights loaded from %s", model_path)
         except FileNotFoundError:
