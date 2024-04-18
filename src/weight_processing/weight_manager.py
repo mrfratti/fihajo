@@ -38,7 +38,7 @@ class WeightManager:
     def load_weights(self, model_path=None):
         """loads the weights"""
         try:
-            if not model_path:
+            if model_path is None:
                 model_path = self._DEFAULT_PATH
             self.current_model.inner.load_weights(model_path)
             logging.info("Model weights loaded from %s", model_path)
@@ -62,7 +62,7 @@ class WeightManager:
 
     def loading_effect(self, duration=0.1, message="Evaluating"):
         """loading effect for loading weights"""
-        print(message, end="")
+        print("\n" + message, end="")
         for _ in range(duration):
             for cursor in "|/-\\":
                 sys.stdout.write(cursor)
