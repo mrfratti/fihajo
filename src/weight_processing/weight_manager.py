@@ -2,7 +2,6 @@
 
 import logging
 
-
 import sys
 import time
 
@@ -14,12 +13,25 @@ class WeightManager:
 
     def __init__(self) -> None:
         self._DEFAULT_PATH = "data/models/model.weights.h5"  # pylint: disable=C0103
+        self._model_path = ""
         self._current_model = ""
 
     @property
     def default_path(self) -> str:
         """Returns default path for weights"""
         return self._DEFAULT_PATH
+
+    @property
+    def model_path(self):
+        if len(self._model_path) < 1:
+            logging.warning("no default path set")
+        return self.model_path
+
+    @model_path.setter
+    def model_path(self, path):
+        if path is None or path == "" or not isinstance(path, str):
+            self._model_path = self._DEFAULT_PATH
+        self._model_path = path
 
     @property
     def current_model(self) -> model_builders:
@@ -34,16 +46,10 @@ class WeightManager:
             raise ValueError("weightmanager needs an instance for model")
         self._current_model = model_builder.create_model()
 
-    def load_weights(self, model_path=None):
+    def load_weights(self):
         """loads the weights"""
         try:
-            if (
-                model_path is None
-                or model_path == ""
-                or not isinstance(model_path, str)
-            ):
-                model_path = self._DEFAULT_PATH
-
+            model_path = self._model_path
             self.current_model.inner.load_weights(model_path)
             logging.info("Model weights loaded from %s", model_path)
         except FileNotFoundError:
