@@ -8,6 +8,10 @@ from src.cli.string_styling import StringStyling
 
 doc, tag, text = Doc().tagtext()
 
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
+)
+
 
 class HtmlGenerator:
     """Generates html report"""

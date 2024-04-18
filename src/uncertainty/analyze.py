@@ -8,6 +8,11 @@ from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
 
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
+)
+
+
 class Analyzer:
     """
     The Analyzer class is responsible for analyzing a trained model.

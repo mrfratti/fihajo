@@ -24,7 +24,7 @@ from src.weight_processing.weight_manager import WeightManager
 
 
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s"
 )
 
 
