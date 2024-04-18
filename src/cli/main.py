@@ -220,16 +220,18 @@ class CLIApp:
 
         if hasattr(args, "model_path") or args.model_path is not None:
             model_path = args.model_path
-            print("Model Path Jenkins \n")
         else:
             model_path = input(
                 "Enter the model path for analysis or press Enter to use the default path: "
             ).strip()
 
         if not model_path:
+            logging.info("No path set defaulting to defualt path \n")
             model_path = Evaluator.default_path
 
-        # logging.info(f"Evaluating model from {model_path} on {args.dataset} dataset")
+        logging.info(
+            "Evaluating model from %s on %s dataset \n", model_path, args.dataset
+        )
 
         if not hasattr(args, "adv_eval"):
             args.adv_eval = False
