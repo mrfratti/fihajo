@@ -46,14 +46,10 @@ class WeightManager:
             logging.error("The specified weight file was not found: %s", model_path)
             sys.exit(1)
         except PermissionError:
-            logging.error(
-                StringStyling.box_style(
-                    "Cannot open weight file missing permission to read"
-                )
-            )
+            logging.error("Cannot open weight file missing permission to read")
             sys.exit(1)
         except IsADirectoryError:
-            logging.error(StringStyling("Please specify a file instead of a directory"))
+            logging.error("Please specify a file instead of a directory")
             sys.exit(1)
 
     def loading_effect(self, duration=0.1, message="Evaluating"):

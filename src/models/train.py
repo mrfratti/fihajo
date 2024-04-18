@@ -89,7 +89,7 @@ class Trainer:
             TensorBoard(log_dir="./data/logs", histogram_freq=1),
             LambdaCallback(
                 on_epoch_end=lambda epoch, logs: logging.info(
-                    f"Epoch {epoch + 1} completed. Loss: {logs['loss']:.4f}, Accuracy: {logs['accuracy']:.4f}"
+                    f"\n Epoch {epoch + 1} completed. Loss: {logs['loss']:.4f}, Accuracy: {logs['accuracy']:.4f}"
                 )
             ),
         ]
