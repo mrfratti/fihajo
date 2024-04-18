@@ -217,13 +217,15 @@ class CLIApp:
 
     def evaluate(self, args):
         """Runs evaluation attack on model"""
-        model_path = (
-            args.model_path
-            if hasattr(args, "model_path") or args.model_path is not None
-            else input(
+
+        if hasattr(args, "model_path") or args.model_path is not None:
+            model_path = args.model_path
+            print("Model Path Jenkins \n")
+        else:
+            model_path = input(
                 "Enter the model path for analysis or press Enter to use the default path: "
             ).strip()
-        )
+
         if not model_path:
             model_path = Evaluator.default_path
 
