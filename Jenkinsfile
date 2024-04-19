@@ -61,7 +61,7 @@ pipeline {
                 script {
 
                     if (env.stage_choice == 'Train') {
-                        def defaultfile = "data/models/mnist.model.h5"
+                        def defaultfile = "data/models/model.weights.h5"
                         def fullpath ="${env.WORKSPACE}/${defaultfile}"
                         sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist"
                     }
@@ -80,7 +80,7 @@ pipeline {
                 script {
 
                     if (env.stage_choice == 'Train') {
-                        def defaultfile = "data/models/mnist.model.h5"
+                        def defaultfile = "data/models/model.weights.h5"
                         def fullpath ="${env.WORKSPACE}/${defaultfile}"
                         sh "echo | python -m src.cli.main analyze --dataset mnist "
                     }
