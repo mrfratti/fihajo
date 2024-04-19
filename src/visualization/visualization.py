@@ -20,9 +20,7 @@ class VisualizeTraining:
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
 
-    def _plot_results(
-        self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]
-    ):
+    def _plot_results(self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]):
         """Plot training & validation accuracy"""
         if mode == "accuracy":
             plt.subplot(1, 2, 1)
@@ -64,9 +62,7 @@ class VisualizeTraining:
         """_summary_"""
         plt.figure(dpi=1200)
         # Accuracy
-        self._plot_results(
-            history, mode="accuracy", title="Adversarial Training Accuracy"
-        )
+        self._plot_results(history, mode="accuracy", title="Adversarial Training Accuracy")
         # loss
         self._plot_results(history, mode="loss", title="Adversarial Training Loss")
         filename = self._save_plot("adv_train_acc_loss")
@@ -158,9 +154,7 @@ class VisualizeEvaluation:
 
     def plot_adversarial_examples(self, model, x_test, eps, num_samples=25):
         # Generate FGSM adversarial examples
-        x_adv_fgsm = fast_gradient_method(
-            model.inner, x_test[:num_samples], eps, np.inf
-        )
+        x_adv_fgsm = fast_gradient_method(model.inner, x_test[:num_samples], eps, np.inf)
         predictions_fgsm = np.argmax(model.predict(x_adv_fgsm), axis=1)
 
         # predictions_clean = np.argmax(model.predict(x_test[:num_samples]), axis=1)
@@ -272,9 +266,7 @@ class VisualizeUncertainty:
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
         plt.figure(figsize=(10, 10))
-        sns.histplot(
-            pcs_scores, bins=50, alpha=0.7, color="blue", kde=True, label="PCS"
-        )
+        sns.histplot(pcs_scores, bins=50, alpha=0.7, color="blue", kde=True, label="PCS")
         sns.histplot(
             mean_softmax_scores,
             bins=50,
@@ -346,9 +338,7 @@ class VisualizeUncertainty:
 
     def plot_dist_entropy_scores(self, entropy_scores):
         plt.figure(figsize=(20, 10))
-        sns.histplot(
-            entropy_scores, bins=50, kde=True, color="blue", label="Clean Data"
-        )
+        sns.histplot(entropy_scores, bins=50, kde=True, color="blue", label="Clean Data")
         plt.axvline(
             np.mean(entropy_scores),
             color="k",
@@ -380,9 +370,7 @@ class VisualizeUncertainty:
         plt.show()
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
-    def plot_predictive_conf_entropy_scores(
-        self, predictive_confidence, entropy_scores
-    ):
+    def plot_predictive_conf_entropy_scores(self, predictive_confidence, entropy_scores):
         plt.figure(figsize=(20, 10))
         plt.scatter(
             predictive_confidence,

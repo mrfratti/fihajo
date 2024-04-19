@@ -8,9 +8,7 @@ from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
 
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO)
 
 
 class Analyzer:
@@ -124,9 +122,7 @@ class Analyzer:
         visualizer = VisualizeUncertainty()
         visualizer.plot_dist_entropy_scores(self.entropy_scores)
         visualizer.high_uncertain_inputs(self.entropy_scores, x_test, num_samples=25)
-        visualizer.plot_predictive_conf_entropy_scores(
-            predictive_confidence, self.entropy_scores
-        )
+        visualizer.plot_predictive_conf_entropy_scores(predictive_confidence, self.entropy_scores)
         self._plot_file_names.update(visualizer.plot_file_names)
 
     def table_generator(self, x_test, y_test):
@@ -136,12 +132,11 @@ class Analyzer:
         :param y_test:(np.array): Test dataset labels.
         """
         true_labels = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
-        predicted_labels = np.argmax(
-            self.model.predict(x_test), axis=1
-        )  # y_pred_classes
+        predicted_labels = np.argmax(self.model.predict(x_test), axis=1)  # y_pred_classes
         # self.pcs_scores = -self.pcs_scores
         # self.mean_softmax_scores = -self.mean_softmax_scores
-        # predictive_confidence = np.max(self.model.predict(x_test), axis=1) # Mean Softmax Probability
+        # predictive_confidence = np.max(self.model.predict(x_test), axis=1) #
+        # Mean Softmax Probability
 
         # Create a table with the following columns
         table = pd.DataFrame(
@@ -164,9 +159,7 @@ class Analyzer:
             output_dir = save_path if save_path else "data/tables"
 
         except EOFError as e:
-            logging.error(
-                "analyze: error with input from user console, using default path: %s", e
-            )
+            logging.error("analyze: error with input from user console, using default path: %s", e)
             output_dir = "data/tables"
 
         if not os.path.exists(output_dir):

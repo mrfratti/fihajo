@@ -12,9 +12,7 @@ from src.visualization.visualization import VisualizeEvaluation
 from src.weight_processing.weight_manager import WeightManager
 
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
 
 class Evaluator:
@@ -55,9 +53,7 @@ class Evaluator:
     def evaluation(self, x_test, y_test, plot_results=True):
         # Evaluate the model
         loss, acc = self.model.evaluate(x_test, y_test, verbose=1)
-        logging.info(
-            f"Evaluation - Loss: {loss * 100:.2f}%, Accuracy: {acc * 100:.2f}%"
-        )
+        logging.info(f"Evaluation - Loss: {loss * 100:.2f}%, Accuracy: {acc * 100:.2f}%")
 
         if plot_results:
             visualizer = VisualizeEvaluation()
@@ -65,9 +61,7 @@ class Evaluator:
             y_pred_classes = np.argmax(y_pred, axis=1)
             y_true = np.argmax(y_test, axis=1)
 
-            visualizer.plot_predictions(
-                self.model.inner, x_test, y_true, num_samples=25
-            )
+            visualizer.plot_predictions(self.model.inner, x_test, y_true, num_samples=25)
             visualizer.plot_confusion_matrix(
                 y_true, y_pred_classes, classes=[str(i) for i in range(10)]
             )
@@ -105,9 +99,7 @@ class Evaluator:
 
         visualizer = VisualizeEvaluation()
         # Plotting for adversarial evaluation
-        visualizer.plot_adversarial_examples(
-            self.model, x_test, self.args.eps, num_samples=25
-        )
+        visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, num_samples=25)
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
         labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)

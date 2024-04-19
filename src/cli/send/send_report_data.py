@@ -29,9 +29,7 @@ class SendReportData:
     @filenames.setter
     def filenames(self, filenames):
         if not isinstance(filenames, dict):
-            raise TypeError(
-                "Send report: The filnames to be sent needs to be in a dict"
-            )
+            raise TypeError("Send report: The filnames to be sent needs to be in a dict")
         if len(filenames) < 1:
             raise ValueError("Send report: No filenames for images in filename list")
         existing = self._load_json()

@@ -25,18 +25,14 @@ class CLIApp:
         self._plot_file_names = {}
 
     def setup_parser(self):
-        parser = argparse.ArgumentParser(
-            description="AI Model Uncertainty Analysis Tool"
-        )
+        parser = argparse.ArgumentParser(description="AI Model Uncertainty Analysis Tool")
         parser.add_argument(
             "--config",
             type=str,
             help="Path to a JSON configuration file. Command line arguments "
             "override config file values.",
         )
-        parser.add_argument(
-            "--verbose", action="store_true", help="Increase output verbosity."
-        )
+        parser.add_argument("--verbose", action="store_true", help="Increase output verbosity.")
         parser.add_argument(
             "--quiet",
             action="store_true",
@@ -101,9 +97,7 @@ class CLIApp:
             default=None,
             help="Learning rate for the optimizer",
         )
-        parser_train.add_argument(
-            "--report", action="store_true", help="Generate report"
-        )
+        parser_train.add_argument("--report", action="store_true", help="Generate report")
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser("evaluate", help="Evaluate the model")
@@ -131,15 +125,11 @@ class CLIApp:
             default=0.3,
             help="Epsilon for adversarial " "perturbation during evaluation",
         )
-        parser_evaluate.add_argument(
-            "--report", action="store_true", help="Generate report"
-        )
+        parser_evaluate.add_argument("--report", action="store_true", help="Generate report")
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
-        uncertainty_parser = subparsers.add_parser(
-            "analyze", help="Analyze model uncertainty"
-        )
+        uncertainty_parser = subparsers.add_parser("analyze", help="Analyze model uncertainty")
         uncertainty_parser.add_argument(
             "--dataset",
             type=str,
@@ -156,9 +146,7 @@ class CLIApp:
         uncertainty_parser.add_argument(
             "--batch", type=int, default=64, help="Batch size for analyzing."
         )
-        uncertainty_parser.add_argument(
-            "--report", action="store_true", help="Generate report"
-        )
+        uncertainty_parser.add_argument("--report", action="store_true", help="Generate report")
         uncertainty_parser.set_defaults(func=self.analyze)
 
     def add_report_subparser(self, subparsers):
@@ -168,22 +156,19 @@ class CLIApp:
     def check_positive(self, value):
         ivalue = int(value)
         if ivalue <= 0:
-            raise argparse.ArgumentTypeError(
-                f"{value} is an invalid positive int value"
-            )
+            raise argparse.ArgumentTypeError(f"{value} is an invalid positive int value")
         return ivalue
 
     def check_eps(self, value):
         fvalue = float(value)
         if fvalue <= 0.0 or fvalue > 1.0:
-            raise argparse.ArgumentTypeError(
-                f"{value} is out of the allowed range (0.0, 1.0)"
-            )
+            raise argparse.ArgumentTypeError(f"{value} is out of the allowed range (0.0, 1.0)")
         return fvalue
 
     def train(self, args):
         stochastic_mode = StochasticMode()
-        # Instantiate the correct model builder based on the command line argument
+        # Instantiate the correct model builder based on the command line
+        # argument
         dataset_handlers = {
             "mnist": MnistDatasetHandler(),
             "cifar10": Cifar10DatasetHandler(),
@@ -192,7 +177,8 @@ class CLIApp:
 
         dataset_handler = dataset_handlers[args.dataset]
 
-        # Instantiate the correct model builder based on the command line argument
+        # Instantiate the correct model builder based on the command line
+        # argument
         model_builders = {
             "mnist": MNISTModelBuilder,
             "cifar10": Cifar10ModelBuilder,
@@ -229,15 +215,14 @@ class CLIApp:
             logging.info("No path set defaulting to defualt path \n")
             model_path = Evaluator.default_path
 
-        logging.info(
-            "Evaluating model from %s on %s dataset \n", model_path, args.dataset
-        )
+        logging.info("Evaluating model from %s on %s dataset \n", model_path, args.dataset)
 
         if not hasattr(args, "adv_eval"):
             args.adv_eval = False
 
         stochastic_mode = StochasticMode()
-        # Instantiate the correct model builder based on the command line argument
+        # Instantiate the correct model builder based on the command line
+        # argument
         dataset_handlers = {
             "mnist": MnistDatasetHandler(),
             "cifar10": Cifar10DatasetHandler(),
@@ -246,7 +231,8 @@ class CLIApp:
 
         dataset_handler = dataset_handlers[args.dataset]
 
-        # Instantiate the correct model builder based on the command line argument
+        # Instantiate the correct model builder based on the command line
+        # argument
         model_builders = {
             "mnist": MNISTModelBuilder(stochastic_mode),
             "cifar10": Cifar10ModelBuilder(stochastic_mode),
@@ -279,14 +265,16 @@ class CLIApp:
 
         batch = getattr(args, "batch", 64)
 
-        # Instantiate the correct model builder based on the command line argument
+        # Instantiate the correct model builder based on the command line
+        # argument
         dataset_handlers = {
             "mnist": MnistDatasetHandler(),
             "cifar10": Cifar10DatasetHandler(),
             "fashion_mnist": FashionMnistDatasetHandler(),
         }
 
-        # Instantiate the correct model builder based on the command line argument
+        # Instantiate the correct model builder based on the command line
+        # argument
         model_builders = {
             "mnist": MNISTModelBuilder(StochasticMode()),
             "cifar10": Cifar10ModelBuilder(StochasticMode()),

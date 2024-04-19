@@ -8,9 +8,7 @@ from src.cli.string_styling import StringStyling
 
 doc, tag, text = Doc().tagtext()
 
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO)
 
 
 class HtmlGenerator:
@@ -121,8 +119,6 @@ class HtmlGenerator:
             logging.warning("htmlgenerator: %s", e)
             return
         except FileNotFoundError:
-            print(
-                StringStyling.box_style("cannot open html file or filepath not found")
-            )
+            print(StringStyling.box_style("cannot open html file or filepath not found"))
         except PermissionError:
             print(StringStyling.box_style("Missing permission to write html file"))

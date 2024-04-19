@@ -23,9 +23,7 @@ from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
 
 class Trainer:
@@ -65,14 +63,10 @@ class Trainer:
         if self.args.adv:
             message = "Adversarial training enabled.\n"
             self._weightmanager.loading_effect(duration=15, message=message)
-            logging.info(
-                "Starting adversarial training on %s dataset", self.args.dataset
-            )
+            logging.info("Starting adversarial training on %s dataset", self.args.dataset)
             self.adversarial_training()
         else:
-            message = (
-                f"Getting ready for training the model on {self.args.dataset} dataset\n"
-            )
+            message = f"Getting ready for training the model on {self.args.dataset} dataset\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting training.")
             self.training()
@@ -141,9 +135,7 @@ class Trainer:
             train_accuracy.reset_state()
 
             for batch_index, (x_batch, y_batch) in enumerate(
-                tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(
-                    self.args.batch
-                )
+                tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(self.args.batch)
             ):
                 with tf.GradientTape() as tape:
                     # Generate adversarial examples
@@ -154,9 +146,7 @@ class Trainer:
                     loss = self.loss_object(y_batch, predictions)
 
                 gradients = tape.gradient(loss, self.model.inner.trainable_variables)
-                optimizer.apply_gradients(
-                    zip(gradients, self.model.inner.trainable_variables)
-                )
+                optimizer.apply_gradients(zip(gradients, self.model.inner.trainable_variables))
 
                 train_loss(loss)
                 train_accuracy(y_batch, predictions)
@@ -174,9 +164,9 @@ class Trainer:
             adv_training_history["accuracy"].append(np.array(train_accuracy.result()))
 
             # Validation phase after each epoch
-            for x_batch, y_batch in tf.data.Dataset.from_tensor_slices(
-                (x_val, y_val)
-            ).batch(self.args.batch):
+            for x_batch, y_batch in tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(
+                self.args.batch
+            ):
                 x_batch_adv = projected_gradient_descent(
                     self.model.inner, x_batch, self.args.eps, 0.01, 40, np.inf
                 )
@@ -219,9 +209,7 @@ class Trainer:
             save_path = user_input if user_input else self._default_save_path()
 
         except EOFError as e:
-            logging.error(
-                "train: error with input from user console, using default path: %s", e
-            )
+            logging.error("train: error with input from user console, using default path: %s", e)
             user_input = self._default_save_path
 
         try:
@@ -230,18 +218,10 @@ class Trainer:
             logging.info("Model weights saved to: %s", save_path)
 
         except FileNotFoundError:
-            print(
-                StringStyling.box_style(
-                    "File path not found or cannot open weight file"
-                )
-            )
+            print(StringStyling.box_style("File path not found or cannot open weight file"))
             sys.exit(1)
         except PermissionError:
-            print(
-                StringStyling.box_style(
-                    "Missing writing permissions, cannot write weight file"
-                )
-            )
+            print(StringStyling.box_style("Missing writing permissions, cannot write weight file"))
             sys.exit(1)
 
     def _default_save_path(self) -> str:

@@ -6,9 +6,7 @@ from src.cli.main import CLIApp
 class TestCLIApp(unittest.TestCase):
     @patch(
         "src.cli.main.argparse.ArgumentParser.parse_args",
-        return_value=MagicMock(
-            config="train.json", verbose=False, quiet=False, command="train"
-        ),
+        return_value=MagicMock(config="train.json", verbose=False, quiet=False, command="train"),
     )
     @patch(
         "src.cli.main.CLIApp.load_config",

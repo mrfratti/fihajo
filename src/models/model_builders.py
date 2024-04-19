@@ -22,9 +22,7 @@ class MNISTModelBuilder(ModelBuilderInterface):
     and creating a stochastic model for classification.
     """
 
-    def __init__(
-        self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None
-    ):
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
         self.stochastic_mode = stochastic_mode
         self.optimizer_name = optimizer
         self.learning_rate = learning_rate
@@ -36,9 +34,7 @@ class MNISTModelBuilder(ModelBuilderInterface):
         """
         model = uwiz.models.StochasticSequential(
             [
-                layers.Conv2D(
-                    32, kernel_size=(3, 3), activation="relu", input_shape=(28, 28, 1)
-                ),
+                layers.Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=(28, 28, 1)),
                 layers.Conv2D(64, (3, 3), activation="relu"),
                 layers.MaxPooling2D(pool_size=(2, 2)),
                 UwizBernoulliDropout(0.5, stochastic_mode=self.stochastic_mode),
@@ -93,9 +89,7 @@ class MNISTModelBuilder(ModelBuilderInterface):
 
 
 class Cifar10ModelBuilder(ModelBuilderInterface):
-    def __init__(
-        self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None
-    ):
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
         self.stochastic_mode = stochastic_mode
         self.optimizer_name = optimizer
         self.learning_rate = learning_rate
@@ -169,9 +163,7 @@ class Cifar10ModelBuilder(ModelBuilderInterface):
 
 
 class FashionMnistModelBuilder(ModelBuilderInterface):
-    def __init__(
-        self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None
-    ):
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
         self.stochastic_mode = stochastic_mode
         self.optimizer_name = optimizer
         self.learning_rate = learning_rate
@@ -179,9 +171,7 @@ class FashionMnistModelBuilder(ModelBuilderInterface):
     def create_model(self):
         model = uwiz.models.StochasticSequential(
             [
-                layers.Conv2D(
-                    32, kernel_size=(3, 3), activation="relu", input_shape=(28, 28, 1)
-                ),
+                layers.Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=(28, 28, 1)),
                 layers.Conv2D(64, (3, 3), activation="relu"),
                 layers.MaxPooling2D(pool_size=(2, 2)),
                 UwizGaussianDropout(0.5, stochastic_mode=self.stochastic_mode),
