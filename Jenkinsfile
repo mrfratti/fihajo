@@ -40,18 +40,18 @@ pipeline {
                         parameters: [
                             choice(
                                 name: 'choices',
-                                choices: ['Owen define input', 'Recommended input'],
+                                choices: ['Custom input', 'Recommended input'],
                                 description: ''
                             )
                         ]
                     )
 
 
-                    if (user_input == 'Owen define input') {
-                        stage('Owen define input') {
+                    if (user_input == 'Custom input') {
+                        stage('Custom input') {
 
                             steps {
-                                echo 'Executing owen define input'
+                                echo 'Executing Custom input'
 
                                 def defaultfile = "data/models/mnist.model.h5"
                                 def fullpath ="${env.WORKSPACE}/${defaultfile}"
