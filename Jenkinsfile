@@ -33,13 +33,38 @@ pipeline {
             steps {
                 echo 'Running Train...'
                 script {
-                    def defaultfile = "data/models/mnist.model.h5"
-                    def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                    def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
-                    def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
-                    def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
+                    
+                    def user_input = input(message: 'Select input option:', parameters: [choice(choices: ['Owen define input', 'Recommended input'], description: '')])
+                    
+                    if (user_input == 'Owen define input') {
+                        stage('Owen define input') {
 
-                    sh "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
+                            steps {
+                                echo 'Executing owen define input'
+
+                                def defaultfile = "data/models/mnist.model.h5"
+                                def fullpath ="${env.WORKSPACE}/${defaultfile}"
+                                def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
+                                def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
+                                def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
+
+                                sh "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
+                            }
+
+                        }
+                    }
+
+                    else if (userInput == 'Recommended input') {
+                        stage('Recommended input') {
+
+                            steps {
+                                echo 'Executing recommended input'
+                                sh "echo | python -m src.cli.main --config src/cli/config/train.json --verbose"
+                            }
+
+                        }
+                    } 
+
                 }
             }
         }
