@@ -33,9 +33,20 @@ pipeline {
             steps {
                 echo 'Running Train...'
                 script {
-
-                    def user_input = input(message: 'Select input option:', parameters: [choice(choices: ['Owen define input', 'Recommended input'], description: '')])
                     
+                    def user_input = input(
+                        id: 'user_input', 
+                        message: 'Select input option:', 
+                        parameters: [
+                            choice(
+                                name: 'choices',
+                                choices: ['Owen define input', 'Recommended input'],
+                                description: ''
+                            )
+                        ]
+                    )
+
+
                     if (user_input == 'Owen define input') {
                         stage('Owen define input') {
 
