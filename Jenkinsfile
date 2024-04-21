@@ -27,17 +27,18 @@ pipeline {
         }
 
         stage('TRAIN') {
+
             when {
                 expression { return env.stage_choice == 'Train' }
             }
+
             steps {
 
                 echo 'Running Train...'
-                
-                script {
-                    
-                    def user_input = input(
 
+                script {
+
+                    def user_input = input(
                         id: 'user_input', 
                         message: 'Select input option:', 
                         parameters: [
@@ -47,39 +48,58 @@ pipeline {
                                 description: ''
                             )
                         ]
-
                     )
 
+                    def retry_count = 3
+                    def retry_interval = 5
 
-                    if (user_input == 'Custom input') {
+                    for (int i = 0; i < retry_count; i++) {
 
-                        echo 'Executing Custom input'
+                        if (user_input == 'Custom input') {
+                            echo 'Executing Custom input'
 
-                        def defaultfile = "data/models/mnist.model.h5"
-                        def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
-                        def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
-                        def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
+                            def defaultfile = "data/models/mnist.model.h5"
+                            def fullpath ="${env.WORKSPACE}/${defaultfile}"
+                            def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
+                            def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
+                            def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
 
-                        sh "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
+                            def command_text = "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
+                            def command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
+                        }
+                        else if (user_input == 'Recommended input') {
+                            echo 'Executing recommended input'
+                            def command_text = "echo | python -m src.cli.main --config src/cli/config/train.json --verbose"
+                            def command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
+                        }
+
+                        if (command_output == 0) {
+                            echo "Running successfully! Next Stage ..."
+                            break
+                        } else {
+                            echo "Error found! Retrying in ${retry_interval} sec ..."
+                            sleep retry_interval
+                        }
 
                     }
 
-                    else if (user_input == 'Recommended input') {
-
-                        echo 'Executing recommended input'
-                        sh "echo | python -m src.cli.main --config src/cli/config/train.json --verbose"
-
-                    } 
+                    // Display error output, link up with python CLI error output
+                    if (command_output != 0) {
+                        echo "Failed to execute command after ${retryCount} retries"
+                        echo "Error output:"
+                        echo command_output.trim()
+                    }
 
                 }
             }
         }
 
         stage('ADVERSERIAL TRAINING') {
+
             when {
                 expression { return env.stage_choice == 'Adverserial' }
             }
+
             steps {
                 echo 'Running Adverserial....'
                 script {
