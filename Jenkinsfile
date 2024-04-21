@@ -85,12 +85,11 @@ pipeline {
 
                     }
 
-                    echo "TEST 3 ..."
+                    println "TEST 3 ..."
                     // Display error output, link up with python CLI error output
                     if (command_output != 0) {
-                        echo "Failed to execute command after ${retryCount} retries"
-                        echo "Error output:"
-                        echo command_output.trim()
+                            println "Error output:"
+                            println command_output.trim()
                     }
 
                 }
