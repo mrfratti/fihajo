@@ -52,6 +52,7 @@ pipeline {
 
                     def retry_count = 3
                     def retry_interval = 5
+                    def command_output
 
                     for (int i = 0; i < retry_count; i++) {
 
@@ -65,12 +66,12 @@ pipeline {
                             def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
 
                             def command_text = "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
-                            def command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
+                            command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
                         }
                         else if (user_input == 'Recommended input') {
                             echo 'Executing recommended input'
                             def command_text = "echo | python -m src.cli.main --config src/cli/config/train.json --verbose"
-                            def command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
+                            command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
                         }
 
                         if (command_output == 0) {
