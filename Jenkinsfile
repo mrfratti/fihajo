@@ -50,7 +50,7 @@ pipeline {
                         ]
                     )
 
-                    def retry_count = 3
+                    def retry_count = 1
                     def retry_interval = 5
                     def command_output
 
