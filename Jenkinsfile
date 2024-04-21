@@ -89,7 +89,7 @@ pipeline {
                     // Display error output, linked up with python CLI error output
                     if (command_output != 0) {
                             echo "Error output:"
-                            echo command_output.toString().trim()
+                            echo command_output.trim()
                     }
 
                 }
