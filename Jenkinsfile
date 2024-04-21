@@ -85,11 +85,11 @@ pipeline {
 
                     }
 
-                    println "TEST 3 ..."
-                    // Display error output, link up with python CLI error output
+                    echo  "TEST 3 ..."
+                    // Display error output, linked up with python CLI error output
                     if (command_output != 0) {
-                            println "Error output:"
-                            println command_output.trim()
+                            echo "Error output:"
+                            echo command_output.toString().trim()
                     }
 
                 }
