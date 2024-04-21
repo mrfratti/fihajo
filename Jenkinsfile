@@ -65,19 +65,22 @@ pipeline {
                             def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
 
                             def command_text = "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
-                            def command_output = sh(script: command_text, returnStatus: true)
+                            def command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
                         }
                         else if (user_input == 'Recommended input') {
                             echo 'Executing recommended input'
                             def command_text = "echo | python -m src.cli.main --config src/cli/config/train.json --verbose"
-                            def command_output = sh(script: command_text, returnStatus: true)
+                            def command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
                         }
 
                         if (command_output == 0) {
-                            echo "Running successfully! Next Stage ..."
-                            break
+                            // echo "Running successfully! Next Stage ..."
+                            // break
+                            echo command_output
+                            echo "1 Error found! Retrying in ${retry_interval} sec ..."
+                            sleep retry_interval
                         } else {
-                            echo "Error found! Retrying in ${retry_interval} sec ..."
+                            echo "2 Error found! Retrying in ${retry_interval} sec ..."
                             sleep retry_interval
                         }
 
