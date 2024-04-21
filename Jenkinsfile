@@ -74,19 +74,18 @@ pipeline {
                             command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
                         }
 
+                        echo "TEST 2 ..."
                         if (command_output == 0) {
-                            // echo "Running successfully! Next Stage ..."
-                            // break
-                            echo command_output
-                            echo "1 Error found! Retrying in ${retry_interval} sec ..."
-                            sleep retry_interval
+                            echo "Running successfully! Next Stage ..."
+                            break
                         } else {
-                            echo "2 Error found! Retrying in ${retry_interval} sec ..."
+                            echo "Error found! Retrying in ${retry_interval} sec ..."
                             sleep retry_interval
                         }
 
                     }
 
+                    echo "TEST 3 ..."
                     // Display error output, link up with python CLI error output
                     if (command_output != 0) {
                         echo "Failed to execute command after ${retryCount} retries"
