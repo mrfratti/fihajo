@@ -87,7 +87,7 @@ pipeline {
 
                     echo  "TEST 3 ..."
                     // Display error output, linked up with python CLI error output
-                    if (Exception e) {
+                    if (e) {
 
                             echo "Error output: ${e.getMessage()}"
 
