@@ -87,20 +87,20 @@ pipeline {
 
                     echo  "TEST 3 ..."
                     // Display error output, linked up with python CLI error output
-                    if (command_output != 0) {
+                    if (Exception e) {
 
-                            echo "Error output:"
-                            def terminal_lines = currentBuild.rawBuild.getLog(1000)
-                            def terminal_error = logLines.findAll { line -> line.contains("error") }
+                            echo "Error output: ${e.getMessage()}"
 
-                            if (!terminal_error.isEmpty()) {
-                                def terminal_last = terminal_error.last()
-                                echo "Last error output:"
-                                echo terminal_last
-                            } 
-                            else {
-                                echo "No error!"
-                            }
+                            // def terminal_error = logLines.findAll { line -> line.contains("error") }
+
+                            // if (!terminal_error.isEmpty()) {
+                            //     def terminal_last = terminal_error.last()
+                            //     echo "Last error output:"
+                            //     echo terminal_last
+                            // } 
+                            // else {
+                            //     echo "No error!"
+                            // }
                     }
 
 
