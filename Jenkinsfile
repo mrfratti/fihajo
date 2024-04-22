@@ -91,12 +91,12 @@ pipeline {
 
                             echo "Error output:"
                             def terminal_lines = currentBuild.log(size: 1000)
-                            def terminal_error = logLines.findAll { line -> line.contains("error:") }
-                            
+                            def terminal_error = logLines.findAll { line -> line.contains("error: argument") }
+
                             if (!terminal_error.isEmpty()) {
-                                def terminal_last_line = terminal_error.last()
+                                def terminal_last = terminal_error.last()
                                 echo "Last error output:"
-                                echo terminal_last_line
+                                echo terminal_last
                             } 
                             else {
                                 echo "No error!"
