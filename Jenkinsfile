@@ -90,7 +90,7 @@ pipeline {
                     if (command_output != 0) {
 
                             echo "Error output:"
-                            def terminal_lines = steps.buildLog(maxLines: 1000)
+                            def terminal_lines = currentBuild.rawBuild.getLog(1000)
                             def terminal_error = logLines.findAll { line -> line.contains("error") }
 
                             if (!terminal_error.isEmpty()) {
