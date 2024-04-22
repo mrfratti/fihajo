@@ -95,9 +95,12 @@ pipeline {
                                 def terminal_last_line = terminal_error.last()
                                 echo "Last error output:"
                                 echo terminal_last_line
-                            } else {
+                            } 
+                            else {
                                 echo "No error!"
                             }
+                    }
+
 
                 }
             }
