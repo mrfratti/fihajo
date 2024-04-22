@@ -90,7 +90,7 @@ pipeline {
                     if (command_output != 0) {
 
                             echo "Error output:"
-                            def terminal_lines = currentBuild.log(size: 1000)
+                            def terminal_lines = currentBuild.getRawBuild().getLog(size: 1000)
                             def terminal_error = logLines.findAll { line -> line.contains("error: argument") }
 
                             if (!terminal_error.isEmpty()) {
