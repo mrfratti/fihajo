@@ -89,7 +89,7 @@ pipeline {
                     // Display error output, linked up with python CLI error output
                     if (command_output != 0) {
                             echo "Error output:"
-                            def terminal_last_line  = currentBuild.rawBuild.getLog(1000).last()
+                            def terminal_last_line  = currentBuild.rawBuild.getLog(1000)
                             echo terminal_last_line
                     }
 
