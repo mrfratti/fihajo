@@ -90,7 +90,11 @@ pipeline {
                     if (command_output != 0) {
                             // echo "Error output:"
                             error "Error output:"
-                            error currentBuild.rawBuild.getLog(1000).join('\n')
+                            def log = currentBuild.rawBuild.getLog(1000).join('\n')
+                            println "Error output:"
+                            println log
+                            println "Error fun println"
+                            error "Error fun error"
                     }
 
                 }
