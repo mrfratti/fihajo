@@ -87,10 +87,10 @@ pipeline {
 
                     echo  "TEST 3 ..."
                     // Display error output, linked up with python CLI error output
-                    if (e) {
+                    if (command_output != 0) {
 
-                            echo "Error output: ${e.getMessage()}"
-
+                            echo "Error!"
+                            // def terminal_lines = steps.buildLog(maxLines: 1000)
                             // def terminal_error = logLines.findAll { line -> line.contains("error") }
 
                             // if (!terminal_error.isEmpty()) {
