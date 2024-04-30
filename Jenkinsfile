@@ -34,9 +34,9 @@ pipeline {
             steps {
                 script {
                     if (params.INPUT_PARAMETERS == 'Custom input') {
-                        sh "python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                        sh "echo | python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
-                        sh "python -m src.cli.main --config src/cli/config/train.json"
+                        sh "echo | python -m src.cli.main --config src/cli/config/train.json"
                     }
                 }
             }
