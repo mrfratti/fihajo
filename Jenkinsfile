@@ -22,32 +22,38 @@ pipeline {
 
         stage('Setup Python Environment') {
             steps {
-                sh '''
-                python -m venv venv
-                source venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                '''
+                script {
+                    sh '''
+                    python -m venv venv
+                    source venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    '''
+                }
             }
         }
 
         stage('Security Scan') {
             steps {
-                sh '''
-                source venv/bin/activate
-                pip install bandit
-                bandit -r src/ -c bandit.yaml
-                '''
+                script {
+                    sh '''
+                    source venv/bin/activate
+                    pip install bandit
+                    bandit -r src/ -c bandit.yaml
+                    '''
+                }
             }
         }
 
         stage('Dependency Security Check') {
             steps {
-                sh '''
-                source venv/bin/activate
-                pip install safety
-                safety check
-                '''
+                script {
+                    sh '''
+                    source venv/bin/activate
+                    pip install safety
+                    safety check
+                    '''
+                }
             }
         }
 
