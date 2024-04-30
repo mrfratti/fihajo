@@ -210,10 +210,12 @@ class Trainer:
 
         except EOFError as e:
             logging.error("train: error with input from user console, using default path: %s", e)
-            user_input = self._default_save_path()
+            save_path = self._default_save_path()
+
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
         try:
-            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            # os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
             logging.info("Model weights saved to: %s", save_path)
 
