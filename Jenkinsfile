@@ -3,10 +3,13 @@ pipeline {
 
     parameters {
         choice(name: 'ACTION', choices: ['Standard Training', 'Adversarial Training'], description: 'Choose the training mode')
-        choice(name: 'INPUT_PARAMETERS', choices: ['Custom parameters', 'Recommended parameters'], description: 'Select input configuration')
         string(name: 'EPOCHS', defaultValue: '10', description: 'Number of epochs for training')
         string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Batch size for training')
-        string(name: 'SAVE_PATH', defaultValue: '', description: 'Optional: custom path to save model weights')
+        string(name: 'SAVE_PATH', defaultValue: 'data/models/model.weights.h5', description: 'Path to save model weights')
+        string(name: 'EPSILON', defaultValue: '0.3', description: 'Epsilon value for adversarial training or evaluation')
+        choice(name: 'OPTIMIZER', choices: ['adadelta', 'adam', 'sgd'], description: 'Optimizer for training')
+        choice(name: 'DATASET', choices: ['mnist', 'cifar10', 'fashion_mnist'], description: 'Dataset for training and evaluation')
+        booleanParam(name: 'ADV_EVAL', defaultValue: false, description: 'Perform adversarial evaluation')
     }
 
     stages {
@@ -17,65 +20,41 @@ pipeline {
             }
         }
 
-        stage('Configure Input') {
-            steps {
-                script {
-                    if (params.INPUT_PARAMETERS == 'Custom parameters') {
-                        env.EPOCHS = params.EPOCHS
-                        env.BATCH_SIZE = params.BATCH_SIZE
-                        env.SAVE_PATH = params.SAVE_PATH ?: "data/models/model.weights.h5"
-                    }
-                }
-            }
-        }
-
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
-                script {
-                    if (params.INPUT_PARAMETERS == 'Custom parameters') {
-                        sh "echo | python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
-                    } else {
-                        sh "echo | python -m src.cli.main --config src/cli/config/train.json"
-                    }
-                }
+                sh "python -m src.cli.main --mode train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
             }
         }
 
         stage('Adversarial Training') {
             when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
-                script {
-                    if (params.INPUT_PARAMETERS == 'Custom parameters') {
-                        sh "python -m src.cli.main train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
-                    } else {
-                        sh "python -m src.cli.main --config src/cli/config/train_adv.json --verbose"
-                    }
-                }
+                sh "python -m src.cli.main --mode train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
             }
         }
 
         stage('Evaluate') {
             steps {
                 script {
-                    def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
-                    sh "python -m src.cli.main evaluate --dataset mnist --model-path ${modelPath}"
+                    if (params.ADV_EVAL) {
+                        sh "python -m src.cli.main --mode evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
+                    } else {
+                        sh "python -m src.cli.main --mode evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                    }
                 }
             }
         }
 
         stage('Analyze') {
             steps {
-                script {
-                    def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
-                    sh "python -m src.cli.main analyze --dataset mnist --model-path ${modelPath}"
-                }
+                sh "python -m src.cli.main --mode analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
             }
         }
 
         stage('Generate HTML Report') {
             steps {
-                sh "python -m src.cli.main report"
+                sh "python -m src.cli.main --mode report"
                 publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
@@ -85,6 +64,12 @@ pipeline {
                     reportName: "HTML Report"
                 ]
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs(notFailBuild: true, deleteDirs: true, excludePattern: '**/models/**')
         }
     }
 }
