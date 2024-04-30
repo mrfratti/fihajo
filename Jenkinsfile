@@ -6,7 +6,7 @@ pipeline {
         choice(name: 'INPUT_PARAMETERS', choices: ['Custom', 'Recommended'], description: 'Select input configuration')
         string(name: 'EPOCHS', defaultValue: '10', description: 'Number of epochs for training')
         string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Batch size for training')
-        string(name: 'SAVE_PATH', defaultValue: '', description: 'Optional: custom path to save model weights')
+        string(name: 'SAVE_PATH', defaultValue: 'data/models/model.weights.h5', description: 'Optional: custom path to save model weights')
     }
 
     stages {
@@ -36,7 +36,7 @@ pipeline {
                     if (params.INPUT_PARAMETERS == 'Custom input') {
                         sh "python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
-                        sh "python -m src.cli.main --config src/cli/config/train.json --verbose"
+                        sh "python -m src.cli.main --config src/cli/config/train.json"
                     }
                 }
             }
