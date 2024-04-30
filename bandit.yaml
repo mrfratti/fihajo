@@ -1,0 +1,10 @@
+exclude:
+  - 'tests/*'
+  - 'docs/*'
+  - 'data/*'
+
+targets:
+  - src/
+
+output_format: txt
+output_file: bandit-report.txt

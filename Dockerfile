@@ -3,7 +3,6 @@ FROM jenkins/jenkins:lts
 USER root
 
 RUN jenkins-plugin-cli --plugins "json-path-api"
-
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
 
 RUN apt-get update && \
@@ -28,6 +27,7 @@ RUN pip install --no-cache-dir \
   argparse==1.4.0 \
   yattag==1.15.2
 
+RUN chown -R jenkins:jenkins /opt/venv
 
 USER jenkins
 
