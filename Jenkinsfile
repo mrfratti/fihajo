@@ -23,8 +23,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                pip install --upgrade pip
-                pip install -r requirements.txt
+                pip3 install --upgrade pip
+                pip3 install -r requirements.txt
                 '''
             }
         }
@@ -32,7 +32,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 sh '''
-                pip install bandit
+                pip3 install bandit
                 bandit -r src/ -c bandit.yaml
                 '''
             }
@@ -41,7 +41,7 @@ pipeline {
         stage('Dependency Security Check') {
             steps {
                 sh '''
-                pip install safety
+                pip3 install safety
                 safety check
                 '''
             }
@@ -50,14 +50,14 @@ pipeline {
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
-                sh "python -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
+                sh "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
             }
         }
 
         stage('Adversarial Training') {
             when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
-                sh "python -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
+                sh "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
             }
         }
 
@@ -65,9 +65,9 @@ pipeline {
             steps {
                 script {
                     if (params.ADV_EVAL) {
-                        sh "python -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
+                        sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
                     } else {
-                        sh "python -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                        sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
                     }
                 }
             }
@@ -75,13 +75,13 @@ pipeline {
 
         stage('Analyze') {
             steps {
-                sh "python -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
             }
         }
 
         stage('Generate HTML Report') {
             steps {
-                sh "python -m src.cli.main report"
+                sh "python3 -m src.cli.main report"
                 publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
