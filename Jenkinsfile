@@ -9,7 +9,7 @@ pipeline {
         string(name: 'EPSILON', defaultValue: '0.3', description: 'Epsilon value for adversarial training or evaluation')
         choice(name: 'OPTIMIZER', choices: ['adadelta', 'adam', 'sgd'], description: 'Optimizer for training')
         choice(name: 'DATASET', choices: ['mnist', 'cifar10', 'fashion_mnist'], description: 'Dataset for training and evaluation')
-        booleanParam(name: 'ADV_EVAL', defaultValue: false, description: 'Perform adversarial evaluation')
+        booleanParam(name: 'ADV_EVAL', defaultValue: false, description: 'Perform adversarial attacks during evaluation')
     }
 
     stages {
@@ -23,14 +23,14 @@ pipeline {
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
-                sh "python -m src.cli.main --mode train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
+                sh "python -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
             }
         }
 
         stage('Adversarial Training') {
             when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
-                sh "python -m src.cli.main --mode train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
+                sh "python -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
             }
         }
 
@@ -38,9 +38,9 @@ pipeline {
             steps {
                 script {
                     if (params.ADV_EVAL) {
-                        sh "python -m src.cli.main --mode evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
+                        sh "python -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
                     } else {
-                        sh "python -m src.cli.main --mode evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                        sh "python -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
                     }
                 }
             }
@@ -48,13 +48,13 @@ pipeline {
 
         stage('Analyze') {
             steps {
-                sh "python -m src.cli.main --mode analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                sh "python -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
             }
         }
 
         stage('Generate HTML Report') {
             steps {
-                sh "python -m src.cli.main --mode report"
+                sh "python -m src.cli.main report"
                 publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
