@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'ACTION', choices: ['Train', 'Adversarial'], description: 'Choose action for the pipeline')
-        choice(name: 'INPUT_TYPE', choices: ['Custom input', 'Recommended input'], description: 'Select input option')
-        string(name: 'EPOCHS', defaultValue: '10', description: 'Enter the number of epochs')
-        string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Enter the batch size')
-        string(name: 'SAVE_PATH', defaultValue: '', description: 'Enter the save path for model weights (leave blank for default)')
+        choice(name: 'ACTION', choices: ['Train', 'Adversarial'], description: 'Choose the training mode')
+        choice(name: 'INPUT_TYPE', choices: ['Custom input', 'Recommended input'], description: 'Select input configuration')
+        string(name: 'EPOCHS', defaultValue: '10', description: 'Number of epochs for training')
+        string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Batch size for training')
+        string(name: 'SAVE_PATH', defaultValue: '', description: 'Optional: custom path to save model weights')
     }
 
     stages {
@@ -20,11 +20,10 @@ pipeline {
         stage('Configure Input') {
             steps {
                 script {
-                    // Configure environment variables based on user input
                     if (params.INPUT_TYPE == 'Custom input') {
                         env.EPOCHS = params.EPOCHS
                         env.BATCH_SIZE = params.BATCH_SIZE
-                        env.SAVE_PATH = params.SAVE_PATH ?: "data/models/default_model.weights.h5"
+                        env.SAVE_PATH = params.SAVE_PATH ?: "data/models/model.weights.h5"
                     }
                 }
             }
@@ -34,10 +33,11 @@ pipeline {
             when { expression { params.ACTION == 'Train' } }
             steps {
                 script {
-                    def command = params.INPUT_TYPE == 'Custom input' ?
-                        "python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}" :
-                        "python -m src.cli.main --config src/cli/config/train.json --verbose"
-                    sh command
+                    if (params.INPUT_TYPE == 'Custom input') {
+                        sh "python -m src.cli.main train --verbose --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                    } else {
+                        sh "python -m src.cli.main --config src/cli/config/train.json --verbose"
+                    }
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     if (params.INPUT_TYPE == 'Custom input') {
-                        sh "python -m src.cli.main train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                        sh "python -m src.cli.main train --adv --verbose --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
                         sh "python -m src.cli.main --config src/cli/config/train_adv.json --verbose"
                     }
@@ -58,8 +58,8 @@ pipeline {
         stage('Evaluate') {
             steps {
                 script {
-                    def modelPath = params.SAVE_PATH ?: "data/models/default_model.weights.h5"
-                    sh "python -m src.cli.main evaluate --dataset mnist --model-path ${modelPath}"
+                    def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
+                    sh "python -m src.cli.main evaluate --verbose --dataset mnist --model-path ${modelPath}"
                 }
             }
         }
@@ -67,8 +67,8 @@ pipeline {
         stage('Analyze') {
             steps {
                 script {
-                    def modelPath = params.SAVE_PATH ?: "data/models/default_model.weights.h5"
-                    sh "python -m src.cli.main analyze --dataset mnist --model-path ${modelPath}"
+                    def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
+                    sh "python -m src.cli.main analyze --verbose --dataset mnist --model-path ${modelPath}"
                 }
             }
         }
