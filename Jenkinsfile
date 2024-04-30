@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         choice(name: 'ACTION', choices: ['Standard Training', 'Adversarial Training'], description: 'Choose the training mode')
-        choice(name: 'INPUT_PARAMETERS', choices: ['Custom', 'Recommended'], description: 'Select input configuration')
+        choice(name: 'INPUT_PARAMETERS', choices: ['Custom parameters', 'Recommended parameters'], description: 'Select input configuration')
         string(name: 'EPOCHS', defaultValue: '10', description: 'Number of epochs for training')
         string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Batch size for training')
         string(name: 'SAVE_PATH', defaultValue: '', description: 'Optional: custom path to save model weights')
@@ -20,7 +20,7 @@ pipeline {
         stage('Configure Input') {
             steps {
                 script {
-                    if (params.INPUT_PARAMETERS == 'Custom input') {
+                    if (params.INPUT_PARAMETERS == 'Custom parameters') {
                         env.EPOCHS = params.EPOCHS
                         env.BATCH_SIZE = params.BATCH_SIZE
                         env.SAVE_PATH = params.SAVE_PATH ?: "data/models/model.weights.h5"
@@ -33,7 +33,7 @@ pipeline {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
                 script {
-                    if (params.INPUT_PARAMETERS == 'Custom input') {
+                    if (params.INPUT_PARAMETERS == 'Custom parameters') {
                         sh "echo | python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
                         sh "echo | python -m src.cli.main --config src/cli/config/train.json"
@@ -46,7 +46,7 @@ pipeline {
             when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
                 script {
-                    if (params.INPUT_PARAMETERS == 'Custom input') {
+                    if (params.INPUT_PARAMETERS == 'Custom parameters') {
                         sh "python -m src.cli.main train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
                         sh "python -m src.cli.main --config src/cli/config/train_adv.json --verbose"
