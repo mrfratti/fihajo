@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'ACTION', choices: ['Train', 'Adversarial'], description: 'Choose action for the pipeline')
-        choice(name: 'INPUT_TYPE', choices: ['Custom input', 'Recommended input']. description: 'Select input option')
+        choice(name: 'ACTION', choices: ['Train', 'Adverserial'], description: 'Choose action for the pipeline')
+        choice(name: 'INPUT_TYPE', choices: ['Custom input', 'Recommended input'], description: 'Select input option')
         string(name: 'EPOCHS', defaultValue: '10', description: 'Enter the number of epochs', trim: true)
-        string(name: 'BATCH_SIZE': defaultValue: '64', description: 'Enter the batch size for training', trim: true)
+        string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Enter the batch size', trim: true)
         string(name: 'SAVE_PATH', defaultValue: '', description: 'Enter the save path for model weights')
     }
 
@@ -22,9 +22,9 @@ pipeline {
                 script {
                     // Use Jenkins parameters to set environment variables if 'Custom input' is selected
                     if (params.INPUT_TYPE == 'Custom input') {
-                        env.EPOCHS == params.EPOCHS
-                        env.BATCH_SIZE == params.BATCH_SIZE
-                        env.SAVE_PATH == params.SAVE_PATH ?: "data/models/model.weights.h5" // default if not specified
+                        env.EPOCHS = params.EPOCHS
+                        env.BATCH_SIZE = params.BATCH_SIZE
+                        env.SAVE_PATH = params.SAVE_PATH ?: "data/models/model.weights.h5" // Default if not specified
                     }
                 }
             }
@@ -35,18 +35,18 @@ pipeline {
             steps {
                 script {
                     if (params.INPUT_TYPE == 'Custom input') {
-                        sh "python -m src.cli.main train --dataset mnist -- epochs ${env.EPOCHS} -- batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                        sh "python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
-                        sh "python -m src.cli.main --config src/cli/config/train.json"
+                        sh "python -m src.cli.main --config src/cli/config/train.json --verbose"
                     }
                 }
             }
         }
 
         stage('Adversarial Training') {
-            when { expression { params.ACTION == 'Adversarial' } }
+            when { expression { params.ACTION == 'Adverserial' } }
             steps {
-                sh "python -m src.cli.main --verbose train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                sh "python -m src.cli.main train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
             }
         }
 
