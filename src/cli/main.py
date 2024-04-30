@@ -26,18 +26,12 @@ class CLIApp:
 
     def setup_parser(self):
         parser = argparse.ArgumentParser(description="AI Model Uncertainty Analysis Tool")
-        parser.add_argument(
-            "--config",
-            type=str,
-            help="Path to a JSON configuration file. Command line arguments "
-            "override config file values.",
-        )
+        parser.add_argument("--config", type=str,
+                            help="Path to a JSON configuration file. Command line arguments override"
+                                 " config file values.")
         parser.add_argument("--verbose", action="store_true", help="Increase output verbosity.")
-        parser.add_argument(
-            "--quiet",
-            action="store_true",
-            help="Minimize the output, show only essential information.",
-        )
+        parser.add_argument("--quiet", action="store_true",
+                            help="Minimize the output, show only essential information.")
 
         subparsers = parser.add_subparsers(dest="command")
 
@@ -50,102 +44,43 @@ class CLIApp:
 
     def add_train_subparser(self, subparsers):
         parser_train = subparsers.add_parser("train", help="Train the model")
+        parser_train.add_argument("--dataset", type=str, choices=["mnist", "cifar10", "fashion_mnist"],
+                                  required=True, help="The dataset to use for training.")
         parser_train.add_argument(
-            "--dataset",
-            type=str,
-            choices=["mnist", "cifar10", "fashion_mnist"],
-            required=True,
-            help="The dataset to use for training.",
-        )
-        parser_train.add_argument(
-            "--epochs",
-            type=self.check_positive,
-            default=5,
-            help="Number of epochs for " "training the model",
-        )
-        parser_train.add_argument(
-            "--batch",
-            type=self.check_positive,
-            default=64,
-            help="Batch size for training",
-        )
-        parser_train.add_argument(
-            "--adv",
-            action="store_true",
-            help="Enable adversarial training to improve model "
-            "robustness against adversarial examples.",
-        )
-        parser_train.add_argument(
-            "--eps",
-            type=self.check_eps,
-            default=0.3,
-            help="Epsilon value for adversarial training, controlling the perturbation magnitude.",
-        )
-        parser_train.add_argument(
-            "--save-path", type=str, default=None, help="Path to save the model weights"
-        )
-        parser_train.add_argument(
-            "--optimizer",
-            type=str,
-            default="adadelta",
-            choices=["adadelta", "adam", "sgd"],
-            help="Optimizer for training",
-        )
-        parser_train.add_argument(
-            "--learning-rate",
-            type=float,
-            default=None,
-            help="Learning rate for the optimizer",
-        )
+            "--epochs", type=self.check_positive, default=5, help="Number of epochs for " "training the model")
+        parser_train.add_argument("--batch", type=self.check_positive, default=64, help="Batch size for training")
+        parser_train.add_argument("--adv", action="store_true", help="Enable adversarial training to improve model "
+                                                                     "robustness against adversarial examples.")
+        parser_train.add_argument("--eps", type=self.check_eps, default=0.3, help="Epsilon value for adversarial "
+                                                                                  "training, controlling the "
+                                                                                  "perturbation magnitude.")
+        parser_train.add_argument("--save-path", type=str, default=None, help="Path to save the model weights")
+        parser_train.add_argument("--optimizer", type=str, default="adadelta", choices=["adadelta", "adam", "sgd"],
+                                  help="Optimizer for training")
+        parser_train.add_argument("--learning-rate", type=float, default=None, help="Learning rate for the optimizer")
         parser_train.add_argument("--report", action="store_true", help="Generate report")
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser("evaluate", help="Evaluate the model")
-        parser_evaluate.add_argument(
-            "--model-path",
-            type=str,
-            default=None,
-            help="Path to the the model weights for " "evaluation",
-        )
-        parser_evaluate.add_argument(
-            "--dataset",
-            type=str,
-            choices=["mnist", "cifar10", "fashion_mnist"],
-            required=True,
-            help="The dataset used for training.",
-        )
-        parser_evaluate.add_argument(
-            "--adv-eval",
-            action="store_true",
-            help="Perform adversarial evaluation to test " "model robustness.",
-        )
-        parser_evaluate.add_argument(
-            "--eps",
-            type=self.check_eps,
-            default=0.3,
-            help="Epsilon for adversarial " "perturbation during evaluation",
-        )
+        parser_evaluate.add_argument("--model-path", type=str, default=None, help="Path to the the model weights for "
+                                                                                  "evaluation")
+        parser_evaluate.add_argument("--dataset", type=str, choices=["mnist", "cifar10", "fashion_mnist"],
+                                     required=True,
+                                     help="The dataset used for training.")
+        parser_evaluate.add_argument("--adv-eval", action="store_true", help="Perform adversarial evaluation to test "
+                                                                             "model robustness.")
+        parser_evaluate.add_argument("--eps", type=self.check_eps, default=0.3, help="Epsilon for adversarial "
+                                                                                     "perturbation during evaluation")
         parser_evaluate.add_argument("--report", action="store_true", help="Generate report")
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
         uncertainty_parser = subparsers.add_parser("analyze", help="Analyze model uncertainty")
-        uncertainty_parser.add_argument(
-            "--dataset",
-            type=str,
-            choices=["mnist", "cifar10", "fashion_mnist"],
-            required=True,
-            help="The dataset used for analysis.",
-        )
-        uncertainty_parser.add_argument(
-            "--model-path",
-            type=str,
-            default=None,
-            help="Path to load the model weights " "for uncertainty analysis.",
-        )
-        uncertainty_parser.add_argument(
-            "--batch", type=int, default=64, help="Batch size for analyzing."
-        )
+        uncertainty_parser.add_argument("--dataset", type=str, choices=["mnist", "cifar10", "fashion_mnist"],
+                                        required=True, help="The dataset used for analysis.")
+        uncertainty_parser.add_argument("--model-path", type=str, default=None, help="Path to load the model weights "
+                                                                                     "for uncertainty analysis.")
+        uncertainty_parser.add_argument("--batch", type=int, default=64, help="Batch size for analyzing.")
         uncertainty_parser.add_argument("--report", action="store_true", help="Generate report")
         uncertainty_parser.set_defaults(func=self.analyze)
 
@@ -185,9 +120,7 @@ class CLIApp:
             "fashion_mnist": FashionMnistModelBuilder,
         }
 
-        model_builder = model_builders[args.dataset](
-            stochastic_mode, args.optimizer, args.learning_rate
-        )
+        model_builder = model_builders[args.dataset](stochastic_mode, args.optimizer, args.learning_rate)
 
         (x_train, y_train), (x_test, y_test) = dataset_handler.load_and_preprocess()
 
@@ -207,9 +140,7 @@ class CLIApp:
         if hasattr(args, "model_path") or args.model_path is not None:
             model_path = args.model_path
         else:
-            model_path = input(
-                "Enter the model path for analysis or press Enter to use the default path: "
-            ).strip()
+            model_path = input("Enter the model path for analysis or press Enter to use the default path: ").strip()
 
         if not model_path:
             logging.info("No path set defaulting to defualt path \n")
@@ -256,10 +187,9 @@ class CLIApp:
         model_path = (
             args.model_path
             if (hasattr(args, "model_path") or args.model_path is not None)
-            else input(
-                "Enter the model path for analysis or press Enter to use the default path: "
-            ).strip()
+            else input("Enter the model path for analysis or press Enter to use the default path: ").strip()
         )
+
         if not model_path:
             model_path = Analyzer.default_path
 

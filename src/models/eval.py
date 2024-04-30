@@ -53,7 +53,7 @@ class Evaluator:
     def evaluation(self, x_test, y_test, plot_results=True):
         # Evaluate the model
         loss, acc = self.model.evaluate(x_test, y_test, verbose=1)
-        logging.info(f"Evaluation - Loss: {loss * 100:.2f}%, Accuracy: {acc * 100:.2f}%")
+        logging.info(f"Evaluation - Loss: {loss:.2f}%, Accuracy: {acc * 100:.2f}%")
 
         if plot_results:
             visualizer = VisualizeEvaluation()
@@ -71,31 +71,29 @@ class Evaluator:
     def adversarial_evaluation(self, x_test, y_test):
         # Fast Gradient Sign Method
         loss, acc = self.model.evaluate(x_test, y_test, verbose=1)
-        x_adv_fgsm = fast_gradient_method(
-            self.model.inner, x_test, self.args.eps, np.inf, clip_min=0.0, clip_max=1.0
-        )
+        x_adv_fgsm = fast_gradient_method(self.model.inner,
+                                          x_test,
+                                          self.args.eps,
+                                          np.inf,
+                                          clip_min=0.0,
+                                          clip_max=1.0)
         loss_fgsm, acc_fgsm = self.model.evaluate(x_adv_fgsm, y_test, verbose=1)
         predictions_fgsm = self.model.predict(x_adv_fgsm)
-        logging.info(
-            f"Evaluation on FGSM - Loss: {loss_fgsm:.2f}%, Accuracy: {acc_fgsm * 100:.2f}%"
-        )
+
+        logging.info(f"Evaluation on FGSM - Loss: {loss_fgsm:.2f}%, Accuracy: {acc_fgsm * 100:.2f}%")
 
         # Projected Gradient Descent
-        x_adv_pgd = projected_gradient_descent(
-            self.model.inner,
-            x_test,
-            self.args.eps,
-            0.01,
-            40,
-            np.inf,
-            clip_min=0.0,
-            clip_max=1.0,
-        )
+        x_adv_pgd = projected_gradient_descent(self.model.inner,
+                                               x_test,
+                                               self.args.eps,
+                                               0.01,
+                                               40,
+                                               np.inf,
+                                               clip_min=0.0,
+                                               clip_max=1.0)
         loss_pgd, acc_pgd = self.model.evaluate(x_adv_pgd, y_test, verbose=1)
         predictions_pgd = self.model.predict(x_adv_pgd)
-        logging.info(
-            f"Evaluation on PGD - Loss: {loss_pgd * 100:.2f}%, Accuracy: {acc_pgd * 100:.2f}%"
-        )
+        logging.info(f"Evaluation on PGD - Loss: {loss_pgd:.2f}%, Accuracy: {acc_pgd * 100:.2f}%")
 
         visualizer = VisualizeEvaluation()
         # Plotting for adversarial evaluation
