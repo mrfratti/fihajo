@@ -69,7 +69,7 @@ pipeline {
 
     post {
         always {
-            cleanWs(notFailBuild: true, deleteDirs: true, excludePattern: '**/models/**')
+            cleanWs(notFailBuild: true, deleteDirs: true, patterns: [excludePattern: '**/models/**'])
         }
     }
 }
