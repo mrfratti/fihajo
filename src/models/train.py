@@ -202,19 +202,27 @@ class Trainer:
     def save_model(self):
         """saving model weights"""
 
-        if self.args.save_path:
-            save_path = self.args.save_path
-        else:
-            save_path = self._default_save_path()
+        try:
+            user_input = input(
+                "Enter a path to save the model or press Enter to use the default path: "
+            ).strip()
+            save_path = user_input if user_input else self._default_save_path()
 
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        except EOFError as e:
+            logging.error("train: error with input from user console, using default path: %s", e)
+            user_input = self._default_save_path()
 
         try:
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
             self.model.inner.save_weights(save_path)
             logging.info("Model weights saved to: %s", save_path)
-        except Exception as e:
-            logging.error("Failed to save model weights: %s", e)
-            raise
+
+        except FileNotFoundError:
+            print(StringStyling.box_style("File path not found or cannot open weight file"))
+            sys.exit(1)
+        except PermissionError:
+            print(StringStyling.box_style("Missing writing permissions, cannot write weight file"))
+            sys.exit(1)
 
     def _default_save_path(self) -> str:
         """Generate a default save path for the model based on training type"""
