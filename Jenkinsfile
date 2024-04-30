@@ -1,171 +1,76 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(name: 'ACTION', choices: ['Train', 'Adversarial'], description: 'Choose action for the pipeline')
+        choice(name: 'INPUT_TYPE', choices: ['Custom input', 'Recommended input']. description: 'Select input option')
+        string(name: 'EPOCHS', defaultValue: '10', description: 'Enter the number of epochs', trim: true)
+        string(name: 'BATCH_SIZE': defaultValue: '64', description: 'Enter the batch size for training', trim: true)
+        string(name: 'SAVE_PATH', defaultValue: '', description: 'Enter the save path for model weights')
+    }
+
     stages {
         stage('Setup') {
             steps {
                 checkout scm
-                
-                //create directories
-                dir('data/plots/training'){sh 'pwd -P'}
-                dir('data/models'){sh 'pwd -P'}
-                dir('data/logs'){sh 'pwd -P'}
-                dir('report/reports'){sh 'pwd -P'}
+                sh "mkdir -p data/plots/training data/models data/logs report/reports"
             }
         }
 
-        stage('Train or Adverserial Training') {
+        stage('Configure Input') {
             steps {
                 script {
-                    env.stage_choice = input(id: 'userInput',
-                                             message: 'Choose action:',
-                                             parameters: [choice(name: 'STAGE OPTION',
-                                                                 choices: ['Train', 'Adverserial'],
-                                                                 description: 'Select stage')])
-                }
-            }
-        }
-
-        stage('TRAIN') {
-
-            when {
-                expression { return env.stage_choice == 'Train' }
-            }
-
-            steps {
-
-                echo 'Running Train...'
-
-                script {
-
-                    def user_input = input(
-                        id: 'user_input',
-                        message: 'Select input option:',
-                        parameters: [
-                            choice(
-                                name: 'choices',
-                                choices: ['Custom input', 'Recommended input'],
-                                description: ''
-                            )
-                        ]
-                    )
-
-                    def retry_count = 1
-                    def retry_interval = 5
-                    def command_output
-
-                    for (int i = 0; i < retry_count; i++) {
-
-                        if (user_input == 'Custom input') {
-                            echo 'Executing Custom input'
-
-                            def defaultfile = "data/models/mnist.model.h5"
-                            def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                            def epochs = input(id: 'userInputEpochs', message: 'Enter the number of epochs:', parameters: [string(defaultValue: '10', description: 'Number of epochs', name: 'epochs')])
-                            def batch_size = input(id: 'userInputBatchSize', message: 'Enter the batch size:', parameters: [string(defaultValue: '32', description: 'Batch size', name: 'batch')])
-                            def save_path = input(id: 'userInputSavePath', message: 'Enter the save path for model weights:', parameters: [string(defaultValue:fullpath, description: 'Model save path', name: 'savePath')])
-
-                            def command_text = "echo | python -m src.cli.main --verbose train --dataset mnist --epochs ${epochs} --batch ${batch_size} --save-path ${save_path}"
-                            command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
-                        }
-                        else if (user_input == 'Recommended input') {
-                            echo 'Executing recommended input'
-                            def command_text = "echo | python -m src.cli.main --config src/cli/config/train.json --verbose"
-                            command_output = sh(script: command_text, returnStdout: true, returnStatus: true)
-                        }
-
-                        echo "TEST 2 ..."
-                        if (command_output == 0) {
-                            echo "Running successfully! Next Stage ..."
-                            break
-                        } else {
-                            echo "Error found! Retrying in ${retry_interval} sec ..."
-                            sleep retry_interval
-                        }
-
+                    // Use Jenkins parameters to set environment variables if 'Custom input' is selected
+                    if (params.INPUT_TYPE == 'Custom input') {
+                        env.EPOCHS == params.EPOCHS
+                        env.BATCH_SIZE == params.BATCH_SIZE
+                        env.SAVE_PATH == params.SAVE_PATH ?: "data/models/model.weights.h5" // default if not specified
                     }
-
-                    echo  "TEST 3 ..."
-                    // Display error output, linked up with python CLI error output
-                    if (command_output != 0) {
-
-                            echo "Error!"
-                            // def terminal_lines = steps.buildLog(maxLines: 1000)
-                            // def terminal_error = logLines.findAll { line -> line.contains("error") }
-
-                            // if (!terminal_error.isEmpty()) {
-                            //     def terminal_last = terminal_error.last()
-                            //     echo "Last error output:"
-                            //     echo terminal_last
-                            // }
-                            // else {
-                            //     echo "No error!"
-                            // }
-                    }
-
-
                 }
             }
         }
 
-        stage('ADVERSERIAL TRAINING') {
-
-            when {
-                expression { return env.stage_choice == 'Adverserial' }
-            }
-
-            steps {
-                echo 'Running Adverserial....'
-                script {
-                    sh "echo | python -m src.cli.main --verbose train --adv --dataset mnist"
-                }
-            }
-        }
-
-        stage('EVALUATE') {
+        stage('Train') {
+            when { expression { params.ACTION == 'Train' } }
             steps {
                 script {
-
-                    if (env.stage_choice == 'Train') {
-                        def defaultfile = "data/models/model.weights.h5"
-                        def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist"
+                    if (params.INPUT_TYPE == 'Custom input') {
+                        sh "python -m src.cli.main train --dataset mnist -- epochs ${env.EPOCHS} -- batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                    } else {
+                        sh "python -m src.cli.main --config src/cli/config/train.json"
                     }
-
-                    else if (env.stage_choice == 'Adverserial') {
-                        def defaultfile = "data/models/adv_model.weights.h5"
-                        def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main --verbose evaluate --dataset mnist "
-                    }
-
                 }
             }
         }
-        stage('ANALYZE') {
+
+        stage('Adversarial Training') {
+            when { expression { params.ACTION == 'Adversarial' } }
+            steps {
+                sh "python -m src.cli.main --verbose train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+            }
+        }
+
+        stage('Evaluate') {
             steps {
                 script {
-
-                    if (env.stage_choice == 'Train') {
-                        def defaultfile = "data/models/model.weights.h5"
-                        def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main analyze --dataset mnist "
-                    }
-
-                    else if (env.stage_choice == 'Adverserial') {
-                        def defaultfile = "data/models/adv_model.weights.h5"
-                        def fullpath ="${env.WORKSPACE}/${defaultfile}"
-                        sh "echo | python -m src.cli.main analyze --dataset mnist "
-                    }
-
+                    def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
+                    sh "python -m src.cli.main evaluate --dataset mnist --model-path ${modelPath}"
                 }
             }
         }
 
-        stage('HTML REPORT') {
+        stage('Analyze') {
             steps {
-                script{
-                    sh "echo | python -m src.cli.main report"
+                script {
+                    def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
+                    sh "python -m src.cli.main analyze --dataset mnist --model-path ${modelPath}"
                 }
+            }
+        }
+
+        stage('Generate HTML Report') {
+            steps {
+                sh "python -m src.cli.main report"
                 publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
