@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     if (params.INPUT_TYPE == 'Custom input') {
-                        sh "python -m src.cli.main train --verbose --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                        sh "python -m src.cli.main train --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
                         sh "python -m src.cli.main --config src/cli/config/train.json --verbose"
                     }
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     if (params.INPUT_TYPE == 'Custom input') {
-                        sh "python -m src.cli.main train --adv --verbose --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
+                        sh "python -m src.cli.main train --adv --dataset mnist --epochs ${env.EPOCHS} --batch ${env.BATCH_SIZE} --save-path ${env.SAVE_PATH}"
                     } else {
                         sh "python -m src.cli.main --config src/cli/config/train_adv.json --verbose"
                     }
@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
-                    sh "python -m src.cli.main evaluate --verbose --dataset mnist --model-path ${modelPath}"
+                    sh "python -m src.cli.main evaluate --dataset mnist --model-path ${modelPath}"
                 }
             }
         }
@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     def modelPath = params.SAVE_PATH ?: "data/models/model.weights.h5"
-                    sh "python -m src.cli.main analyze --verbose --dataset mnist --model-path ${modelPath}"
+                    sh "python -m src.cli.main analyze --dataset mnist --model-path ${modelPath}"
                 }
             }
         }
