@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage('Train') {
-            when { expression { params.ACTION == 'Train' } }
+            when { expression { params.ACTION == 'Standard Training' } }
             steps {
                 script {
                     if (params.INPUT_PARAMETERS == 'Custom input') {
@@ -43,7 +43,7 @@ pipeline {
         }
 
         stage('Adversarial Training') {
-            when { expression { params.ACTION == 'Adversarial' } }
+            when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
                 script {
                     if (params.INPUT_PARAMETERS == 'Custom input') {
