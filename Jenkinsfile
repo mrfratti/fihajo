@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    tools {
-        python 'Python3.11.7'
-    }
+
     parameters {
         choice(name: 'ACTION', choices: ['Standard Training', 'Adversarial Training'], description: 'Choose the training mode')
         string(name: 'EPOCHS', defaultValue: '10', description: 'Number of epochs for training')
