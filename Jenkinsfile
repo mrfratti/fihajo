@@ -72,7 +72,7 @@ pipeline {
             cleanWs(
             notFailBuild: true,
             deleteDirs: true,
-            patterns: [pattern('**', excludes: '**/models/**')])
+            patterns: [pattern(name: '**', excludes: '**/models/**')])
         }
     }
 }
