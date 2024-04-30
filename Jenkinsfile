@@ -24,6 +24,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    #!/bin/bash
                     python -m venv venv
                     source venv/bin/activate
                     pip install --upgrade pip
@@ -37,6 +38,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    #!/bin/bash
                     source venv/bin/activate
                     pip install bandit
                     bandit -r src/ -c bandit.yaml
@@ -49,6 +51,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    #!/bin/bash
                     source venv/bin/activate
                     pip install safety
                     safety check
