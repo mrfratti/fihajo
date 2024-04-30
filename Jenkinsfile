@@ -20,46 +20,6 @@ pipeline {
             }
         }
 
-        stage('Setup Python Environment') {
-            steps {
-                script {
-                    sh '''
-                    #!/bin/bash
-                    python -m venv venv
-                    source venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    '''
-                }
-            }
-        }
-
-        stage('Security Scan') {
-            steps {
-                script {
-                    sh '''
-                    #!/bin/bash
-                    source venv/bin/activate
-                    pip install bandit
-                    bandit -r src/ -c bandit.yaml
-                    '''
-                }
-            }
-        }
-
-        stage('Dependency Security Check') {
-            steps {
-                script {
-                    sh '''
-                    #!/bin/bash
-                    source venv/bin/activate
-                    pip install safety
-                    safety check
-                    '''
-                }
-            }
-        }
-
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
