@@ -5,7 +5,7 @@ pipeline {
         choice(name: 'ACTION', choices: ['Standard Training', 'Adversarial Training'], description: 'Choose the training mode')
         string(name: 'EPOCHS', defaultValue: '10', description: 'Number of epochs for training')
         string(name: 'BATCH_SIZE', defaultValue: '64', description: 'Batch size for training')
-        string(name: 'SAVE_PATH', defaultValue: '', description: 'Path to save model weights')
+        string(name: 'SAVE_PATH', defaultValue: 'data/models/model.weights.h5', description: 'Path to save model weights')
         string(name: 'EPSILON', defaultValue: '0.3', description: 'Epsilon value for adversarial training or evaluation')
         choice(name: 'OPTIMIZER', choices: ['adadelta', 'adam', 'sgd'], description: 'Optimizer for training')
         choice(name: 'DATASET', choices: ['mnist', 'cifar10', 'fashion_mnist'], description: 'Dataset for training and evaluation')
