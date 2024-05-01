@@ -115,18 +115,6 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
                 }}
             }});
 
-            function data_change_a_l(button_option) {{
-                chart.data.datasets.forEach(function(data_set) {{
-                
-                    const if_accuracy = (button_option === 'accuracy');
-                    const if_hide = (if_accuracy && (data_set.label.includes('Loss'))) ||
-                                    (!if_accuracy && (data_set.label.includes('Accuracy')));
-
-                    data_set.hidden = if_hide;
-                }});
-                
-                chart.update();
-            }}
 
         </script>
     </body>
