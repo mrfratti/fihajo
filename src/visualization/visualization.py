@@ -102,7 +102,7 @@ class VisualizeEvaluation:
         predictions = model.predict(x_test[:num_samples])
         predicted_labels = np.argmax(predictions, axis=1)
         # true_label = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
             plt.imshow(x_test[i].reshape(28, 28), cmap="gray")
@@ -118,7 +118,7 @@ class VisualizeEvaluation:
         cm = confusion_matrix(y_true, y_pred)
 
         # Plot the confusion matrix
-        plt.figure(figsize=(20, 15))
+        plt.figure(dpi=1200)
         sns.heatmap(
             cm,
             annot=True,
@@ -127,9 +127,9 @@ class VisualizeEvaluation:
             xticklabels=classes,
             yticklabels=classes,
         )
-        plt.title("Confusion Matrix")
-        plt.ylabel("True Label")
-        plt.xlabel("Predicted Label")
+        plt.title("Confusion Matrix", fontsize=20)
+        plt.ylabel("True Label", fontsize=18)
+        plt.xlabel("Predicted Label", fontsize=18)
         filename = self._save_plot("confusion_matrix")
         plt.show()
         self._plot_file_names["confusion_matrix"] = filename
@@ -140,14 +140,14 @@ class VisualizeEvaluation:
         )
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         sns.heatmap(
             df_report[["precision", "recall", "f1-score"]].T,
             annot=True,
             cmap="viridis",
             fmt=".2f",
         )
-        plt.title("Classification Report")
+        plt.title("Classification Report", fontsize=20)
         filename = self._save_plot("classification_report")
         plt.show()
         self._plot_file_names["classification_report"] = filename
@@ -167,24 +167,24 @@ class VisualizeEvaluation:
 
         plt.figure(figsize=(2 * num_samples, 6))
 
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         for i in range(num_samples):
             # Original images
             plt.subplot(3, num_samples, i + 1)
             plt.imshow(x_test[i], cmap="gray")
-            plt.title(f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}", fontsize=12)
+            plt.title(f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}", fontsize=18)
             plt.axis("off")
 
             # Plot FGSM adversarial images
             plt.subplot(3, num_samples, num_samples + i + 1)
             plt.imshow(x_adv_fgsm[i], cmap="gray")
-            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=12)
+            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=18)
             plt.axis("off")
 
             # Plot PGD adversarial images
             plt.subplot(3, num_samples, 2 * num_samples + i + 1)
             plt.imshow(x_adv_pgd[i], cmap="gray")
-            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=12)
+            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=18)
             plt.axis("off")
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
@@ -194,12 +194,12 @@ class VisualizeEvaluation:
         self._plot_file_names["adversarial_examples"] = filename
 
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
-        plt.figure(figsize=(8, 6))
+        plt.figure(dpi=1200)
         bar_positions = np.arange(len(accuracies))
         plt.bar(bar_positions, accuracies, color=["blue", "green", "red"])
         plt.xticks(bar_positions, labels)
-        plt.ylabel("Accuracy (%)")
-        plt.title("Model Accuracy: Clean vs Adversarial Examples")
+        plt.ylabel("Accuracy (%)", fontsize=18)
+        plt.title("Model Accuracy: Clean vs Adversarial Examples", fontsize=20)
         plt.ylim(0, max(accuracies) + 10)
         # plt.ylim(0, 110)
 
@@ -244,17 +244,17 @@ class VisualizeUncertainty:
         # Results is a list of tuples, where each tuple contains (predictions, scores)
         # pcs_scores, mean_softmax_scores = results[0][1], results[1][1]
 
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         plt.subplot(1, 2, 1)
         sns.histplot(pcs_scores, bins=50, kde=True, color="skyblue")
         plt.xlabel("PCS Score", fontsize=18)
         plt.ylabel("Frequency", fontsize=18)
-        plt.title("Distribution of PCS Scores")
+        plt.title("Distribution of PCS Scores", fontsize=20)
         plt.subplot(1, 2, 2)
         sns.histplot(mean_softmax_scores, bins="auto", kde=True, color="lightgreen")
-        plt.xlabel("Mean Softmax Score")
-        plt.ylabel("Frequency")
-        plt.title("Distribution of Mean Softmax Scores")
+        plt.xlabel("Mean Softmax Score", fontsize=18)
+        plt.ylabel("Frequency", fontsize=18)
+        plt.title("Distribution of Mean Softmax Scores", fontsize=20)
         plt.tight_layout()
         filename = self._save_plot("pcs_meansoftmax")
         plt.show()
@@ -262,7 +262,7 @@ class VisualizeUncertainty:
 
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
-        plt.figure(figsize=(10, 10))
+        plt.figure(dpi=1200)
         sns.histplot(pcs_scores, bins=50, alpha=0.7, color="blue", kde=True, label="PCS")
         sns.histplot(
             mean_softmax_scores,
@@ -272,9 +272,9 @@ class VisualizeUncertainty:
             kde=True,
             label="Mean Softmax",
         )
-        plt.xlabel("Predictive Confidence Score & Mean Softmax Scores")
-        plt.ylabel("Frequency")
-        plt.title("Distribution of PCS and Mean Softmax Scores")
+        plt.xlabel("Predictive Confidence Score & Mean Softmax Scores", fontsize=18)
+        plt.ylabel("Frequency", fontsize=18)
+        plt.title("Distribution of PCS and Mean Softmax Scores", fontsize=20)
         plt.legend()
         filename = self._save_plot("dist_pcs_meansoftmax")
         plt.show()
@@ -287,7 +287,7 @@ class VisualizeUncertainty:
         mean_softmax_inverse = 1 - mean_softmax_scores
         uncertainty_threshold_mean_softmax = np.percentile(mean_softmax_inverse, 95)
 
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         # First subplot for PCS scores
         plt.subplot(1, 2, 1)
         sns.histplot(pcs_inverse, bins="auto", kde=True, color="skyblue")
@@ -304,9 +304,9 @@ class VisualizeUncertainty:
             linestyle="dashed",
             label=f"Mean PCS: {np.mean(pcs_scores):.2f}",
         )
-        plt.xlabel("Prediction Confidence Score (PCS)", fontsize=14)
-        plt.ylabel("Frequency", fontsize=14)
-        plt.title("Distribution of PCS Scores as Uncertainty", fontsize=18)
+        plt.xlabel("Prediction Confidence Score (PCS)", fontsize=18)
+        plt.ylabel("Frequency", fontsize=18)
+        plt.title("Distribution of PCS Scores as Uncertainty", fontsize=20)
         plt.legend()
 
         # Second subplot for Mean Softmax scores
@@ -324,9 +324,9 @@ class VisualizeUncertainty:
             linestyle="dashed",
             label=f"Mean Softmax: {np.mean(mean_softmax_scores):.2f}",
         )
-        plt.xlabel("Mean Softmax Score", fontsize=14)
-        plt.ylabel("Frequency", fontsize=14)
-        plt.title("Distribution of Mean Softmax Scores as Uncertainty", fontsize=18)
+        plt.xlabel("Mean Softmax Score", fontsize=18)
+        plt.ylabel("Frequency", fontsize=18)
+        plt.title("Distribution of Mean Softmax Scores as Uncertainty", fontsize=20)
         plt.legend()
         plt.tight_layout()
         filename = self._save_plot("pcs_ms_inverse")
@@ -334,7 +334,7 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_inverse"] = filename
 
     def plot_dist_entropy_scores(self, entropy_scores):
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         sns.histplot(entropy_scores, bins=50, kde=True, color="blue", label="Clean Data")
         plt.axvline(
             np.mean(entropy_scores),
@@ -345,7 +345,7 @@ class VisualizeUncertainty:
         )
         plt.xlabel("Predictive Entropy", fontsize=18)
         plt.ylabel("Frequency", fontsize=18)
-        plt.title("Histogram of Predictive Entropy", fontsize=24)
+        plt.title("Histogram of Predictive Entropy", fontsize=20)
         plt.legend()
         filename = self._save_plot("dist_entropy")
         plt.show()
@@ -356,7 +356,7 @@ class VisualizeUncertainty:
         sorted_indices = np.argsort(entropy_scores)[::-1]
 
         # Plot the most uncertain examples
-        plt.figure(figsize=(10, 10))
+        plt.figure(dpi=1200)
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
             plt.imshow(x_test[sorted_indices[i]], cmap="gray")
@@ -368,7 +368,7 @@ class VisualizeUncertainty:
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
     def plot_predictive_conf_entropy_scores(self, predictive_confidence, entropy_scores):
-        plt.figure(figsize=(20, 10))
+        plt.figure(dpi=1200)
         plt.scatter(
             predictive_confidence,
             entropy_scores,
@@ -376,10 +376,10 @@ class VisualizeUncertainty:
             cmap="viridis",
             alpha=0.5,
         )
-        plt.colorbar(label="Predictive Entropy")
-        plt.xlabel("Predictive Confidence")
-        plt.ylabel("Entropy Score")
-        plt.title("Predictive Confidence vs Entropy Score")
+        plt.colorbar(label="Predictive Entropy", fontsize=18)
+        plt.xlabel("Predictive Confidence", fontsize=18)
+        plt.ylabel("Entropy Score", fontsize=18)
+        plt.title("Predictive Confidence vs Entropy Score", fontsize=18)
         filename = self._save_plot("pred_vs_entropy")
         plt.show()
         self._plot_file_names["prediction_vs_entrophy"] = filename
