@@ -18,6 +18,7 @@ class VisualizeTraining:
     generate plot and storing plots
     """
 
+    # --- Settings --- |
     def __init__(self, plot_dir="report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
@@ -47,7 +48,7 @@ class VisualizeTraining:
         plt.xlabel(xlabel)
         plt.legend()
 
-        # --- Interactive Chart --- |
+        # --- Interactive Chart | Accuracy & Loss --- |
 
         history_data = history.history
         
@@ -64,9 +65,8 @@ class VisualizeTraining:
         }
 
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        file_path = 'report/reports/data/plots/training/'
-        # file_path_2 = f"{file_path}val_acc_and_loss_{date_time}.json"
-        file_path_2 = f"{file_path}val_acc_and_loss.json"
+        # file_path_2 = f"{self.plot_dir}/val_acc_and_loss_{date_time}.json"
+        file_path_2 = f"{self.plot_dir}/val_acc_and_loss.json"
         
         full_file_path = os.path.join(os.getcwd(), file_path_2)
         with open(full_file_path, 'w') as file:
@@ -166,16 +166,18 @@ class VisualizeEvaluation:
         self._plot_file_names["confusion_matrix"] = filename
 
 
-        # --- Confusion Matrix --- |
+        # --- Interactive Chart | Confusion Matrix --- |
 
-        data_info = {
-            "x": cm,
-        }
+        data = []
+        for x in range(len(cm)):
+            for y in range(len(cm[x])):
+                data.append({'value': int(cm[x][y]), 'row_x': x, 'column_y': y})
+
+        data_info = json.dumps(data)
 
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        file_path = 'report/reports/data/plots/training/'
-        # file_path_2 = f"{file_path}val_acc_and_loss_{date_time}.json"
-        file_path_2 = f"{file_path}confusion_matrix.json"
+        # file_path_2 = f"{self.plot_dir}/confusion_matrix_{date_time}.json"
+        file_path_2 = f"{self.plot_dir}/confusion_matrix.json"
         
         full_file_path = os.path.join(os.getcwd(), file_path_2)
         with open(full_file_path, 'w') as file:

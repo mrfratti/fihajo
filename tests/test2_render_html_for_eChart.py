@@ -1,7 +1,7 @@
 import os
 import json
 
-# Make function for adding +1 for jason file, that will be used for every stage, 
+# Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
 # so we can use that info to make 1 file where they can see all build graf and compare
 # jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,
 # sum should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
