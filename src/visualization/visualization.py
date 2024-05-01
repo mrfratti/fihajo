@@ -376,7 +376,7 @@ class VisualizeUncertainty:
             cmap="viridis",
             alpha=0.5,
         )
-        plt.colorbar(label="Predictive Entropy", fontsize=18)
+        plt.colorbar(label="Predictive Entropy")
         plt.xlabel("Predictive Confidence", fontsize=18)
         plt.ylabel("Entropy Score", fontsize=18)
         plt.title("Predictive Confidence vs Entropy Score", fontsize=18)
