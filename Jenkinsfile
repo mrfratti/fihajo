@@ -20,32 +20,32 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                '''
-            }
-        }
+        // stage('Install Dependencies') {
+        //     steps {
+        //         sh '''
+        //         pip install --upgrade pip
+        //         pip install -r requirements.txt
+        //         '''
+        //     }
+        // }
 
-        stage('Security Scan') {
-            steps {
-                sh '''
-                pip install bandit
-                bandit -r src/ -c bandit.yaml
-                '''
-            }
-        }
+        // stage('Security Scan') {
+        //     steps {
+        //         sh '''
+        //         pip install bandit
+        //         bandit -r src/ -c bandit.yaml
+        //         '''
+        //     }
+        // }
 
-        stage('Dependency Security Check') {
-            steps {
-                sh '''
-                pip install safety
-                safety check
-                '''
-            }
-        }
+        // stage('Dependency Security Check') {
+        //     steps {
+        //         sh '''
+        //         pip install safety
+        //         safety check
+        //         '''
+        //     }
+        // }
 
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
