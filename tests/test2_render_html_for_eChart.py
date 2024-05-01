@@ -27,12 +27,8 @@ def html_start():
                 height: 400px;
             }}
 
-            .chart_line_2 {{
-                width: 600px;
-                height: 400px;
-            }}
-
-            #heatmap {{
+            
+            #chart_heatmap {{
                 width: 800px;
                 height: 600px;
                 margin: 50px auto;
@@ -134,77 +130,80 @@ def html_accuracy_loss_chart(data_x, data_y1, data_y2, data_y3, data_y4):
 
 
 
-def html_heatmap_chart(data):
-    json_data = json.dumps(data)
-    value_max = max(item['value'] for item in data)
+def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value):
+    data_value = json.dumps(data_heatmap)
+    data_columns = json.dumps(heatmap_columns)
+    data_rows = json.dumps(heatmap_rows)
 
-    html_content = f"""
+    html_content =  f"""
 
-    <div id="charts_box">
-        <h1>Heatmap</h1>
-        <div id="chart_heatmap" class="chart_line_2"></div>
-    </div>
+        <div id="chart_heatmap"></div>
+        
+        <script>
+            var js_chart_heatmap = echarts.init(document.getElementById('chart_heatmap'));
+            var data = {data_value};
+            var columns = {data_columns};
+            var rows = {data_rows};
 
-    <script>
-        var js_chart_heatmap = echarts.init(document.getElementById('chart_heatmap'));
-        var data = {json_data};
-
-        var option = {{
-            tooltip: {{
-                position: 'top',
-                formatter: function (params) {{
-                    return 'Value: ' + params.value[2];
-                }}
-            }},
-
-            animation: false,
-            grid: {{
-                height: '50%',
-                top: '10%'
-            }},
-
-            xAxis: {{
-                splitArea: {{
-                    show: true
-                }}
-                type: 'category',
-                data: data.map(item => item.column.toString()),
-            }},
-            yAxis: {{
-                splitArea: {{
-                    show: true
-                }}
-                type: 'category',
-                data: data.map(item => item.row.toString()),
-            }},
-            
-            visualMap: {{
-                min: 0,
-                max: {value_max},
-                calculable: true,
-                orient: 'horizontal',
-                left: 'center',
-                bottom: '15%'
-            }},
-
-            series: [{{
-                name: 'Heatmap',
-                type: 'heatmap',
-                data: data.map(item => [item.column, item.row, item.value]),
-                label: {{
-                    show: true
-                }},
-                itemStyle: {{
-                    emphasis: {{
-                        shadowBlur: 10,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+            var option = {{
+                tooltip: {{
+                    position: 'top',
+                    formatter: function (params) {{
+                        return 'Value: ' + params.value[2];
                     }}
-                }}
-            }}]
-        }};
+                }},
 
-        js_chart_heatmap.setOption(option);
-    </script>
+                animation: false,
+
+                grid: {{
+                    height: '50%',
+                    top: '10%'
+                }},
+
+                xAxis: {{
+                    type: 'category',
+                    data: columns,
+                    splitArea: {{
+                        show: true
+                    }}
+                }},
+                yAxis: {{
+                    type: 'category',
+                    data: rows,
+                    splitArea: {{
+                        show: true
+                    }}
+                }},
+
+                visualMap: {{
+                    min: 0,
+                    max: {heatmap_max_value},
+                    calculable: true,
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: '15%'
+                }},
+
+                series: [{{
+                    name: 'Heatmap',
+                    type: 'heatmap',
+                    data: data.map(function (item) {{
+                        return [columns.indexOf(item.column), rows.indexOf(item.row), item.value];
+                    }}),
+                    label: {{
+                        show: true
+                    }},
+                    itemStyle: {{
+                        emphasis: {{
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }}
+                    }}
+                }}]
+            }};
+            js_chart_heatmap.setOption(option);
+        </script>
+
     """
 
     return html_content
@@ -248,13 +247,14 @@ def main():
     with open(full_file_path, "r") as json_file:
         data_heatmap = json.load(json_file)
 
-    print("Heatmap data:", data_heatmap)
-        
+    heatmap_columns = list({item['column'] for item in data_heatmap})
+    heatmap_rows = list({item['row'] for item in data_heatmap})
+    heatmap_max_value = max(item['value'] for item in data_heatmap)
 
     # --- HTML FOUNDATION --- |
     html_content = html_start()
     html_content += html_accuracy_loss_chart(data_al_x, data_al_y1, data_al_y2, data_al_y3, data_al_y4)
-    html_content += html_heatmap_chart(data_heatmap)
+    html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
     html_content += html_end()
 
     with open("report/reports/interactive_chart.html", "w") as html_file:
