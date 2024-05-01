@@ -102,7 +102,7 @@ pipeline {
                     keepAll: true,
                     reportDir: 'report/reports/',
                     reportFiles: 'interactive_chart.html',
-                    reportName: "HTML Report"
+                    reportName: "HTML Report 2"
                 ]
             }
         }
