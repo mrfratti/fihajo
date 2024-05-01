@@ -45,7 +45,7 @@ class VisualizeTraining:
 
     def plot_training_results(self, history):
         # Plot training & validation accuracy and loss
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         # Accuracy
         self._plot_results(
             history,
@@ -60,7 +60,7 @@ class VisualizeTraining:
 
     def plot_adversarial_training_results(self, history):
         """_summary_"""
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         # Accuracy
         self._plot_results(history, mode="accuracy", title="Adversarial Training Accuracy")
         # loss
@@ -102,7 +102,7 @@ class VisualizeEvaluation:
         predictions = model.predict(x_test[:num_samples])
         predicted_labels = np.argmax(predictions, axis=1)
         # true_label = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
             plt.imshow(x_test[i].reshape(28, 28), cmap="gray")
@@ -118,7 +118,7 @@ class VisualizeEvaluation:
         cm = confusion_matrix(y_true, y_pred)
 
         # Plot the confusion matrix
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 15))
         sns.heatmap(
             cm,
             annot=True,
@@ -140,7 +140,7 @@ class VisualizeEvaluation:
         )
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 16))
         sns.heatmap(
             df_report[["precision", "recall", "f1-score"]].T,
             annot=True,
@@ -167,7 +167,7 @@ class VisualizeEvaluation:
 
         plt.figure(figsize=(2 * num_samples, 6))
 
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         for i in range(num_samples):
             # Original images
             plt.subplot(3, num_samples, i + 1)
@@ -194,7 +194,7 @@ class VisualizeEvaluation:
         self._plot_file_names["adversarial_examples"] = filename
 
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(10, 8))
         bar_positions = np.arange(len(accuracies))
         plt.bar(bar_positions, accuracies, color=["blue", "green", "red"])
         plt.xticks(bar_positions, labels)
@@ -244,7 +244,7 @@ class VisualizeUncertainty:
         # Results is a list of tuples, where each tuple contains (predictions, scores)
         # pcs_scores, mean_softmax_scores = results[0][1], results[1][1]
 
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         plt.subplot(1, 2, 1)
         sns.histplot(pcs_scores, bins=50, kde=True, color="skyblue")
         plt.xlabel("PCS Score", fontsize=18)
@@ -262,7 +262,7 @@ class VisualizeUncertainty:
 
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         sns.histplot(pcs_scores, bins=50, alpha=0.7, color="blue", kde=True, label="PCS")
         sns.histplot(
             mean_softmax_scores,
@@ -287,7 +287,7 @@ class VisualizeUncertainty:
         mean_softmax_inverse = 1 - mean_softmax_scores
         uncertainty_threshold_mean_softmax = np.percentile(mean_softmax_inverse, 95)
 
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         # First subplot for PCS scores
         plt.subplot(1, 2, 1)
         sns.histplot(pcs_inverse, bins="auto", kde=True, color="skyblue")
@@ -334,7 +334,7 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_inverse"] = filename
 
     def plot_dist_entropy_scores(self, entropy_scores):
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         sns.histplot(entropy_scores, bins=50, kde=True, color="blue", label="Clean Data")
         plt.axvline(
             np.mean(entropy_scores),
@@ -356,7 +356,7 @@ class VisualizeUncertainty:
         sorted_indices = np.argsort(entropy_scores)[::-1]
 
         # Plot the most uncertain examples
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(8, 8))
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
             plt.imshow(x_test[sorted_indices[i]], cmap="gray")
@@ -368,7 +368,7 @@ class VisualizeUncertainty:
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
     def plot_predictive_conf_entropy_scores(self, predictive_confidence, entropy_scores):
-        plt.figure(dpi=1200)
+        plt.figure(figsize=(20, 10))
         plt.scatter(
             predictive_confidence,
             entropy_scores,
