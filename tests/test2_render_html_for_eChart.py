@@ -9,113 +9,100 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     <html>
     <head>
 
-        <title>Interactive Chart</title>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+        <title>Interactive Charts</title>
+        <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
 
         <style>
-
-            canvas {{
-                display: block;
-                margin: 0 auto;
+            #charts_box {{
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }}
 
-            #controls {{
-                text-align: center;
-                margin-top: 10px;
+            .chart_line_1 {{
+                width: 600px;
+                height: 400px;
             }}
-
         </style>
 
     </head>
-
     <body>
 
-        <canvas id="chart_accuracy_loss" width="800" height="500"></canvas>
-
-        <div id="chart_button">
-            <button onclick="data_change_a_l('accuracy')">Show Accuracy</button>
-            <button onclick="data_change_a_l('loss')">Show Loss</button>
+        <div id="charts_box">
+            <div id="chart_accuracy" class="chart_line_1"></div>
+            <div id="chart_loss" class="chart_line_1"></div>
         </div>
 
         <script>
-            var canvas_accuracy_loss = document.getElementById('chart_accuracy_loss').getContext('2d');
-            var chart_data_a_l = new Chart(canvas_accuracy_loss, {{
-                type: 'line',
-                data: {{
-                    labels: {json.dumps(data_x)},
-                    datasets: [
-                        {{
-                            label: 'Accuracy',
-                            data: {json.dumps(data_y1)},
 
-                            borderColor: 'rgba(0, 255, 250, 0.8)',
-                            backgroundColor: 'rgba(0, 255, 250, 0.8)',
-                            borderWidth: 1,
-                            pointRadius: 0,
-                            yAxisID: 'y',
-                        }},
-                        {{
-                            label: 'Validation Accuracy',
-                            data: {json.dumps(data_y2)},
-
-                            borderColor: 'rgba(0, 142, 139, 0.8)',
-                            backgroundColor: 'rgba(0, 162, 235, 0.2)',
-                            borderWidth: 1,
-                            pointRadius: 0,
-                            yAxisID: 'y',
-                        }},
-                        {{
-                            label: 'Loss',
-                            data: {json.dumps(data_y3)},
-
-                            borderColor: 'rgba(255, 206, 0, 1)',
-                            backgroundColor: 'rgba(255, 206, 0, 0.8)',
-                            borderWidth: 1,
-                            pointRadius: 0,
-                            yAxisID: 'y',
-                            hidden: true
-                        }},
-                        {{
-                            label: 'Validation Loss',
-                            data: {json.dumps(data_y4)},
-                            
-                            borderColor: 'rgba(0, 192, 192, 1)',
-                            backgroundColor: 'rgba(0, 192, 192, 0.2)',
-                            borderWidth: 1,
-                            pointRadius: 0,
-                            yAxisID: 'y',
-                            hidden: true
-                        }}
-                    ]
-                }},
-
-                options: {{
-                    responsive: true,
-                    scales: {{
-                        y: {{
-                            beginAtZero: true
+            function create_option(title_text, data_set) {{
+                return {{
+                    title: {{
+                        text: title_text
+                    }},
+                    tooltip: {{
+                        trigger: 'axis'
+                    }},
+                    legend: {{
+                        data: ['Accuracy', 'Validation Accuracy', 'Loss', 'Validation Loss']
+                    }},
+                    grid: {{
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    }},
+                    toolbox: {{
+                        feature: {{
+                            saveAsImage: {{}}
                         }}
                     }},
+                    xAxis: {{
+                        type: 'category',
+                        boundaryGap: false,
+                        data: {json.dumps(data_x)}
+                    }},
+                    yAxis: {{
+                        type: 'value'
+                    }},
+                    series: data_set
+                }};
+            }}
 
-                    plugins: {{
-                        zoom: {{
-                            zoom: {{
-                                mode: 'xy'
-                                wheel: {{ enabled: true }},
-                                pinch: {{ enabled: true }},
-                            }},
-                            pan: {{
-                                mode: 'xy'
-                                enabled: true,
-                            }}
-                        }}
-                    }}
+            var js_chart_accuracy = echarts.init(document.getElementById('chart_accuracy'));
+            js_chart_accuracy.setOption(create_option('Accuracy & Validation Accuracy', [
+                {{
+                    name: 'Accuracy',
+                    type: 'line',
+                    stack: 'Total',
+                    data: {json.dumps(data_y1)}
+                }},
+                
+                {{
+                    name: 'Validation Accuracy',
+                    type: 'line',
+                    stack: 'Total',
+                    data: {json.dumps(data_y2)}
                 }}
-            }});
+            ]));
 
+            var js_chart_loss = echarts.init(document.getElementById('chart_loss'));
+            js_chart_loss.setOption(create_option('Loss & Validation Loss', [
+                {{
+                    name: 'Loss',
+                    type: 'line',
+                    stack: 'Total',
+                    data: {json.dumps(data_y3)}
+                }},
 
+                {{
+                    name: 'Validation Loss',
+                    type: 'line',
+                    stack: 'Total',
+                    data: {json.dumps(data_y4)}
+                }}
+            ]));
+            
         </script>
     </body>
     </html>
