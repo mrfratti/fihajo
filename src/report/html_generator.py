@@ -40,27 +40,32 @@ class HtmlGenerator:
             raise ValueError("HTMLReport needs HTMLData type, wrong datatype set")
         self._html_report = report
 
-    def _generate(self) -> str:
+    def _generate(self):
         doc.asis("<!DOCTYPE html>")
-        with tag("html"):
+        with tag("html", lang="en"):
             with tag("head"):
-                with tag("meta", charset="UTF-8"):
-                    pass
+                doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
-                with tag(
-                    "meta",
-                    name="viewport",
-                    content="width=device-width, initial-scale=1.0",
-                ):
-                    pass
+                doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
 
             with tag("body"):
                 with tag("header"):
                     with tag("h1"):
                         text(self._html_report.header_text)
-                with tag("main"):
-                    self._main()
+                    with tag("nav"):
+                        with tag("ul"):
+                            for i, data in enumerate(self._image_data_list):
+                                with tag("li"):
+                                    with tag("a", href=f"#section{i}"):
+                                        text(data.header_image)
 
+                with tag("main"):
+                    for i, data in enumerate(self._image_data_list):
+                        with tag("section", id=f"section{i}"):
+                            self._img_section(data, "right" if i % 2 == 0 else "left")
+
+                with tag("footer"):
+                    text("Copyright © Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
         return doc.getvalue()
 
     def _main(self):
