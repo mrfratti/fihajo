@@ -13,3 +13,4 @@ DateTime==5.4
 argparse==1.4.0
 yattag==1.15.2
 openpyxl==3.1.2
+bandit==1.7.8
