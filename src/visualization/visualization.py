@@ -23,6 +23,7 @@ class VisualizeTraining:
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
 
+
     def _plot_results(self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]):
         """Plot training & validation accuracy"""
         if mode == "accuracy":
@@ -46,29 +47,28 @@ class VisualizeTraining:
         plt.xlabel(xlabel)
         plt.legend()
 
-        
+        # --- Interactive Chart --- |
+
         history_data = history.history
         
-        xlabel = []
-
+        x_value = []
         for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-            xlabel.append(x_axis_nr)
+            x_value.append(x_axis_nr)
 
         data_info = {
-            "x": xlabel,
+            "x": x_value,
             "y1": history_data["accuracy"],
             "y2": history_data["val_accuracy"],
             "y3": history_data["loss"],
             "y4": history_data["val_loss"]
         }
 
-        directory_path = os.getcwd()
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         file_path = 'report/reports/data/plots/training/'
         # file_path_2 = f"{file_path}val_acc_and_loss_{date_time}.json"
         file_path_2 = f"{file_path}val_acc_and_loss.json"
         
-        full_file_path = os.path.join(directory_path, file_path_2)
+        full_file_path = os.path.join(os.getcwd(), file_path_2)
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
 
@@ -164,6 +164,25 @@ class VisualizeEvaluation:
         filename = self._save_plot("confusion_matrix")
         plt.show()
         self._plot_file_names["confusion_matrix"] = filename
+
+
+        # --- Confusion Matrix --- |
+
+        data_info = {
+            "x": cm,
+        }
+
+        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        file_path = 'report/reports/data/plots/training/'
+        # file_path_2 = f"{file_path}val_acc_and_loss_{date_time}.json"
+        file_path_2 = f"{file_path}confusion_matrix.json"
+        
+        full_file_path = os.path.join(os.getcwd(), file_path_2)
+        with open(full_file_path, 'w') as file:
+            json.dump(data_info, file, indent=4)
+
+
+
 
     def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
         report = classification_report(

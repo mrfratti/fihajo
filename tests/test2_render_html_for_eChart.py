@@ -1,11 +1,11 @@
 import os
 import json
 
-
 # Make function for adding +1 for jason file, that will be used for every stage, 
 # so we can use that info to make 1 file where they can see all build graf and compare
 # jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,
 # sum should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
+
 
 def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     html_content = f"""
@@ -76,7 +76,7 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
             }}
 
             var js_chart_accuracy = echarts.init(document.getElementById('chart_accuracy'));
-            js_chart_accuracy.setOption(create_option('Accuracy & Validation Accuracy', [
+            js_chart_accuracy.setOption(create_option('Accuracy', [
                 {{
                     name: 'Accuracy',
                     type: 'line',
@@ -93,7 +93,7 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
             ]));
 
             var js_chart_loss = echarts.init(document.getElementById('chart_loss'));
-            js_chart_loss.setOption(create_option('Loss & Validation Loss', [
+            js_chart_loss.setOption(create_option('Loss', [
                 {{
                     name: 'Loss',
                     type: 'line',
@@ -116,6 +116,8 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     return html_content
 
 def main():
+
+    # --- Accuracy & Loss --- |
     directory_path = os.getcwd()
     file_path = 'report/reports/data/plots/training/'
     file_path_2 = f"{file_path}val_acc_and_loss.json"
@@ -130,10 +132,17 @@ def main():
     data_y3 = data["y3"]
     data_y4 = data["y4"]
 
+
+    # --- Confusion Matrix --- |
+
+
     html_content = generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4)
 
     with open("report/reports/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
+
+    
+
 
 if __name__ == "__main__":
     main()
