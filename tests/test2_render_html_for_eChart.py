@@ -1,28 +1,47 @@
 import os
 import json
 
+
+
+
 def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     html_content = f"""
     <html>
     <head>
 
-        <title>Interactive Line Chart</title>
+        <title>Interactive Chart</title>
+
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+
         <style>
+
             canvas {{
                 display: block;
                 margin: 0 auto;
             }}
+
+            #controls {{
+                text-align: center;
+                margin-top: 10px;
+            }}
+
         </style>
 
     </head>
+
     <body>
 
-        <canvas id="chart_1" width="600" height="400"></canvas>
+        <canvas id="chart_accuracy_loss" width="800" height="500"></canvas>
+
+        <div id="chart_button">
+            <button onclick="data_change_a_l('accuracy')">Show Accuracy</button>
+            <button onclick="data_change_a_l('loss')">Show Loss</button>
+        </div>
 
         <script>
-            var ctx = document.getElementById('chart_1').getContext('2d');
-            var chart_1 = new Chart(ctx, {{
+            var canvas_accuracy_loss = document.getElementById('chart_accuracy_loss').getContext('2d');
+            var chart_data_a_l = new Chart(canvas_accuracy_loss, {{
                 type: 'line',
                 data: {{
                     labels: {json.dumps(data_x)},
@@ -30,54 +49,85 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
                         {{
                             label: 'Accuracy',
                             data: {json.dumps(data_y1)},
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+
+                            borderColor: 'rgba(0, 255, 250, 0.8)',
+                            backgroundColor: 'rgba(0, 255, 250, 0.8)',
                             borderWidth: 1,
-                            pointRadius: 0
+                            pointRadius: 0,
+                            yAxisID: 'y',
                         }},
                         {{
                             label: 'Validation Accuracy',
                             data: {json.dumps(data_y2)},
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+
+                            borderColor: 'rgba(0, 142, 139, 0.8)',
+                            backgroundColor: 'rgba(0, 162, 235, 0.2)',
                             borderWidth: 1,
-                            pointRadius: 0
+                            pointRadius: 0,
+                            yAxisID: 'y',
                         }},
                         {{
                             label: 'Loss',
                             data: {json.dumps(data_y3)},
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+
+                            borderColor: 'rgba(255, 206, 0, 1)',
+                            backgroundColor: 'rgba(255, 206, 0, 0.8)',
                             borderWidth: 1,
-                            pointRadius: 0
+                            pointRadius: 0,
+                            yAxisID: 'y',
+                            hidden: true
                         }},
                         {{
                             label: 'Validation Loss',
                             data: {json.dumps(data_y4)},
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            
+                            borderColor: 'rgba(0, 192, 192, 1)',
+                            backgroundColor: 'rgba(0, 192, 192, 0.2)',
                             borderWidth: 1,
-                            pointRadius: 0
+                            pointRadius: 0,
+                            yAxisID: 'y',
+                            hidden: true
                         }}
                     ]
                 }},
 
                 options: {{
+                    responsive: true,
                     scales: {{
                         y: {{
                             beginAtZero: true
                         }}
                     }},
-                    tooltips: {{
-                        mode: 'index',
-                        intersect: false
-                    }},
-                    hover: {{
-                        mode: 'nearest',
-                        intersect: true
+
+                    plugins: {{
+                        zoom: {{
+                            zoom: {{
+                                mode: 'xy'
+                                wheel: {{ enabled: true }},
+                                pinch: {{ enabled: true }},
+                            }},
+                            pan: {{
+                                mode: 'xy'
+                                enabled: true,
+                            }}
+                        }}
                     }}
                 }}
             }});
+
+            function data_change_a_l(button_option) {{
+                chart.data.datasets.forEach(function(data_set) {{
+                
+                    const if_accuracy = (button_option === 'accuracy');
+                    const if_hide = (if_accuracy && (data_set.label.includes('Loss'))) ||
+                                    (!if_accuracy && (data_set.label.includes('Accuracy')));
+
+                    data_set.hidden = if_hide;
+                }});
+                
+                chart.update();
+            }}
+
         </script>
     </body>
     </html>
