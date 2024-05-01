@@ -3,9 +3,9 @@ import json
 
 # Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
 # so we can use that info to make 1 file where they can see all build graf and compare
-# jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,
-# sum should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
-
+# jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
+# SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
+# USE try and catch to skip error if there is no adv and so on
 
 def html_start():
     html_content = f"""
@@ -80,9 +80,9 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
                 }}
             }},
             grid: {{
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
+                left: '5%',
+                right: '5%',
+                bottom: '5%',
                 containLabel: true
             }},
             
@@ -146,9 +146,9 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
                 }}
             }},
             grid: {{
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
+                left: '5%',
+                right: '5%',
+                bottom: '5%',
                 containLabel: true
             }},
 
@@ -190,7 +190,7 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
 
         js_chart_accuracy.setOption(option_accuracy);
         js_chart_loss.setOption(option_loss);
-        
+
     </script>
  
     """
@@ -279,7 +279,13 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
     return html_content
 
 
-
+def confusion_matrix(path):
+    html_content = f"""
+    <iframe src={path} width="100%" height="900" frameborder="0"></iframe>
+    """
+    return html_content
+    
+    
 
 def html_end():
     html_content = f"""
@@ -292,6 +298,10 @@ def html_end():
 
 
 def main():
+
+    # --- HTML FOUNDATION --- |
+    html_content  = html_start()
+
 
     # --- Accuracy & Loss --- |
     file_path = 'report/reports/data/plots/training'
@@ -307,6 +317,8 @@ def main():
     data_al_loss = data_accuracy_loss["loss"]
     data_al_val_loss = data_accuracy_loss["val_loss"]
 
+    html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
+
 
     # --- Confusion Matrix --- |
     file_path = 'report/reports/data/plots/evaluation'
@@ -320,11 +332,18 @@ def main():
     heatmap_rows = list({item['row'] for item in data_heatmap})
     heatmap_max_value = max(item['value'] for item in data_heatmap)
 
+    html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
+
 
     # --- HTML FOUNDATION --- |
-    html_content  = html_start()
-    html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
-    html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
+    file_path = 'report/reports/data/plots/analyze'
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/entropy_scores.html")
+    confusion_matrix(full_file_path)
+
+
+
+
+
     html_content += html_end()
 
     with open("report/reports/interactive_chart.html", "w") as html_file:
