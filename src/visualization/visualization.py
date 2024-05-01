@@ -10,7 +10,7 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from src.cli.string_styling import StringStyling
 
 import json
-from src.visualization import jason_plot_results
+
 
 
 class VisualizeTraining:
@@ -48,7 +48,14 @@ class VisualizeTraining:
 
         
         history_data = history.history
-        data_info = jason_plot_results(xlabel, history_data)
+
+        data_info = {
+            "x": xlabel,
+            "y1": history_data["accuracy"],
+            "y2": history_data["val_accuracy"],
+            "y3": history_data["loss"],
+            "y4": history_data["val_loss"]
+        }
 
         directory_path = os.getcwd()
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
