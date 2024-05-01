@@ -9,6 +9,9 @@ from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.cli.string_styling import StringStyling
 
+import json
+from src.visualization import jason_plot_results
+
 
 class VisualizeTraining:
     """_summary_
@@ -42,6 +45,22 @@ class VisualizeTraining:
         plt.ylabel(ylabel)
         plt.xlabel(xlabel)
         plt.legend()
+
+        
+        history_data = history.history
+        data_info = jason_plot_results(xlabel, history_data)
+
+        directory_path = os.getcwd()
+        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        file_path = 'report/reports/data/plots/training/'
+        # file_path_2 = f"{file_path}val_acc_and_loss_{date_time}.json"
+        file_path_2 = f"{file_path}val_acc_and_loss.json"
+        
+        full_file_path = os.path.join(directory_path, file_path_2)
+        with open(full_file_path, 'w') as file:
+            json.dump(data_info, file, indent=4)
+
+
 
     def plot_training_results(self, history):
         # Plot training & validation accuracy and loss

@@ -92,6 +92,21 @@ pipeline {
                 ]
             }
         }
+
+        stage('Generate HTML Report 2') {
+            steps {
+                sh "python -m tests.test2_render_html_for_eChart"
+                publishHTML target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'report/reports/',
+                    reportFiles: 'interactive_chart.html',
+                    reportName: "HTML Report"
+                ]
+            }
+        }
+
     }
 
     post {
