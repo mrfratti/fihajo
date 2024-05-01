@@ -47,7 +47,6 @@ def html_accuracy_loss_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     html_content = f"""
 
     <div id="charts_box">
-        <h>Accuracy & Loss<h>
         <div id="chart_accuracy" class="chart_line_1"></div>
         <div id="chart_loss" class="chart_line_1"></div>
     </div>
