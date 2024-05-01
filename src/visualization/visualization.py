@@ -169,14 +169,18 @@ class VisualizeEvaluation:
         # --- Interactive Chart | Confusion Matrix --- |
 
         data_info = []
+        # list_value = []
+        # list_value = []
+        # list_value = []
         for x in range(len(cm)):
             for y in range(len(cm[x])):
-                data_info.append({'value': int(cm[x][y]), 'row_x': x, 'column_y': y})
+                data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
+        # # find function that take all out from index
         # data_info = {
-        #     "x": ,
-        #     "y1": ,
-        #     "y2": ,
+        #     "value": int(cm[x][y]),
+        #     "row_x": cm,
+        #     "column_y": cm[x],
         # }
 
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
