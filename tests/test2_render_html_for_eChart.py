@@ -335,15 +335,13 @@ def main():
     html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
 
 
-    # --- HTML FOUNDATION --- |
+    # --- Entropy Scores --- |
     file_path = 'report/reports/data/plots/analyze'
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/entropy_scores.html")
-    confusion_matrix(full_file_path)
+    html_content += confusion_matrix(full_file_path)
 
 
-
-
-
+    # --- HTML FOUNDATION --- |
     html_content += html_end()
 
     with open("report/reports/interactive_chart.html", "w") as html_file:
