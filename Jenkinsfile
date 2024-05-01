@@ -22,6 +22,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                timestamps { echo ">>>>>>>>>>Installing dependencies>>>>>>>>>>"}
                 sh '''
                 pip3 install --upgrade pip
                 pip3 install -r requirements.txt
@@ -31,6 +32,7 @@ pipeline {
 
         stage('Security Scan') {
             steps {
+                timestamps { echo ">>>>>>>>>>Running bandit on source code>>>>>>>>>>"}
                 sh '''
                 pip3 install bandit
                 bandit -r src/ -c bandit.yaml
