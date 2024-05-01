@@ -1,8 +1,8 @@
 import logging
 import os
 from yattag import Doc
-from report.html_data import HtmlData
-from report.image_data import ImageData
+from src.report.html_data import HtmlData
+from src.report.image_data import ImageData
 from src.cli.string_styling import StringStyling
 
 

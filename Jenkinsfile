@@ -34,7 +34,7 @@ pipeline {
             steps {
                 timestamps { echo ">>>>>>>>>>Running bandit on source code>>>>>>>>>>"}
                 sh '''
-                export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/3.11/bin
+                pip3 install bandit
                 bandit -r src/ -c bandit.yaml
                 '''
             }

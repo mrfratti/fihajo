@@ -43,7 +43,7 @@ class HtmlData:
         if not isinstance(location, str):
             raise TypeError("Store location needs string as input")
         if len(location) < 1:
-            self.html_store_location = "./report/reports/"
+            self.html_store_location = "src/report/reports/"
         else:
             self._html_store_location = location
 

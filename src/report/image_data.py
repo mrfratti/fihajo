@@ -27,7 +27,7 @@ class ImageData:
             raise TypeError("Image location needs to be a string")
         if len(location) < 1:
             raise ValueError("Missing input for image location")
-        rm = "/report/reports"
+        rm = "/src/report/reports"
         if location.find(rm):
             pos = rm.index(rm) + len(rm)
             location = location[pos:]

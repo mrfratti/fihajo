@@ -1,8 +1,7 @@
-from genericpath import exists
 import json
 import os
 
-from report.API.html_generator_api import HtmlGeneratorApi
+from src.report.API.html_generator_api import HtmlGeneratorApi
 
 
 class SendReportData:
