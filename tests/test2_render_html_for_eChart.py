@@ -45,6 +45,7 @@ def html_start():
 
 def html_accuracy_loss_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     html_content = f"""
+
     <div id="charts_box">
         <h>Accuracy & Loss<h>
         <div id="chart_accuracy" class="chart_line_1"></div>
@@ -137,8 +138,11 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div id="chart_heatmap"></div>
-        
+        <div>
+            <h>Heatmap<h>
+            <div id="chart_heatmap"></div>
+        </div>
+
         <script>
             var js_chart_heatmap = echarts.init(document.getElementById('chart_heatmap'));
             var data = {data_value};
