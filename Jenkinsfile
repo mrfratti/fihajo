@@ -99,6 +99,7 @@ pipeline {
                     System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "sandbox; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'; style-src 'self' 'unsafe-inline';")
                 }
             }
+        }
 
         stage('Generate HTML Report 2') {
             steps {
