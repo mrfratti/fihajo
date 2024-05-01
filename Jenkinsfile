@@ -11,10 +11,7 @@ pipeline {
         choice(name: 'DATASET', choices: ['mnist', 'cifar10', 'fashion_mnist'], description: 'Dataset for training and evaluation')
         booleanParam(name: 'ADV_EVAL', defaultValue: false, description: 'Perform adversarial attacks during evaluation')
     }
-
-    options {
-        contentSecurityPolicyDirective(scriptSrc: "'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/chart.js https://cdn.jsdelivr.net/npm/echarts")
-    }
+    
 
     stages {
         stage('Setup') {
