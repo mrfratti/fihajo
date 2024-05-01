@@ -43,7 +43,7 @@ def html_start():
 
 
 
-def html_accuracy_loss_chart(data_x, data_y1, data_y2, data_y3, data_y4):
+def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
 
     <div id="charts_box">
@@ -52,79 +52,136 @@ def html_accuracy_loss_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     </div>
 
     <script>
-
-        function create_option(title_text, data_set) {{
-            return {{
-                title: {{
-                    text: title_text
-                }},
-                tooltip: {{
-                    trigger: 'axis'
-                }},
-                legend: {{
-                    data: ['Accuracy', 'Validation Accuracy', 'Loss', 'Validation Loss']
-                }},
-                grid: {{
-                    left: '5%',
-                    right: '5%',
-                    bottom: '5%',
-                    containLabel: true
-                }},
-                toolbox: {{
-                    feature: {{
-                        dataZoom: {{
-                            yAxisIndex: 'none'
-                        }},
-                        restore: {{}}
-                    }}
-                }},
-                xAxis: {{
-                    type: 'category',
-                    boundaryGap: false,
-                    data: {json.dumps(data_x)}
-                }},
-                yAxis: {{
-                    type: 'value'
-                }},
-                series: data_set
-            }};
-        }}
-
+        
         var js_chart_accuracy = echarts.init(document.getElementById('chart_accuracy'));
-        js_chart_accuracy.setOption(create_option('Accuracy', [
-            {{
-                name: 'Accuracy',
-                type: 'line',
-                stack: 'Total',
-                data: {json.dumps(data_y1)}
+        var js_chart_loss = echarts.init(document.getElementById('chart_loss'));
+
+        var option_accuracy = {{
+            title: {{
+                text: 'Accuracy'
+            }},
+            legend: {{
+                data: ['Accuracy', 'Validation Accuracy']
+            }},
+
+            tooltip: {{
+                trigger: 'axis',
+                axisPointer: {{
+                    type: 'cross'
+                }}
+            }},
+            toolbox: {{
+                feature: {{
+                    dataZoom: {{
+                        yAxisIndex: 'none'
+                    }},
+                    restore: {{}},
+                    magicType: {{ type: ['line', 'bar'] }}
+                }}
+            }},
+            grid: {{
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
             }},
             
-            {{
-                name: 'Validation Accuracy',
-                type: 'line',
-                stack: 'Total',
-                data: {json.dumps(data_y2)}
-            }}
-        ]));
+            xAxis: {{
+                type: 'category',
+                boundaryGap: false,
+                data: {json.dumps(data_x)}
+            }},
+            yAxis: {{
+                type: 'value'
+            }},
+            
+            series: [
+                {{
+                    name: 'Accuracy',
+                    type: 'line',
+                    data: {json.dumps(accuracy)},
+                    smooth: true,
+                    markPoint: {{
+                        data: [
+                            {{ type: 'max', name: 'Max' }},
+                            {{ type: 'min', name: 'Min' }}
+                        ]
+                    }}
+                }},
+                {{
+                    name: 'Validation Accuracy',
+                    type: 'line',
+                    data: {json.dumps(val_accuracy)},
+                    smooth: true
+                }}
+            ]
+        }};
 
-        var js_chart_loss = echarts.init(document.getElementById('chart_loss'));
-        js_chart_loss.setOption(create_option('Loss', [
-            {{
-                name: 'Loss',
-                type: 'line',
-                stack: 'Total',
-                data: {json.dumps(data_y3)}
+        var option_loss = {{
+            title: {{
+                text: 'Loss'
+            }},
+            legend: {{
+                data: ['Loss', 'Validation Loss']
             }},
 
-            {{
-                name: 'Validation Loss',
-                type: 'line',
-                stack: 'Total',
-                data: {json.dumps(data_y4)}
-            }}
-        ]));
+            tooltip: {{
+                trigger: 'axis',
+                axisPointer: {{
+                    type: 'cross'
+                }}
+            }},
+            toolbox: {{
+                feature: {{
+                    dataZoom: {{
+                        yAxisIndex: 'none'
+                    }},
+                    restore: {{}},
+                    magicType: {{ type: ['line', 'bar'] }}
+                }}
+            }},
+            grid: {{
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            }},
 
+            xAxis: {{
+                type: 'category',
+                boundaryGap: false,
+                data: {json.dumps(data_x)}
+            }},
+            yAxis: {{
+                type: 'value'
+            }},
+
+            series: [
+                {{
+                    name: 'Loss',
+                    type: 'line',
+                    data: {json.dumps(loss)},
+                    smooth: true,
+                    markPoint: {{
+                        data: [
+                            {{ type: 'max', name: 'Max' }},
+                            {{ type: 'min', name: 'Min' }}
+                        ]
+                    }}
+                }},
+                {{
+                    name: 'Validation Loss',
+                    type: 'line',
+                    data: {json.dumps(val_loss)},
+                    smooth: true
+                }}
+            ]
+        }};
+
+        js_chart_accuracy.setOption(option_accuracy);
+        js_chart_loss.setOption(option_loss);
     </script>
+ 
     """
     return html_content
 
@@ -138,7 +195,6 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
     html_content =  f"""
 
         <div>
-            <h>Heatmap<h>
             <div id="chart_heatmap"></div>
         </div>
 
@@ -235,10 +291,10 @@ def main():
         data_accuracy_loss = json.load(json_file)
 
     data_al_x = data_accuracy_loss["x"]
-    data_al_y1 = data_accuracy_loss["y1"]
-    data_al_y2 = data_accuracy_loss["y2"]
-    data_al_y3 = data_accuracy_loss["y3"]
-    data_al_y4 = data_accuracy_loss["y4"]
+    data_al_accuracy = data_accuracy_loss["accuracy"]
+    data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
+    data_al_loss = data_accuracy_loss["loss"]
+    data_al_val_loss = data_accuracy_loss["val_loss"]
 
 
     # --- Confusion Matrix --- |
@@ -255,8 +311,8 @@ def main():
     heatmap_max_value = max(item['value'] for item in data_heatmap)
 
     # --- HTML FOUNDATION --- |
-    html_content = html_start()
-    html_content += html_accuracy_loss_chart(data_al_x, data_al_y1, data_al_y2, data_al_y3, data_al_y4)
+    html_content  = html_start()
+    html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
     html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
     html_content += html_end()
 

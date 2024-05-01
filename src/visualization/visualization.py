@@ -58,13 +58,13 @@ class VisualizeTraining:
 
         data_info = {
             "x": x_value,
-            "y1": history_data["accuracy"],
-            "y2": history_data["val_accuracy"],
-            "y3": history_data["loss"],
-            "y4": history_data["val_loss"]
+            "accuracy": history_data["accuracy"],
+            "val_accuracy": history_data["val_accuracy"],
+            "loss": history_data["loss"],
+            "val_loss": history_data["val_loss"]
         }
 
-        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         # file_path_2 = f"{self.plot_dir}/val_acc_and_loss_{date_time}.json"
         file_path_2 = f"{self.plot_dir}/val_acc_and_loss.json"
         
@@ -169,21 +169,13 @@ class VisualizeEvaluation:
         # --- Interactive Chart | Confusion Matrix --- |
 
         data_info = []
-        # list_value = []
-        # list_value = []
-        # list_value = []
+
         for x in range(len(cm)):
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-        # # find function that take all out from index
-        # data_info = {
-        #     "value": int(cm[x][y]),
-        #     "row_x": cm,
-        #     "column_y": cm[x],
-        # }
 
-        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         # file_path_2 = f"{self.plot_dir}/confusion_matrix_{date_time}.json"
         file_path_2 = f"{self.plot_dir}/confusion_matrix.json"
         
