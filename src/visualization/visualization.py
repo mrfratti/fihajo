@@ -168,12 +168,16 @@ class VisualizeEvaluation:
 
         # --- Interactive Chart | Confusion Matrix --- |
 
-        data = []
+        data_info = []
         for x in range(len(cm)):
             for y in range(len(cm[x])):
-                data.append({'value': int(cm[x][y]), 'row_x': x, 'column_y': y})
-
-        data_info = json.dumps(data)
+                data_info.append({'value': int(cm[x][y]), 'row_x': x, 'column_y': y})
+        
+        # data_info = {
+        #     "x": ,
+        #     "y1": ,
+        #     "y2": ,
+        # }
 
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         # file_path_2 = f"{self.plot_dir}/confusion_matrix_{date_time}.json"
