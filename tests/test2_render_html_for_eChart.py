@@ -16,8 +16,8 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
         </style>
 
     </head>
-
     <body>
+
         <canvas id="chart_1" width="600" height="400"></canvas>
 
         <script>
@@ -82,7 +82,6 @@ def generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4):
     </body>
     </html>
     """
-    
     return html_content
 
 def main():
@@ -95,14 +94,14 @@ def main():
         data = json.load(json_file)
 
     data_x = data["x"]
-    data_y1 = data["y1"] 
-    data_y2 = data["y2"] 
-    data_y3 = data["y3"] 
-    data_y4 = data["y4"] 
+    data_y1 = data["y1"]
+    data_y2 = data["y2"]
+    data_y3 = data["y3"]
+    data_y4 = data["y4"]
 
     html_content = generate_html_with_chart(data_x, data_y1, data_y2, data_y3, data_y4)
 
-    with open("interactive_line_chart.html", "w") as html_file:
+    with open("report/reports/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
 
 if __name__ == "__main__":
