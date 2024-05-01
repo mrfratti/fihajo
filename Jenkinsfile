@@ -12,6 +12,10 @@ pipeline {
         booleanParam(name: 'ADV_EVAL', defaultValue: false, description: 'Perform adversarial attacks during evaluation')
     }
 
+    options {
+        contentSecurityPolicyDirective(scriptSrc: "'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/chart.js https://cdn.jsdelivr.net/npm/echarts")
+    }
+
     stages {
         stage('Setup') {
             steps {
