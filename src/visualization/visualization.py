@@ -48,6 +48,11 @@ class VisualizeTraining:
 
         
         history_data = history.history
+        
+        xlabel = []
+
+        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
+            xlabel.append(x_axis_nr)
 
         data_info = {
             "x": xlabel,
