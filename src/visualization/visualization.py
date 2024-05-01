@@ -167,34 +167,31 @@ class VisualizeEvaluation:
 
         plt.figure(figsize=(2 * num_samples, 6))
 
-        # plt.figure(figsize=(20, 10))
+        plt.figure(figsize=(20, 10))
         for i in range(num_samples):
             # Original images
-            plt.subplot(2, num_samples, i + 1)
+            plt.subplot(3, num_samples, i + 1)
             plt.imshow(x_test[i], cmap="gray")
-            plt.title(
-                f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}",
-                fontsize=9,
-            )
+            plt.title(f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}", fontsize=12)
             plt.axis("off")
 
             # Plot FGSM adversarial images
             plt.subplot(3, num_samples, num_samples + i + 1)
             plt.imshow(x_adv_fgsm[i], cmap="gray")
-            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=9)
+            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=12)
             plt.axis("off")
 
             # Plot PGD adversarial images
             plt.subplot(3, num_samples, 2 * num_samples + i + 1)
             plt.imshow(x_adv_pgd[i], cmap="gray")
-            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=9)
+            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=12)
             plt.axis("off")
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
 
-        filename = self._save_plot("adv_examples")
+        filename = self._save_plot("adversarial_examples")
         plt.show()
-        self._plot_file_names["adverserial_ex"] = filename
+        self._plot_file_names["adversarial_examples"] = filename
 
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
         plt.figure(figsize=(8, 6))
@@ -275,7 +272,7 @@ class VisualizeUncertainty:
             kde=True,
             label="Mean Softmax",
         )
-        plt.xlabel("Predictive Confidence Score")
+        plt.xlabel("Predictive Confidence Score & Mean Softmax Scores")
         plt.ylabel("Frequency")
         plt.title("Distribution of PCS and Mean Softmax Scores")
         plt.legend()

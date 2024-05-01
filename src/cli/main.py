@@ -174,21 +174,26 @@ class CLIApp:
 
         (x_test, y_test) = dataset_handler.load_and_preprocess()
 
+        logging.debug("Starting evaluation...")
         try:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
-            SendReportData().filenames = evaluator.plot_file_names
+
+            send_data = SendReportData()
+            send_data.adversarial_evaluated = args.adv_eval
+            send_data.filenames = evaluator.plot_file_names
+
+            logging.debug("Evaluation complete, filenames: %s", evaluator.plot_file_names)
+            #SendReportData().filenames = evaluator.plot_file_names
             if args.report:
                 self.report()
         except Exception as e:
             logging.error("An error occurred during evaluation: %s", e)
 
     def analyze(self, args):
-        model_path = (
-            args.model_path
+        model_path = (args.model_path
             if (hasattr(args, "model_path") or args.model_path is not None)
-            else input("Enter the model path for analysis or press Enter to use the default path: ").strip()
-        )
+                      else input("Enter the model path for analysis or press Enter to use the default path: ").strip())
 
         if not model_path:
             model_path = Analyzer.default_path
@@ -227,8 +232,14 @@ class CLIApp:
 
     def report(self, args=""):
         """Run report generation"""
+        send_data = SendReportData()
+        if args and hasattr(args, 'adv_eval'):
+            send_data.adversarial_evaluated = args.adv_eval
+        else:
+            send_data.adversarial_evaluated = False
+
         try:
-            SendReportData().send()
+            send_data.send()
         except ValueError as e:
             logging.warning("main.report: %s", e)
 

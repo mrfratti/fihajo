@@ -37,7 +37,7 @@ class HtmlGenerator:
     @html_report.setter
     def html_report(self, report):
         if report is None or not isinstance(report, HtmlData):
-            raise ValueError("HtmlReport needs htmldata type, wrong datatype set")
+            raise ValueError("HTMLReport needs HTMLData type, wrong datatype set")
         self._html_report = report
 
     def _generate(self) -> str:
@@ -101,7 +101,7 @@ class HtmlGenerator:
             if not os.path.exists(self._html_report.html_store_location):
                 os.mkdir(self._html_report.html_store_location)
                 logging.info(
-                    "Htmlgenerator: Dirctory %s did not exist making directory",
+                    "Htmlgenerator: Directory %s did not exist making directory",
                     self._html_report.html_store_location,
                 )
             with open(
@@ -119,6 +119,6 @@ class HtmlGenerator:
             logging.warning("htmlgenerator: %s", e)
             return
         except FileNotFoundError:
-            print(StringStyling.box_style("cannot open html file or filepath not found"))
+            print(StringStyling.box_style("Cannot open html file or filepath not found"))
         except PermissionError:
             print(StringStyling.box_style("Missing permission to write html file"))
