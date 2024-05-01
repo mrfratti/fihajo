@@ -94,7 +94,7 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
             yAxis: {{
                 type: 'value'
             }},
-            
+
             series: [
                 {{
                     name: 'Accuracy',
@@ -102,6 +102,11 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
                     data: {json.dumps(accuracy)},
                     smooth: true,
                     markPoint: {{
+                        label: {{
+                            formatter: function (param) {{
+                                return param.name + ': ' + param.value.toFixed(2);
+                            }}
+                        }},
                         data: [
                             {{ type: 'max', name: 'Max' }},
                             {{ type: 'min', name: 'Min' }}
@@ -163,6 +168,11 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
                     data: {json.dumps(loss)},
                     smooth: true,
                     markPoint: {{
+                        label: {{
+                            formatter: function (param) {{
+                                return param.name + ': ' + param.value.toFixed(2);
+                            }}
+                        }},
                         data: [
                             {{ type: 'max', name: 'Max' }},
                             {{ type: 'min', name: 'Min' }}
@@ -180,6 +190,7 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
 
         js_chart_accuracy.setOption(option_accuracy);
         js_chart_loss.setOption(option_loss);
+        
     </script>
  
     """
@@ -298,7 +309,6 @@ def main():
 
 
     # --- Confusion Matrix --- |
-    
     file_path = 'report/reports/data/plots/evaluation'
     file_path_2 = f"{file_path}/confusion_matrix.json"
     full_file_path = os.path.join(os.getcwd(), file_path_2)
@@ -309,6 +319,7 @@ def main():
     heatmap_columns = list({item['column'] for item in data_heatmap})
     heatmap_rows = list({item['row'] for item in data_heatmap})
     heatmap_max_value = max(item['value'] for item in data_heatmap)
+
 
     # --- HTML FOUNDATION --- |
     html_content  = html_start()

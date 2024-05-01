@@ -57,11 +57,11 @@ class VisualizeTraining:
             x_value.append(x_axis_nr)
 
         data_info = {
-            "x": x_value,
-            "accuracy": history_data["accuracy"],
+            "x":            x_value,
+            "accuracy":     history_data["accuracy"],
             "val_accuracy": history_data["val_accuracy"],
-            "loss": history_data["loss"],
-            "val_loss": history_data["val_loss"]
+            "loss":         history_data["loss"],
+            "val_loss":     history_data["val_loss"]
         }
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
