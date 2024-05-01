@@ -168,14 +168,14 @@ def html_heatmap_chart(data):
                     show: true
                 }}
                 type: 'category',
-                data: data.map(item => item.column_y.toString()),
+                data: data.map(item => item.column.toString()),
             }},
             yAxis: {{
                 splitArea: {{
                     show: true
                 }}
                 type: 'category',
-                data: data.map(item => item.row_x.toString()),
+                data: data.map(item => item.row.toString()),
             }},
             
             visualMap: {{
@@ -190,7 +190,7 @@ def html_heatmap_chart(data):
             series: [{{
                 name: 'Heatmap',
                 type: 'heatmap',
-                data: data.map(item => [item.column_y, item.row_x, item.value]),
+                data: data.map(item => [item.column, item.row, item.value]),
                 label: {{
                     show: true
                 }},
@@ -240,12 +240,15 @@ def main():
 
 
     # --- Confusion Matrix --- |
+    
     file_path = 'report/reports/data/plots/evaluation'
     file_path_2 = f"{file_path}/confusion_matrix.json"
     full_file_path = os.path.join(os.getcwd(), file_path_2)
 
     with open(full_file_path, "r") as json_file:
         data_heatmap = json.load(json_file)
+
+    print("Heatmap data:", data_heatmap)
         
 
     # --- HTML FOUNDATION --- |
