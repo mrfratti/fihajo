@@ -325,9 +325,9 @@ class VisualizeUncertainty:
 
             fig.add_trace(go.Histogram(
                 x=data,
-                nbinsx=50,
+                nbinsx=100,
                 marker_color=color_option,
-                opacity=0.75,
+                opacity=0.8,
                 name="Histogram"
             ))
 
