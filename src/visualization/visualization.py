@@ -323,42 +323,25 @@ class VisualizeUncertainty:
         def create_line_histogram(data, file_path_name):
             fig = go.Figure()
 
-            data_histogram = go.Histogram(
+            fig.add_trace(go.Histogram(
                 x=data,
-                xbins=dict(start=0, end=1, size=0.1),
-                name='Histogram',
+                nbinsx=50,
                 marker_color='rgba(255, 188, 77, 0.8)',
                 opacity=0.75,
-                histnorm='percent'
-            )
-            fig.add_trace(data_histogram)
-
-            y, bin_top = np.histogram(data, bins=np.arange(0, 1.1, 0.1), density=False)
-            y = y / sum(y) * 100
-            x = 0.5 * (bin_top[:-1] + bin_top[1:])
-
-            fig.add_trace(go.Scatter(
-                x=x,
-                y=y,
-                mode='lines+markers',
-                name='Line',
-                line=dict(color='black', width=2)
+                name="Histogram"
             ))
 
             fig.update_layout(
-                title="Interactive plot",
-                xaxis_title='x value',
-                yaxis_title='y value',
+                title="Distribution of PCS Scores",
+                xaxis_title='PCS Score',
+                yaxis_title='Frequency',
                 bargap=0.2,
                 hovermode='x unified'
             )
+            
             pio.write_html(fig, file=file_path_name)
 
-        # TEST
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/TEST.json")
-        with open(full_file_path, 'w') as file:
-            json.dump(pcs_scores, file, indent=4)
-
+        
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.html")
         create_line_histogram(pcs_scores, full_file_path)
 
