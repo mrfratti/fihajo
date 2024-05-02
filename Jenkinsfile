@@ -14,39 +14,39 @@ pipeline {
     
 
     stages {
-        // stage('Setup') {
-        //     steps {
-        //         checkout scm
-        //         powershell "New-Item -Path data/plots/training, data/models, data/logs, report/reports -ItemType Directory -Force"
-        //     }
-        // }
+        stage('Setup') {
+            steps {
+                checkout scm
+                sh "mkdir -p data/plots/training data/models data/logs report/reports"
+            }
+        }
 
-        // stage('Install Dependencies') {
-        //     steps {
-        //         sh '''
-        //         pip install --upgrade pip
-        //         pip install -r requirements.txt
-        //         '''
-        //     }
-        // }
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                '''
+            }
+        }
 
-        // stage('Security Scan') {
-        //     steps {
-        //         sh '''
-        //         pip install bandit
-        //         bandit -r src/ -c bandit.yaml
-        //         '''
-        //     }
-        // }
+        stage('Security Scan') {
+            steps {
+                sh '''
+                pip install bandit
+                bandit -r src/ -c bandit.yaml
+                '''
+            }
+        }
 
-        // stage('Dependency Security Check') {
-        //     steps {
-        //         sh '''
-        //         pip install safety
-        //         safety check
-        //         '''
-        //     }
-        // }
+        stage('Dependency Security Check') {
+            steps {
+                sh '''
+                pip install safety
+                safety check
+                '''
+            }
+        }
 
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
