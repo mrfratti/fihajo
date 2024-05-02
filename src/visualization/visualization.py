@@ -354,10 +354,10 @@ class VisualizeUncertainty:
             )
             pio.write_html(fig, file=file_path_name)
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.json")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.html")
         create_line_histogram(pcs_scores, full_file_path)
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_mean_softmax.json")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_mean_softmax.html")
         create_line_histogram(pcs_scores, full_file_path)
 
 
