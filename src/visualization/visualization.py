@@ -9,8 +9,9 @@ from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.cli.string_styling import StringStyling
 
+# --- Interactive Chart --- |
 import json
-import plotly.tools as tls
+import plotly.graph_objects as go
 import plotly.io as pio
 
 
@@ -177,10 +178,8 @@ class VisualizeEvaluation:
         
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        # file_path_2 = f"{self.plot_dir}/confusion_matrix_{date_time}.json"
-        file_path_2 = f"{self.plot_dir}/confusion_matrix.json"
         
-        full_file_path = os.path.join(os.getcwd(), file_path_2)
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix.json")
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
 
@@ -318,6 +317,52 @@ class VisualizeUncertainty:
         plt.show()
         self._plot_file_names["pcs_meansoftmax"] = filename
 
+
+        # --- Interactive Chart | plot_pcs_ms_inverse --- |
+
+        def create_line_histogram(data, file_path_name):
+            fig = go.Figure()
+
+            data_histogram = go.Histogram(
+                x=data,
+                xbins=dict(start=0, end=1, size=0.1),
+                name='Histogram',
+                marker_color='rgba(255, 188, 77, 0.8)',
+                opacity=0.75,
+                histnorm='percent'
+            )
+            fig.add_trace(data_histogram)
+
+            y, bin_top = np.histogram(data, bins=np.arange(0, 1.1, 0.1), density=False)
+            y = y / sum(y) * 100
+            x = 0.5 * (bin_top[:-1] + bin_top[1:])
+
+            fig.add_trace(go.Scatter(
+                x=x,
+                y=y,
+                mode='lines+markers',
+                name='Line',
+                line=dict(color='black', width=2)
+            ))
+
+            fig.update_layout(
+                title="Interactive plot",
+                xaxis_title='x value',
+                yaxis_title='y value',
+                bargap=0.2,
+                hovermode='x unified'
+            )
+            pio.write_html(fig, file=file_path_name)
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.json")
+        create_line_histogram(pcs_scores, full_file_path)
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_mean_softmax.json")
+        create_line_histogram(pcs_scores, full_file_path)
+
+
+
+
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
         plt.figure(figsize=(10, 10))
@@ -390,13 +435,7 @@ class VisualizeUncertainty:
         filename = self._save_plot("pcs_ms_inverse")
         plt.show()
         self._plot_file_names["pcs_inverse"] = filename
-
-
-        # --- Interactive Chart | plot_pcs_ms_inverse --- |
-        fig_plotly = tls.mpl_to_plotly(plt.gcf())
-
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_ms_inverse.html")
-        pio.write_html(fig_plotly, file=full_file_path, auto_open=False)
+     
 
 
     def plot_dist_entropy_scores(self, entropy_scores):
@@ -416,6 +455,9 @@ class VisualizeUncertainty:
         filename = self._save_plot("dist_entropy")
         plt.show()
         self._plot_file_names["entropy_distrubution"] = filename
+
+
+
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
         # Sort the indices of the entropy scores in descending order

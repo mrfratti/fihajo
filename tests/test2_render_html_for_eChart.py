@@ -5,7 +5,6 @@ import json
 # so we can use that info to make 1 file where they can see all build graf and compare
 # jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
 # SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
-# USE try and catch to skip error if there is no adv and so on
 
 def html_start():
     html_content = f"""
@@ -279,11 +278,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
     return html_content
 
 
-def confusion_matrix(path):
-    html_content = f"""
-    <iframe src={path} width="100%" height="900" frameborder="0"></iframe>
-    """
-    return html_content
+
     
     
 
@@ -295,7 +290,7 @@ def html_end():
     return html_content
 
 
-
+# USE try and catch to skip error if there is no adv and so on
 
 def main():
 
@@ -305,8 +300,7 @@ def main():
 
     # --- Accuracy & Loss --- |
     file_path = 'report/reports/data/plots/training'
-    file_path_2 = f"{file_path}/val_acc_and_loss.json"
-    full_file_path = os.path.join(os.getcwd(), file_path_2)
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss.json")
 
     with open(full_file_path, "r") as json_file:
         data_accuracy_loss = json.load(json_file)
@@ -322,8 +316,7 @@ def main():
 
     # --- Confusion Matrix --- |
     file_path = 'report/reports/data/plots/evaluation'
-    file_path_2 = f"{file_path}/confusion_matrix.json"
-    full_file_path = os.path.join(os.getcwd(), file_path_2)
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix.json")
 
     with open(full_file_path, "r") as json_file:
         data_heatmap = json.load(json_file)
@@ -336,10 +329,15 @@ def main():
 
 
     # --- Entropy Scores --- |
-    # file_path = 'report/reports/data/plots/analyze'
-    # full_file_path = os.path.join(os.getcwd(), f"{file_path}/entropy_scores.html")
-    # html_content += confusion_matrix(full_file_path)
+    file_path = 'report/reports/data/plots/analyze'
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs.html")
+    with open(full_file_path, 'r') as file:
+        data_content = file.readlines()
 
+    content_start = data_content.index('<body>\n') + 1
+    content_end = data_content.index('</body>\n')
+    content_content = data_content[content_start:content_end]
+    html_content += content_content
 
     # --- HTML FOUNDATION --- |
     html_content += html_end()
