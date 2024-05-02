@@ -17,10 +17,7 @@ pipeline {
         stage('Setup') {
             steps {
                 checkout scm
-                bat "if not exist data\\plots\\training mkdir data\\plots\\training"
-                bat "if not exist data\\models mkdir data\\models"
-                bat "if not exist data\\logs mkdir data\\logs"
-                bat "if not exist report\\reports mkdir report\\reports"
+                powershell "items -Path data/plots/training, data/models, data/logs, report/reports -ItemType Directory"
             }
         }
 
