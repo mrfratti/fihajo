@@ -416,16 +416,16 @@ class VisualizeUncertainty:
         # --- Interactive Chart | Entropy Scores --- |
         fig = tls.mpl_to_plotly(plt.gcf())
 
-        # fig.update_layout(
-        #     title="Histogram of Predictive Entropy",
-        #     xaxis_title="Predictive Entropy",
-        #     yaxis_title="Frequency",
-        #     legend_title="Legend"
-        # )
+        fig.update_layout(
+            title="Histogram of Predictive Entropy",
+            xaxis_title="Predictive Entropy",
+            yaxis_title="Frequency",
+            legend_title="Legend"
+        )
 
         file_path = f"{self.plot_dir}/entropy_scores.html"
         full_file_path = os.path.join(os.getcwd(), file_path)
-        pio.write_html(fig, file=full_file_path, auto_open=True)
+        pio.write_html(fig, file=full_file_path, auto_open=False)
 
 
 
