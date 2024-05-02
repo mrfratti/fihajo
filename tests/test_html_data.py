@@ -1,6 +1,6 @@
 import unittest
 
-from report.html_data import HtmlData
+from src.report.html_data import HtmlData
 
 
 class TestHtmlData(unittest.TestCase):
@@ -16,6 +16,6 @@ class TestHtmlData(unittest.TestCase):
             self.html_data.header_text = ""
 
     def test_default_store_location(self):
-        default = "./report/reports/"
+        default = "src/report/reports/"
         self.html_data.html_store_location = ""
         self.assertEqual(default, self.html_data.html_store_location)

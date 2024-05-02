@@ -1,6 +1,6 @@
 import unittest
 
-from report.image_data import ImageData
+from src.report.image_data import ImageData
 
 
 class TestImageData(unittest.TestCase):
