@@ -294,12 +294,14 @@ def html_end():
 
 def main():
 
+    main_path = "report/reports/data/plots"
+
     # --- HTML FOUNDATION --- |
     html_content  = html_start()
 
 
     # --- Accuracy & Loss --- |
-    file_path = 'report/reports/data/plots/training'
+    file_path = main_path + "/training"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss.json")
 
     with open(full_file_path, "r") as json_file:
@@ -315,7 +317,7 @@ def main():
 
 
     # --- Confusion Matrix --- |
-    file_path = 'report/reports/data/plots/evaluation'
+    file_path = main_path + "/evaluation"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix.json")
 
     with open(full_file_path, "r") as json_file:
@@ -329,7 +331,7 @@ def main():
 
 
     # --- Entropy Scores --- |
-    file_path = 'report/reports/data/plots/analyze'
+    file_path = main_path + "/analyze"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs.html")
     with open(full_file_path, 'r') as file:
         data_content = file.readlines()
