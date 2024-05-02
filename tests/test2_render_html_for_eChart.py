@@ -339,7 +339,8 @@ def main():
     content_start = data_content.index('<body>\n') + 1
     content_end = data_content.index('</body>\n')
     content_content = data_content[content_start:content_end]
-    html_content += content_content
+    content_string = ''.join(content_content)
+    html_content += content_string
 
     # --- HTML FOUNDATION --- |
     html_content += html_end()
