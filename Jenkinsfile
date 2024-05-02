@@ -17,7 +17,7 @@ pipeline {
         stage('Setup') {
             steps {
                 checkout scm
-                powershell "items -Path data/plots/training, data/models, data/logs, report/reports -ItemType Directory"
+                powershell "New-Item -Path data/plots/training, data/models, data/logs, report/reports -ItemType Directory -Force"
             }
         }
 
