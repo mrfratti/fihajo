@@ -14,12 +14,12 @@ pipeline {
     
 
     stages {
-        // stage('Setup') {
-        //     steps {
-        //         checkout scm
-        //         sh "mkdir -p data/plots/training data/models data/logs report/reports"
-        //     }
-        // }
+        stage('Setup') {
+            steps {
+                checkout scm
+                sh "mkdir -p data/plots/training data/models data/logs report/reports"
+            }
+        }
 
         // stage('Install Dependencies') {
         //     steps {
