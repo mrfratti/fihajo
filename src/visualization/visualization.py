@@ -354,6 +354,11 @@ class VisualizeUncertainty:
             )
             pio.write_html(fig, file=file_path_name)
 
+        # TEST
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/TEST.json")
+        with open(full_file_path, 'w') as file:
+            json.dump(pcs_scores, file, indent=4)
+
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.html")
         create_line_histogram(pcs_scores, full_file_path)
 
