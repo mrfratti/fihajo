@@ -14,12 +14,12 @@ pipeline {
     
 
     stages {
-        stage('Setup') {
-            steps {
-                checkout scm
-                powershell "New-Item -Path data/plots/training, data/models, data/logs, report/reports -ItemType Directory -Force"
-            }
-        }
+        // stage('Setup') {
+        //     steps {
+        //         checkout scm
+        //         powershell "New-Item -Path data/plots/training, data/models, data/logs, report/reports -ItemType Directory -Force"
+        //     }
+        // }
 
         // stage('Install Dependencies') {
         //     steps {
