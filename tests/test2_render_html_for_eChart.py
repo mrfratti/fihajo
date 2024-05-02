@@ -290,7 +290,7 @@ def html_end():
     return html_content
 
 
-# USE try and catch to skip error if there is no adv and so on
+# USE try and catch to skip error if there is no adv file for that build nr and so on
 
 def main():
 
@@ -331,6 +331,7 @@ def main():
 
 
     # --- Entropy Scores --- |
+    # plot_pcs
     file_path = main_path + "/analyze"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs.html")
     with open(full_file_path, 'r') as file:
@@ -341,6 +342,19 @@ def main():
     content_content = data_content[content_start:content_end]
     content_string = ''.join(content_content)
     html_content += content_string
+    
+    # plot_mean_softmax
+    file_path = main_path + "/analyze"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_mean_softmax.html")
+    with open(full_file_path, 'r') as file:
+        data_content = file.readlines()
+
+    content_start = data_content.index('<body>\n') + 1
+    content_end = data_content.index('</body>\n')
+    content_content = data_content[content_start:content_end]
+    content_string = ''.join(content_content)
+    html_content += content_string
+
 
     # --- HTML FOUNDATION --- |
     html_content += html_end()

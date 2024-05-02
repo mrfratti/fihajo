@@ -320,7 +320,7 @@ class VisualizeUncertainty:
 
         # --- Interactive Chart | plot_pcs_ms_inverse --- |
 
-        def create_line_histogram(data, file_path_name):
+        def create_line_histogram(data, file_path_name, title_text, x_text, y_text):
             fig = go.Figure()
 
             fig.add_trace(go.Histogram(
@@ -338,15 +338,20 @@ class VisualizeUncertainty:
                 bargap=0.2,
                 hovermode='x unified'
             )
-            
+
             pio.write_html(fig, file=file_path_name)
 
-        
+        title_text = "Distribution of PCS Scores"
+        x_text = "PCS Score"
+        y_text = "Frequency"
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.html")
-        create_line_histogram(pcs_scores, full_file_path)
+        create_line_histogram(pcs_scores, full_file_path, title_text, x_text, y_text)
 
+        title_text = "Distribution of Mean Softmax Scores"
+        x_text = "Mean Softmax Score"
+        y_text = "Frequency"
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_mean_softmax.html")
-        create_line_histogram(pcs_scores, full_file_path)
+        create_line_histogram(pcs_scores, full_file_path, title_text, x_text, y_text)
 
 
 
