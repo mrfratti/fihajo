@@ -320,21 +320,21 @@ class VisualizeUncertainty:
 
         # --- Interactive Chart | plot_pcs_ms_inverse --- |
 
-        def create_line_histogram(data, file_path_name, title_text, x_text, y_text):
+        def create_line_histogram(data, file_path_name, title_text, x_text, y_text, color_option):
             fig = go.Figure()
 
             fig.add_trace(go.Histogram(
                 x=data,
                 nbinsx=50,
-                marker_color='rgba(255, 188, 77, 0.8)',
+                marker_color=color_option,
                 opacity=0.75,
                 name="Histogram"
             ))
 
             fig.update_layout(
-                title="Distribution of PCS Scores",
-                xaxis_title='PCS Score',
-                yaxis_title='Frequency',
+                title=title_text,
+                xaxis_title=x_text,
+                yaxis_title=y_text,
                 bargap=0.2,
                 hovermode='x unified'
             )
@@ -344,14 +344,16 @@ class VisualizeUncertainty:
         title_text = "Distribution of PCS Scores"
         x_text = "PCS Score"
         y_text = "Frequency"
+        color_option = "skyblue"
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.html")
-        create_line_histogram(pcs_scores, full_file_path, title_text, x_text, y_text)
+        create_line_histogram(pcs_scores, full_file_path, title_text, x_text, y_text, color_option)
 
         title_text = "Distribution of Mean Softmax Scores"
         x_text = "Mean Softmax Score"
         y_text = "Frequency"
+        color_option = "lightgreen"
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_mean_softmax.html")
-        create_line_histogram(pcs_scores, full_file_path, title_text, x_text, y_text)
+        create_line_histogram(mean_softmax_scores, full_file_path, title_text, x_text, y_text, color_option)
 
 
 
