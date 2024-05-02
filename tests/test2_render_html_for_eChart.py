@@ -336,9 +336,9 @@ def main():
 
 
     # --- Entropy Scores --- |
-    file_path = 'report/reports/data/plots/analyze'
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/entropy_scores.html")
-    html_content += confusion_matrix(full_file_path)
+    # file_path = 'report/reports/data/plots/analyze'
+    # full_file_path = os.path.join(os.getcwd(), f"{file_path}/entropy_scores.html")
+    # html_content += confusion_matrix(full_file_path)
 
 
     # --- HTML FOUNDATION --- |

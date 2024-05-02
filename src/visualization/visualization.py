@@ -11,9 +11,7 @@ from src.cli.string_styling import StringStyling
 
 
 import json
-import plotly.graph_objects as go
 import plotly.tools as tls
-import plotly.subplots as sp
 import plotly.io as pio
 
 
@@ -414,18 +412,17 @@ class VisualizeUncertainty:
         self._plot_file_names["entropy_distrubution"] = filename
 
         # --- Interactive Chart | Entropy Scores --- |
-        fig = tls.mpl_to_plotly(plt.gcf())
+        # fig_plotly = tls.mpl_to_plotly(plt.gcf())
 
-        fig.update_layout(
-            title="Histogram of Predictive Entropy",
-            xaxis_title="Predictive Entropy",
-            yaxis_title="Frequency",
-            legend_title="Legend"
-        )
+        # fig_plotly.update_layout(
+        #     title="Histogram of Predictive Entropy",
+        #     xaxis_title="Predictive Entropy",
+        #     yaxis_title="Frequency",
+        #     legend_title="Legend"
+        # )
 
-        file_path = f"{self.plot_dir}/entropy_scores.html"
-        full_file_path = os.path.join(os.getcwd(), file_path)
-        pio.write_html(fig, file=full_file_path, auto_open=False)
+        # full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/entropy_scores.html")
+        # pio.write_html(fig_plotly, file=full_file_path, auto_open=False)
 
 
 
