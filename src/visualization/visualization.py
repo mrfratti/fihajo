@@ -9,11 +9,9 @@ from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.cli.string_styling import StringStyling
 
-
 import json
 import plotly.tools as tls
 import plotly.io as pio
-
 
 
 class VisualizeTraining:
@@ -297,6 +295,8 @@ class VisualizeUncertainty:
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
 
+
+
     def plot_pcs_mean_softmax(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
         # Results is a list of tuples, where each tuple contains (predictions, scores)
@@ -392,6 +392,12 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_inverse"] = filename
 
 
+        # --- Interactive Chart | plot_pcs_ms_inverse --- |
+        fig_plotly = tls.mpl_to_plotly(plt.gcf())
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_ms_inverse.html")
+        pio.write_html(fig_plotly, file=full_file_path, auto_open=False)
+
 
     def plot_dist_entropy_scores(self, entropy_scores):
         plt.figure(figsize=(20, 10))
@@ -410,21 +416,6 @@ class VisualizeUncertainty:
         filename = self._save_plot("dist_entropy")
         plt.show()
         self._plot_file_names["entropy_distrubution"] = filename
-
-        # --- Interactive Chart | Entropy Scores --- |
-        # fig_plotly = tls.mpl_to_plotly(plt.gcf())
-
-        # fig_plotly.update_layout(
-        #     title="Histogram of Predictive Entropy",
-        #     xaxis_title="Predictive Entropy",
-        #     yaxis_title="Frequency",
-        #     legend_title="Legend"
-        # )
-
-        # full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/entropy_scores.html")
-        # pio.write_html(fig_plotly, file=full_file_path, auto_open=False)
-
-
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
         # Sort the indices of the entropy scores in descending order
