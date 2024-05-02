@@ -1,11 +1,6 @@
 import os
 import json
 
-# Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
-# so we can use that info to make 1 file where they can see all build graf and compare
-# jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
-# SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
-
 def html_start():
     html_content = f"""
     <html>
@@ -279,8 +274,6 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
 
 
-    
-    
 
 def html_end():
     html_content = f"""
@@ -289,6 +282,12 @@ def html_end():
     """
     return html_content
 
+
+
+# Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
+# so we can use that info to make 1 file where they can see all build graf and compare
+# jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
+# SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
 
 # USE try and catch to skip error if there is no adv file for that build nr and so on
 
