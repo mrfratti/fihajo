@@ -228,7 +228,7 @@ class VisualizeEvaluation:
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report.html")
-        fig.write_html(full_file_path)
+        pio.write_html(fig, full_file_path)
 
 
 
