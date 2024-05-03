@@ -63,9 +63,9 @@ def html_start():
     <body>
 
     <header>
-        <button onclick="option_show()">Training</button>
-        <button onclick="option_show()">Evaluate</button>
-        <button onclick="option_show()">Analyze</button>
+        <button onclick="option_show('content_training')">Training</button>
+        <button onclick="option_show('content_evaluate')">Evaluate</button>
+        <button onclick="option_show('content_analyze')">Analyze</button>
         <button onclick="option_show()">Adversarial Training</button>
         <button onclick="option_show()">All AI model data</button>
     </header>
@@ -75,9 +75,12 @@ def html_start():
             document.getElementById("content_training").innerHTML = "TESTING!";
         }}
 
-        function option_show() {{
+        function option_show(option) {{
+            document.getElementById("content_training").style.display = "none";
+            document.getElementById("content_evaluate").style.display = "none";
+            document.getElementById("content_analyze").style.display = "none";
 
-            document.getElementById("content_training").style.display = "block";
+            document.getElementById(option).style.display = "block";
         }}
     </script>
 
