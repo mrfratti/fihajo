@@ -2,7 +2,7 @@ import os
 import json
 
 def html_start():
-    html_content = f"""
+    html_content = """
     <html>
     <head>
 
@@ -76,14 +76,13 @@ def html_start():
         }}
 
         function option_show(option) {{
-            document.getElementById("content_training").style.display = "none";
-            document.getElementById("content_evaluate").style.display = "none";
-            document.getElementById("content_analyze").style.display = "none";
+            document.getElementById("content_training").hidden = true;
+            document.getElementById("content_evaluate").hidden = true;
+            document.getElementById("content_analyze").hidden = true;
 
-            document.getElementById(option).style.display = "block";
+            document.getElementById(option).hidden = false;
         }}
     </script>
-
     """
 
     return html_content
