@@ -25,7 +25,7 @@ def html_start():
 
 
             #content_training {{
-                display: none;
+                display: block;
                 justify-content: center;
                 align-items: center;
             }}
