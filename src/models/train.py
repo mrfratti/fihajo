@@ -5,16 +5,10 @@ import platform
 import sys
 import tensorflow as tf
 import numpy as np
-from keras.callbacks import (
-    EarlyStopping,
-    TensorBoard,
-    LambdaCallback,
-)
+
+from keras.callbacks import (EarlyStopping, TensorBoard, LambdaCallback)
 from keras.losses import CategoricalCrossentropy
-from keras.metrics import (
-    Mean,
-    CategoricalAccuracy,
-)
+from keras.metrics import (Mean, CategoricalAccuracy)
 from keras.utils import Progbar
 from keras import optimizers
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
