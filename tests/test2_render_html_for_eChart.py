@@ -351,8 +351,13 @@ def html_end():
 # Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
 # so we can use that info to make 1 file where they can see all build graf and compare
 # jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
-# SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
 
+# JASON STRUCTURE:
+# build :   1,2,3
+# adv   :   2
+# evaluate  :   1,2,3
+
+# SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
 # USE try and catch to skip error if there is no adv file for that build nr and so on
 
 def main():
@@ -363,6 +368,7 @@ def main():
     html_content  = html_start()
 
 
+    # --- TRAINING --- |
     # --- Accuracy & Loss --- |
     file_path = main_path + "/training"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss.json")
@@ -379,6 +385,8 @@ def main():
     html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
 
 
+
+    # --- EVALUATION --- |
     # --- Confusion Matrix --- |
     file_path = main_path + "/evaluation"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix.json")
@@ -395,10 +403,10 @@ def main():
 
 
     # --- ANALYYZE --- |
-    # --- Entropy Scores --- |
-    # plot_pcs
+    
+    # --- PCS & Mean Softmax Score --- |
     file_path = main_path + "/analyze"
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs.html")
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax.html")
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
@@ -410,23 +418,13 @@ def main():
     content_string = "".join(content_content)
 
     html_content += content_string
-    
-    # plot_mean_softmax
-    file_path = main_path + "/analyze"
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_mean_softmax.html")
-    with open(full_file_path, "r") as file:
-        data_content = file.readlines()
-
-    content_start = data_content.index("<body>\n") + 1
-    content_end = data_content.index("</body>\n")
-    content_content = data_content[content_start:content_end]
-    content_string = "".join(content_content)
-    html_content += content_string
-
     html_content += "</div>"
 
 
-    # ---  --- |
+    # --- Entropy Scores --- |
+
+    
+    # --- ALL AI MODEL --- |
 
     html_content += "<div id='content_aAImd'></div>"
 
