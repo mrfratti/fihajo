@@ -75,6 +75,27 @@ class TestTrainer(unittest.TestCase):
             self.trainer.train()
             mock_adv_training.assert_called_once()
 
+    @patch('os.makedirs')
+    @patch('builtins.input', side_effect=[''])
+    @patch('src.models.train.logging')
+    def test_save_model_default_path(self, mock_logging, mock_input, mock_makedirs):
+        """Test that save_model uses the default path when no path is provided by the user."""
+        self.trainer.save_model()
+        default_directory = '/'.join(self.trainer._default_save_path().split('/')[:-1])
+        mock_makedirs.assert_called_with(default_directory, exist_ok=True)
+        self.trainer.model.inner.save_weights.assert_called_with(self.trainer._default_save_path())
+
+    @patch('os.makedirs')
+    @patch('builtins.input', side_effect=['path/models/model.h5'])
+    @patch('src.models.train.logging')
+    def test_save_model_custom_path(self, mock_logging, mock_input, mock_makedirs):
+        """Test that save_model uses a custom path when provided by the user."""
+        self.trainer.save_model()
+        expected_path = 'path/models/model.h5'
+        expected_directory = 'path/models'
+        mock_makedirs.assert_called_with(expected_directory, exist_ok=True)
+        self.trainer.model.inner.save_weights.assert_called_with(expected_path)
+
 
 if __name__ == '__main__':
     unittest.main()
