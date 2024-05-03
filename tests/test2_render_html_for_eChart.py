@@ -86,7 +86,7 @@ def html_start():
             document.getElementById("content_at").style.display = "none";
             document.getElementById("content_aAImd").style.display = "none";
 
-            document.getElementById(option).style.display = "block";
+            document.getElementById("content_training").style.display = "block";
         }}
     </script>
 
