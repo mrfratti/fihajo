@@ -22,7 +22,8 @@ def html_start():
                 padding: 10px 20px;
                 cursor: pointer;
             }}
-            
+
+
             #content_training {{
                 display: none;
                 justify-content: center;
@@ -41,6 +42,12 @@ def html_start():
                 align-items: center;
             }}
             
+
+            #charts_box {{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }}
             .chart_line_1 {{
                 width: 600px;
                 height: 400px;
@@ -59,6 +66,7 @@ def html_start():
     <body>
 
     <header>
+        <button onclick="change_text('test')">test</button>
         <button onclick="option_show('content_training')">Training</button>
         <button onclick="option_show('content_evaluate')">Evaluate</button>
         <button onclick="option_show('content_analyze')">Analyze</button>
@@ -69,7 +77,7 @@ def html_start():
     
     <script>
         function change_text() {{
-            document.getElementById('content_aAImd').innerHTML = "TESTING!";
+            document.getElementById('content_training').innerHTML = "TESTING!";
         }}
 
         function option_show(option) {{
@@ -100,8 +108,8 @@ def html_start():
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
     
-    <div>
-        <div class="chart_line_1">
+    <div id="content_training">
+        <div class="charts_box">
             <h2>Training</h2>
             <div id="chart_accuracy" class="chart_line_1"></div>
             <div id="chart_loss" class="chart_line_1"></div>
@@ -423,7 +431,7 @@ def main():
 
     # --- Entropy Scores --- |
 
-    
+
     # --- ALL AI MODEL --- |
 
     html_content += "<div id='content_aAImd'></div>"
