@@ -32,7 +32,7 @@ def html_start():
                 
                 border: 2px solid #ccc;
             }}
-            .show {{
+            .display_box {{
                 display: block;
             }}
 
@@ -60,21 +60,6 @@ def html_start():
         <button onclick="option_show('content_4')">Adversarial Training</button>
         <button onclick="option_show('content_5')">All AI model data</button>
     </header>
-
-    <script>
-        function option_show(option) {{
-            var element = document.getElementById(option);
-            element.classList.toggle("show");
-            
-            var contents = document.getElementsByClassName("charts_box");
-            for (var nr = 0; nr < contents.length; nr++) {{
-                if (contents[nr].option !== option) {{
-                    contents[nr].classList.remove("show");
-                }}
-            }}
-
-        }}
-    </script>
 
     """
 
@@ -245,7 +230,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div class="charts_box" id="content_1">
+        <div id="content_1">
             <div id="chart_heatmap"></div>
         </div>
 
@@ -323,6 +308,20 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
 def html_end():
     html_content = f"""
+        <script>
+            function option_show(option) {{
+                var element = document.getElementById(option);
+                element.classList.toggle("display_box");
+                
+                var contents = document.getElementsByClassName("charts_box");
+                for (var nr = 0; nr < contents.length; nr++) {{
+                    if (contents[nr].option !== option) {{
+                        contents[nr].classList.remove("display_box");
+                    }}
+                }}
+
+            }}
+        </script>
     # </body>
     # </html>
     """
@@ -384,7 +383,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div class='charts_box' id='content_3'>"
+    html_content += "<div id='content_3'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
