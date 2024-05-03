@@ -66,6 +66,31 @@ def html_start():
         <button onclick="option_show('content_aAImd')">All AI model data</button>
     </header>
 
+    
+    <script>
+        function change_text() {{
+            document.getElementById('content_aAImd').innerHTML = "TESTING!";
+        }}
+
+        function option_show(option) {{
+        
+            var data_content_training = document.getElementById(content_training);
+            var data_content_evaluate = document.getElementById(content_evaluate);
+            var data_content_analyze = document.getElementById(content_analyze);
+            var data_content_at = document.getElementById(content_at);
+            var data_content_aAImd = document.getElementById(content_aAImd);
+
+            data_content_training.style.display = "none";
+            data_content_evaluate.style.display = "none";
+            data_content_analyze.style.display = "none";
+            data_content_at.style.display = "none";
+            data_content_aAImd.style.display = "none";
+
+            var data_option = document.getElementById(option);
+            data_option.style.display = "block";
+        }}
+    </script>
+
     """
 
     return html_content
@@ -76,9 +101,11 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
     
     <div id="content_training">
-        <h2>Training</h2>
-        <div id="chart_accuracy" class="chart_line_1"></div>
-        <div id="chart_loss" class="chart_line_1"></div>
+        <div class="chart_line_1">
+            <h2>Training</h2>
+            <div id="chart_accuracy" class="chart_line_1"></div>
+            <div id="chart_loss" class="chart_line_1"></div>
+        <div>
     </div>
 
     <script>
@@ -313,28 +340,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
 def html_end():
     html_content = f"""
-        <script>
 
-            function option_show(option) {{
-            
-                var data_content_training = document.getElementById(content_training);
-                var data_content_evaluate = document.getElementById(content_evaluate);
-                var data_content_analyze = document.getElementById(content_analyze);
-                var data_content_at = document.getElementById(content_at);
-                var data_content_aAImd = document.getElementById(content_aAImd);
-
-                data_content_training.style.display = "none";
-                data_content_evaluate.style.display = "none";
-                data_content_analyze.style.display = "none";
-                data_content_at.style.display = "none";
-                data_content_aAImd.style.display = "none";
-
-                var data_option = document.getElementById(option);
-                data_option.style.display = "block";
-
-
-            }}
-        </script>
     # </body>
     # </html>
     """
@@ -396,7 +402,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_3'>"
+    html_content += "<div id='content_analyze'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -410,8 +416,6 @@ def main():
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_mean_softmax.html")
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
-
-    html_content += "<div class='charts_box' id='content_3'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
