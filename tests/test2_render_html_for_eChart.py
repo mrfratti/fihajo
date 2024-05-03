@@ -66,26 +66,25 @@ def html_start():
     <body>
 
     <header>
-        <button onclick="option_show('content_training')">Training</button>
-        <button onclick="option_show('content_evaluate')">Evaluate</button>
-        <button onclick="option_show('content_analyze')">Analyze</button>
-        <button onclick="option_show('content_at')">Adversarial Training</button>
-        <button onclick="option_show('content_aAImd')">All AI model data</button>
+        <button onclick="option_show("content_training")">Training</button>
+        <button onclick="option_show("content_evaluate")">Evaluate</button>
+        <button onclick="option_show("content_analyze")">Analyze</button>
+        <button onclick="option_show("content_at")">Adversarial Training</button>
+        <button onclick="option_show("content_aAImd")">All AI model data</button>
     </header>
-
     
     <script>
         function change_text() {{
-            document.getElementById('content_training').innerHTML = "TESTING!";
+            document.getElementById("content_training").innerHTML = "TESTING!";
         }}
 
         function option_show(option) {{
 
-            document.getElementById(content_training).style.display = "none";
-            document.getElementById(content_evaluate).style.display = "none";
-            document.getElementById(content_analyze).style.display = "none";
-            document.getElementById(content_at).style.display = "none";
-            document.getElementById(content_aAImd).style.display = "none";
+            document.getElementById("content_training").style.display = "none";
+            document.getElementById("content_evaluate").style.display = "none";
+            document.getElementById("content_analyze").style.display = "none";
+            document.getElementById("content_at").style.display = "none";
+            document.getElementById("content_aAImd").style.display = "none";
 
             document.getElementById(option).style.display = "block";
         }}
