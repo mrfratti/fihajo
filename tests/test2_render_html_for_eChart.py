@@ -371,6 +371,8 @@ def main():
     html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
 
 
+
+    # --- ANALYYZE --- |
     # --- Entropy Scores --- |
     # plot_pcs
     file_path = main_path + "/analyze"
@@ -378,11 +380,13 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += '<div class="charts_box" id="content_3">'
-    content_start = data_content.index('<body>\n') + 1
-    content_end = data_content.index('</body>\n')
+    html_content += "<div class='charts_box' id='content_3'>"
+
+    content_start = data_content.index("<body>\n") + 1
+    content_end = data_content.index("</body>\n")
     content_content = data_content[content_start:content_end]
-    content_string = ''.join(content_content)
+    content_string = "".join(content_content)
+
     html_content += content_string
     
     # plot_mean_softmax
@@ -391,14 +395,20 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    content_start = data_content.index('<body>\n') + 1
-    content_end = data_content.index('</body>\n')
-    content_content = data_content[content_start:content_end]
-    content_string = ''.join(content_content)
-    html_content += content_string
-    html_content += '</div>'
+    html_content += "<div class='charts_box' id='content_3'>"
 
-    # --- Confusion Matrix --- |
+    content_start = data_content.index("<body>\n") + 1
+    content_end = data_content.index("</body>\n")
+    content_content = data_content[content_start:content_end]
+    content_string = "".join(content_content)
+    html_content += content_string
+
+    html_content += "</div>"
+
+
+    # ---  --- |
+
+
 
     # --- HTML FOUNDATION --- |
     html_content += html_end()
