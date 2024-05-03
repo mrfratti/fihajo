@@ -62,13 +62,6 @@ def html_start():
         function option_show(option) {{
             var element = document.getElementById(option);
             element.classList.toggle("show");
-            
-            var contents = document.getElementsByClassName("charts_box");
-            for (var nr = 0; nr < contents.length; nr++) {{
-                if (contents[nr].option !== option) {{
-                    contents[nr].classList.remove("show");
-                }}
-            }}
 
         }}
     </script>
@@ -83,6 +76,7 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
 
     <div class="charts_box" id="content_1">
+        <h2>Training</h2>
         <div id="chart_accuracy" class="chart_line_1"></div>
         <div id="chart_loss" class="chart_line_1"></div>
     </div>
