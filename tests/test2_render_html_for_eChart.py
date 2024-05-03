@@ -428,6 +428,7 @@ def main():
 
     # ---  --- |
 
+    html_content += "<div id='content_aAImd'></div>"
 
 
     # --- HTML FOUNDATION --- |
