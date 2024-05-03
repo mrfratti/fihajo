@@ -22,20 +22,25 @@ def html_start():
                 padding: 10px 20px;
                 cursor: pointer;
             }}
-            .charts_box {{
+            
+            #content_training {{
                 display: none;
-                padding: 20px;
-                margin-top: 20px;
-
                 justify-content: center;
                 align-items: center;
-                
-                border: 2px solid #ccc;
-            }}
-            .display_box {{
-                display: block;
             }}
 
+            #content_evaluate {{
+                display: none;
+                justify-content: center;
+                align-items: center;
+            }}
+
+            #content_analyze {{
+                display: none;
+                justify-content: center;
+                align-items: center;
+            }}
+            
             .chart_line_1 {{
                 width: 600px;
                 height: 400px;
@@ -54,11 +59,11 @@ def html_start():
     <body>
 
     <header>
-        <button onclick="option_show('content_1')">Training</button>
-        <button onclick="option_show('content_2')">Evaluate</button>
-        <button onclick="option_show('content_3')">Analyze</button>
-        <button onclick="option_show('content_4')">Adversarial Training</button>
-        <button onclick="option_show('content_5')">All AI model data</button>
+        <button onclick="option_show('content_training')">Training</button>
+        <button onclick="option_show('content_evaluate')">Evaluate</button>
+        <button onclick="option_show('content_analyze')">Analyze</button>
+        <button onclick="option_show('content_at')">Adversarial Training</button>
+        <button onclick="option_show('content_aAImd')">All AI model data</button>
     </header>
 
     """
@@ -69,8 +74,8 @@ def html_start():
 
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
-
-    <div class="charts_box" id="content_1">
+    
+    <div id="content_training">
         <h2>Training</h2>
         <div id="chart_accuracy" class="chart_line_1"></div>
         <div id="chart_loss" class="chart_line_1"></div>
@@ -230,7 +235,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div id="content_1">
+        <div id="content_training">
             <div id="chart_heatmap"></div>
         </div>
 
@@ -309,16 +314,24 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 def html_end():
     html_content = f"""
         <script>
+
             function option_show(option) {{
-                var element = document.getElementById(option);
-                element.classList.toggle("display_box");
-                
-                var contents = document.getElementsByClassName("charts_box");
-                for (var nr = 0; nr < contents.length; nr++) {{
-                    if (contents[nr].option !== option) {{
-                        contents[nr].classList.remove("display_box");
-                    }}
-                }}
+            
+                var data_content_training = document.getElementById(content_training);
+                var data_content_evaluate = document.getElementById(content_evaluate);
+                var data_content_analyze = document.getElementById(content_analyze);
+                var data_content_at = document.getElementById(content_at);
+                var data_content_aAImd = document.getElementById(content_aAImd);
+
+                data_content_training.style.display = "none";
+                data_content_evaluate.style.display = "none";
+                data_content_analyze.style.display = "none";
+                data_content_at.style.display = "none";
+                data_content_aAImd.style.display = "none";
+
+                var data_option = document.getElementById(option);
+                data_option.style.display = "block";
+
 
             }}
         </script>
