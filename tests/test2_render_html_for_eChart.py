@@ -33,13 +33,6 @@ def html_start():
                 border: 2px solid #ccc;
             }}
 
-
-            #charts_box {{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }}
-
             .chart_line_1 {{
                 width: 600px;
                 height: 400px;
@@ -66,13 +59,16 @@ def html_start():
 
     <script>
         function option_show(option) {{
-            var data_value = document.getElementById(option);
-            if (data_value.style.display === "none") {{
-                data_value.style.display = "block";
-            }} 
-            else {{
-                data_value.style.display = "none";
+            var element = document.getElementById(option);
+            element.classList.toggle("show");
+            
+            var contents = document.getElementsByClassName("charts_box");
+            for (var nr = 0; nr < contents.length; nr++) {{
+                if (contents[nr].option !== option) {{
+                    contents[nr].classList.remove("show");
+                }}
             }}
+            
         }}
     </script>
 
@@ -85,7 +81,7 @@ def html_start():
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
 
-    <div class="content_1">
+    <div class="charts_box" id="content_1">
         <div id="chart_accuracy" class="chart_line_1"></div>
         <div id="chart_loss" class="chart_line_1"></div>
     </div>
@@ -244,7 +240,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div class="content_1">
+        <div class="charts_box" id="content_1">
             <div id="chart_heatmap"></div>
         </div>
 
@@ -381,7 +377,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += '<div class="content_2">'
+    html_content += '<div class="charts_box" id="content_2">'
     content_start = data_content.index('<body>\n') + 1
     content_end = data_content.index('</body>\n')
     content_content = data_content[content_start:content_end]
