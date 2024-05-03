@@ -10,6 +10,30 @@ def html_start():
         <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
 
         <style>
+
+            header {{
+                text-align: center;
+                padding: 20px;
+                font-size: 20px;
+                background: rgba(138, 91, 145, 0.8);
+            }}
+            button {{
+                margin: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+            }}
+            .charts_box {{
+                display: none;
+                padding: 20px;
+                margin-top: 20px;
+
+                justify-content: center;
+                align-items: center;
+                
+                border: 2px solid #ccc;
+            }}
+
+
             #charts_box {{
                 display: flex;
                 justify-content: center;
@@ -27,10 +51,31 @@ def html_start():
                 height: 600px;
                 margin: 50px auto;
             }}
+
         </style>
 
     </head>
     <body>
+
+    <header>
+        <button onclick="option_show('content_1')">Train</button>
+        <button onclick="option_show('content_3')">Evaluate</button>
+        <button onclick="option_show('content_2')">Analyze</button>
+        <button onclick="option_show('content_3')">All AI model data</button>
+    </header>
+
+    <script>
+        function option_show(option) {{
+            var data_value = document.getElementById(option);
+            if (data_value.style.display === "none") {{
+                data_value.style.display = "block";
+            }} 
+            else {{
+                data_value.style.display = "none";
+            }}
+        }}
+    </script>
+
     """
 
     return html_content
@@ -40,7 +85,7 @@ def html_start():
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
 
-    <div id="charts_box">
+    <div class="content_1">
         <div id="chart_accuracy" class="chart_line_1"></div>
         <div id="chart_loss" class="chart_line_1"></div>
     </div>
@@ -199,7 +244,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div>
+        <div class="content_1">
             <div id="chart_heatmap"></div>
         </div>
 
@@ -333,9 +378,10 @@ def main():
     # plot_pcs
     file_path = main_path + "/analyze"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs.html")
-    with open(full_file_path, 'r') as file:
+    with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
+    html_content += '<div class="content_2">'
     content_start = data_content.index('<body>\n') + 1
     content_end = data_content.index('</body>\n')
     content_content = data_content[content_start:content_end]
@@ -345,7 +391,7 @@ def main():
     # plot_mean_softmax
     file_path = main_path + "/analyze"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_mean_softmax.html")
-    with open(full_file_path, 'r') as file:
+    with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
     content_start = data_content.index('<body>\n') + 1
@@ -353,6 +399,7 @@ def main():
     content_content = data_content[content_start:content_end]
     content_string = ''.join(content_content)
     html_content += content_string
+    html_content += '</div>'
 
 
     # --- HTML FOUNDATION --- |
@@ -361,7 +408,6 @@ def main():
     with open("report/reports/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
 
-    
 
 
 if __name__ == "__main__":
