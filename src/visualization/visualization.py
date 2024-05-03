@@ -207,13 +207,16 @@ class VisualizeEvaluation:
 
         # --- Interactive Chart | Confusion Matrix --- |
 
-        z = [[.1, .3, .5, .7, .9],
-            [1, .8, .6, .4, .2],
-            [.2, 0, .5, .7, .9],
-            [.9, .8, .4, .2, 0],
-            [.3, .4, .5, .7, 1]]
-
-        fig = px.imshow(z, text_auto=True)
+        data_heatmap = df_report[["precision", "recall", "f1-score"]].T
+        fig = px.imshow(
+            data_heatmap,
+            labels = dict(x="x value", y="y value", color="Score"),
+            x = data_heatmap.index,
+            y = data_heatmap.columns,
+            aspect = "auto",
+            text_auto = True,
+            color_continuous_scale = "Viridis"
+        )
         fig.show()
 
 
