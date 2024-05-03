@@ -13,6 +13,7 @@ from src.cli.string_styling import StringStyling
 import json
 import plotly.graph_objects as go
 import plotly.io as pio
+from plotly.subplots import make_subplots
 
 
 class VisualizeTraining:
@@ -320,40 +321,47 @@ class VisualizeUncertainty:
 
         # --- Interactive Chart | plot_pcs_ms_inverse --- |
 
-        def create_line_histogram(data, file_path_name, title_text, x_text, y_text, color_option):
-            fig = go.Figure()
+        pcs_inverse = 1 - pcs_scores
+        uncertainty_threshold_pcs = np.percentile(pcs_inverse, 95)
+        mean_softmax_inverse = 1 - mean_softmax_scores
+        uncertainty_threshold_mean_softmax = np.percentile(mean_softmax_inverse, 95)
 
-            fig.add_trace(go.Histogram(
-                x=data,
-                nbinsx=100,
-                marker_color=color_option,
-                opacity=0.8,
-                name="Histogram"
-            ))
+        fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
 
-            fig.update_layout(
-                title=title_text,
-                xaxis_title=x_text,
-                yaxis_title=y_text,
-                bargap=0.2,
-                hovermode='x unified'
-            )
 
-            pio.write_html(fig, file=file_path_name)
+        # First subplot for PCS scores
+        fig.add_trace(go.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
 
-        title_text = "Distribution of PCS Scores"
-        x_text = "PCS Score"
-        y_text = "Frequency"
-        color_option = "skyblue"
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs.html")
-        create_line_histogram(pcs_scores, full_file_path, title_text, x_text, y_text, color_option)
+        fig.add_trace(go.Scatter(x=[uncertainty_threshold_pcs, uncertainty_threshold_pcs], 
+                                y=[0, max(np.histogram(pcs_scores, bins='auto')[0])], 
+                                mode="lines", name=f'95th percentile: {uncertainty_threshold_pcs:.2f}', 
+                                line=dict(color='red', dash='dash')), row=1, col=1)
+        
+        fig.add_trace(go.Scatter(x=[np.mean(pcs_inverse), np.mean(pcs_inverse)], 
+                                y=[0, max(np.histogram(pcs_scores, bins='auto')[0])], 
+                                mode="lines", name=f'Mean PCS: {np.mean(pcs_scores):.2f}', 
+                                line=dict(color='yellow', dash='dash')), row=1, col=1)
 
-        title_text = "Distribution of Mean Softmax Scores"
-        x_text = "Mean Softmax Score"
-        y_text = "Frequency"
-        color_option = "lightgreen"
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_mean_softmax.html")
-        create_line_histogram(mean_softmax_scores, full_file_path, title_text, x_text, y_text, color_option)
+
+        # Second subplot for Mean Softmax scores
+        fig.add_trace(go.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
+
+        fig.add_trace(go.Scatter(x=[uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
+                                y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
+                                mode="lines", name=f'95th percentile: {uncertainty_threshold_mean_softmax:.2f}', 
+                                line=dict(color='red', dash='dash')), row=1, col=2)
+        
+        fig.add_trace(go.Scatter(x=[np.mean(mean_softmax_inverse), np.mean(mean_softmax_inverse)], 
+                                y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
+                                mode="lines", name=f'Mean Softmax: {np.mean(mean_softmax_scores):.2f}', 
+                                line=dict(color='yellow', dash='dash')), row=1, col=2)
+
+        fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
+                        yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
+
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax.html")
+        pio.write_html(fig, file=full_file_path)
 
 
 
