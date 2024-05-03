@@ -66,7 +66,6 @@ def html_start():
     <body>
 
     <header>
-        <button onclick="change_text('test')">test</button>
         <button onclick="option_show('content_training')">Training</button>
         <button onclick="option_show('content_evaluate')">Evaluate</button>
         <button onclick="option_show('content_analyze')">Analyze</button>
@@ -411,7 +410,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyse'>"
+    html_content += "<div id='content_analyze'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -427,6 +426,7 @@ def main():
 
     # --- ALL AI MODEL --- |
 
+    # Show pie chart of all ai model accurcy, so they know what to chooce
     html_content += "<div id='content_aAImd'>content_aAImd</div>"
 
 
