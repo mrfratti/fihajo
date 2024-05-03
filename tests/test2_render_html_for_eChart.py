@@ -81,21 +81,14 @@ def html_start():
         }}
 
         function option_show(option) {{
-        
-            var data_content_training = document.getElementById(content_training);
-            var data_content_evaluate = document.getElementById(content_evaluate);
-            var data_content_analyze = document.getElementById(content_analyze);
-            var data_content_at = document.getElementById(content_at);
-            var data_content_aAImd = document.getElementById(content_aAImd);
 
-            data_content_training.style.display = "none";
-            data_content_evaluate.style.display = "none";
-            data_content_analyze.style.display = "none";
-            data_content_at.style.display = "none";
-            data_content_aAImd.style.display = "none";
+            document.getElementById(content_training).style.display = "none";
+            document.getElementById(content_evaluate).style.display = "none";
+            document.getElementById(content_analyze).style.display = "none";
+            document.getElementById(content_at).style.display = "none";
+            document.getElementById(content_aAImd).style.display = "none";
 
-            var data_option = document.getElementById(option);
-            data_option.style.display = "block";
+            document.getElementById(option).style.display = "block";
         }}
     </script>
 
@@ -113,7 +106,7 @@ def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
             <h2>Training</h2>
             <div id="chart_accuracy" class="chart_line_1"></div>
             <div id="chart_loss" class="chart_line_1"></div>
-        <div>
+        </div>
     </div>
 
     <script>
