@@ -396,21 +396,21 @@ def main():
 
     # --- Classification Report --- |
 
-    file_path = main_path + "/evaluation"
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report.html")
-    with open(full_file_path, "r") as file:
-        data_content = file.readlines()
+    # file_path = main_path + "/evaluation"
+    # full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report.html")
+    # with open(full_file_path, "r") as file:
+    #     data_content = file.readlines()
 
-    # html_content += "<div id='content_analyze'>"
-    html_content += "<div>"
+    # # html_content += "<div id='content_analyze'>"
+    # html_content += "<div>"
 
-    content_start = data_content.index("<body>\n") + 1
-    content_end = data_content.index("</body>\n")
-    content_content = data_content[content_start:content_end]
-    content_string = "".join(content_content)
+    # content_start = data_content.index("<body>\n") + 1
+    # content_end = data_content.index("</body>\n")
+    # content_content = data_content[content_start:content_end]
+    # content_string = "".join(content_content)
 
-    html_content += content_string
-    html_content += "</div>"
+    # html_content += content_string
+    # html_content += "</div>"
 
 
     # --- ANALYYZE --- |
