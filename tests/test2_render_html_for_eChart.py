@@ -263,7 +263,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div>
+        <div id="content_evaluate">
             <div id="chart_heatmap"></div>
         </div>
 
@@ -411,7 +411,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div>"
+    html_content += "<div id='content_analyse'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -427,7 +427,7 @@ def main():
 
     # --- ALL AI MODEL --- |
 
-    html_content += "<div id='content_aAImd'></div>"
+    html_content += "<div id='content_aAImd'>content_aAImd</div>"
 
 
     # --- HTML FOUNDATION --- |
