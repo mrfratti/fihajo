@@ -217,7 +217,9 @@ class VisualizeEvaluation:
             text_auto = True,
             color_continuous_scale = "Viridis"
         )
-        fig.show()
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix.json")
+        fig.write_html(full_file_path + "/plot_classification_report.html")
 
 
 
