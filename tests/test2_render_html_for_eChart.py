@@ -100,7 +100,7 @@ def html_start():
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
     
-    <div id="content_training">
+    <div>
         <div class="chart_line_1">
             <h2>Training</h2>
             <div id="chart_accuracy" class="chart_line_1"></div>
@@ -262,7 +262,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div id="content_training">
+        <div>
             <div id="chart_heatmap"></div>
         </div>
 
@@ -402,7 +402,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyze'>"
+    html_content += "<div>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
