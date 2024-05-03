@@ -32,6 +32,9 @@ def html_start():
                 
                 border: 2px solid #ccc;
             }}
+            .show {{
+                display: block;
+            }}
 
             .chart_line_1 {{
                 width: 600px;
@@ -62,6 +65,13 @@ def html_start():
         function option_show(option) {{
             var element = document.getElementById(option);
             element.classList.toggle("show");
+            
+            var contents = document.getElementsByClassName("charts_box");
+            for (var nr = 0; nr < contents.length; nr++) {{
+                if (contents[nr].option !== option) {{
+                    contents[nr].classList.remove("show");
+                }}
+            }}
 
         }}
     </script>
