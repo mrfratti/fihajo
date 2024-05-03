@@ -205,17 +205,26 @@ class VisualizeEvaluation:
         self._plot_file_names["classification_report"] = filename
 
 
-        # --- Interactive Chart | Confusion Matrix --- |
+        # --- Interactive Chart | Classification Report --- |
 
+        df_report = pd.DataFrame(report).transpose()
+        df_report.drop("support", errors="ignore", inplace=True)
         data_heatmap = df_report[["precision", "recall", "f1-score"]].T
         fig = px.imshow(
             data_heatmap,
-            labels = dict(x="x value", y="y value", color="Score"),
+            labels = dict(x="Class", y="Metric", color="Score"),
             x = data_heatmap.index,
             y = data_heatmap.columns,
             aspect = "auto",
             text_auto = True,
             color_continuous_scale = "Viridis"
+        )
+
+        
+        fig.update_layout(
+            title="Classification Heatmap",
+            xaxis_title="x test",
+            yaxis_title="y test"
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report.html")
