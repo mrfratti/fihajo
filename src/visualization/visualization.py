@@ -11,6 +11,7 @@ from src.cli.string_styling import StringStyling
 
 # --- Interactive Chart --- |
 import json
+import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
@@ -177,13 +178,11 @@ class VisualizeEvaluation:
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix.json")
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
-
 
 
 
@@ -204,6 +203,20 @@ class VisualizeEvaluation:
         filename = self._save_plot("classification_report")
         plt.show()
         self._plot_file_names["classification_report"] = filename
+
+
+        # --- Interactive Chart | Confusion Matrix --- |
+
+        z = [[.1, .3, .5, .7, .9],
+            [1, .8, .6, .4, .2],
+            [.2, 0, .5, .7, .9],
+            [.9, .8, .4, .2, 0],
+            [.3, .4, .5, .7, 1]]
+
+        fig = px.imshow(z, text_auto=True)
+        fig.show()
+
+
 
     def plot_adversarial_examples(self, model, x_test, eps, num_samples=25):
         # Generate FGSM adversarial examples
