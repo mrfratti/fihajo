@@ -51,10 +51,11 @@ def html_start():
     <body>
 
     <header>
-        <button onclick="option_show('content_1')">Train</button>
-        <button onclick="option_show('content_3')">Evaluate</button>
-        <button onclick="option_show('content_2')">Analyze</button>
-        <button onclick="option_show('content_3')">All AI model data</button>
+        <button onclick="option_show('content_1')">Training</button>
+        <button onclick="option_show('content_2')">Evaluate</button>
+        <button onclick="option_show('content_3')">Analyze</button>
+        <button onclick="option_show('content_4')">Adversarial Training</button>
+        <button onclick="option_show('content_5')">All AI model data</button>
     </header>
 
     <script>
@@ -68,7 +69,7 @@ def html_start():
                     contents[nr].classList.remove("show");
                 }}
             }}
-            
+
         }}
     </script>
 
@@ -377,7 +378,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += '<div class="charts_box" id="content_2">'
+    html_content += '<div class="charts_box" id="content_3">'
     content_start = data_content.index('<body>\n') + 1
     content_end = data_content.index('</body>\n')
     content_content = data_content[content_start:content_end]
@@ -397,6 +398,7 @@ def main():
     html_content += content_string
     html_content += '</div>'
 
+    # --- Confusion Matrix --- |
 
     # --- HTML FOUNDATION --- |
     html_content += html_end()
