@@ -5,6 +5,7 @@ from report_interactive.html_structure import html_start, html_accuracy_loss_cha
 
 # set in function with user option(argparse) in traning where it set in diffrent structure for nurons and so on
 
+
 def create_cheack_file():
     default_data = {
         "build_nr": [0],
@@ -14,7 +15,7 @@ def create_cheack_file():
         "adversarial_evaluation": [0]
     }
 
-    file_path = "report_interactive/build_list.json"
+    file_path = "build_list.json"
 
     if not os.path.exists(file_path):
         with open(file_path, 'w') as file:
