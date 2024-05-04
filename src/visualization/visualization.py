@@ -221,9 +221,9 @@ class VisualizeEvaluation:
         )
         fig.update_layout(
             coloraxis=dict(colorscale='Viridis'),
-            title="Classification Metrics Heatmap",
-            xaxis_title="Class",
-            yaxis_title="Metrics"
+            title="Classification Report",
+            xaxis_title="",
+            yaxis_title=""
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report.html")
@@ -501,16 +501,17 @@ class VisualizeUncertainty:
             row=1, col=1
         )
 
-        value_mean = np.mean(entropy_scores)
-        value_max_height = max(np.histogram(entropy_scores, bins='auto')[0])
+        # value_mean = np.mean(entropy_scores)
+        # value_max_height = max(np.histogram(entropy_scores, bins='auto')[0])
 
-        fig.add_trace(
-            go.Scatter(
-                x=[value_mean, value_mean], 
-                y=[0, value_max_height], 
-                mode="lines", name="Mean", 
-                line=dict(color='red', dash='dash')), row=1, col=1
-                )
+        # fig.add_trace(
+        #     go.Scatter(
+        #         x=[value_mean, value_mean], 
+        #         y=[0, value_max_height], 
+        #         mode="lines", name="Mean", 
+        #         line=dict(color='red', dash='dash')), 
+        #         row=1, col=1
+        #         )
 
         fig.update_layout(
             title = "Histogram of Predictive Entropy",
