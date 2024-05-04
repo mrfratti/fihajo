@@ -5,9 +5,6 @@ from report_interactive.html_structure import html_start, html_accuracy_loss_cha
 
 # set in function with user option(argparse) in traning where it set in diffrent structure for nurons and so on
 
-import json
-import os
-
 def create_cheack_file():
     default_data = {
         "build_nr": [0],
