@@ -506,7 +506,6 @@ class VisualizeUncertainty:
 
         fig.add_trace(
             go.Scatter(
-                x = [0, value_mean],
                 y = [0, value_max_height],
                 mode = "lines",
                 name = "Mean",
@@ -514,6 +513,8 @@ class VisualizeUncertainty:
             ),
             row=1, col=1
         )
+
+        fig.add_vline(x=value_mean, line=dict(color="black", dash="dash", width=2))
 
         fig.update_layout(
             title="Histogram with Density Estimate and Mean Line",
