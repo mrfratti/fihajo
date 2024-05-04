@@ -36,18 +36,6 @@ def build_nr_now(option):
 
     return number_last_text
 
-def build_nr_now(option):
-    file_path = "report_interactive/build_list.json"
-    full_file_path = os.path.join(os.getcwd(), file_path)
-
-    with open(full_file_path, "r") as file:
-        data_build_info = json.load(file)
-
-    number_last = data_build_info[option][-1]
-    number_last_text = "_build_" + str(number_last)
-
-    return number_last_text
-
 
 def build_list_info(option):
     file_path = "report_interactive/build_list.json"
