@@ -53,6 +53,7 @@ def build_list_info(option):
 def main():
 
     main_path = "report/reports/data/plots"
+    build_list_info("build_nr")
 
     # --- HTML FOUNDATION --- |
     html_content  = html_start()
@@ -179,7 +180,6 @@ def main():
     with open("report_interactive/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
 
-    build_list_info("build_nr")
 
 
 
