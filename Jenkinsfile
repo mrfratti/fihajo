@@ -30,6 +30,15 @@ pipeline {
             }
         }
 
+        stage('Unit Tests') {
+            steps {
+                timestamps { echo ">>>>>>>>>>Running Unit Tests>>>>>>>>>>"}
+                sh '''
+                python3 -m unittest discover -s tests
+                '''
+            }
+        }
+
         stage('Security Scan') {
             steps {
                 timestamps { echo ">>>>>>>>>>Running bandit on source code>>>>>>>>>>"}
