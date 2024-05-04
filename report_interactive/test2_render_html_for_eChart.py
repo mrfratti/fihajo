@@ -1,7 +1,7 @@
 import os
 import json
 
-from html_structure import html_start, html_accuracy_loss_chart, html_heatmap_chart, html_end
+from report_interactive.html_structure import html_start, html_accuracy_loss_chart, html_heatmap_chart, html_end
 
 # Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
 # so we can use that info to make 1 file where they can see all build graf and compare
