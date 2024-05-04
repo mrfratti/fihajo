@@ -373,7 +373,7 @@ def main():
     # --- Entropy Scores --- |
 
     file_path = main_path + "/analyze"
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax.html")
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores.html")
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
