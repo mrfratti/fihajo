@@ -31,7 +31,7 @@ def html_start():
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
     
-    <div id="content_training">
+    <div id="content_training" class="display">
         <div class="charts_box">
             <h2>Training</h2>
             <div id="chart_accuracy" class="chart_line_1"></div>
@@ -194,7 +194,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
     html_content =  f"""
 
         <div id="content_evaluate">
-            <div id="chart_heatmap"></div>
+            <div id="chart_heatmap" class="display"></div>
         </div>
 
         <script>
@@ -339,8 +339,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    # html_content += "<div id='content_analyze'>"
-    html_content += "<div>"
+    html_content += "<div id='content_analyze' class='display'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -359,7 +358,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyze'>"
+    html_content += "<div id='content_analyze' class='display'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -377,7 +376,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyze'>"
+    html_content += "<div id='content_analyze' class='display'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -392,7 +391,7 @@ def main():
     # --- ALL AI MODEL --- |
 
     # Show pie chart of all ai model accurcy, so they know what to chooce
-    html_content += "<div id='content_aAImd'>content_aAImd</div>"
+    html_content += "<div id='content_aAImd' class='display'>content_aAImd</div>"
 
 
     # --- HTML FOUNDATION --- |

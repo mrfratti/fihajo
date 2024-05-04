@@ -3,9 +3,12 @@ function change_text() {
 }
 
 function option_show(option) {
-    document.getElementById("content_training").hidden = true;
-    document.getElementById("content_evaluate").hidden = true;
-    document.getElementById("content_analyze").hidden = true;
+    var all_div = document.querySelectorAll('.display');
+    for (var nr = 0; nr < all_div.length; nr++) {
+        all_div[nr].classList.remove('display');
+        all_div[nr].classList.add('hide');
+    }
 
-    document.getElementById(option).hidden = false;
+    document.getElementById(option).classList.remove('hide');
+    document.getElementById(option).classList.add('display');
 }

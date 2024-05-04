@@ -11,6 +11,12 @@ button {
     cursor: pointer;
 }
 
+.display {
+    display: block;
+}
+.hide {
+    display: none;
+}
 
 #content_training {
     justify-content: center;
