@@ -60,6 +60,7 @@ class Trainer:
         """
         Selects the training method based on whether adversarial training is enabled via command-line arguments.
         """
+        create_cheack_file()
         if self.args.adv:
             message = "Adversarial training enabled.\n"
             self._weightmanager.loading_effect(duration=15, message=message)
@@ -97,7 +98,6 @@ class Trainer:
 
         visualizer = VisualizeTraining()
         visualizer.plot_training_results(history)
-        create_cheack_file()
         build_list_info("training")
         self._plot_file_names.update(visualizer.plot_file_names)
 
