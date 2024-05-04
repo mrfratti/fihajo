@@ -15,6 +15,8 @@ from report_interactive.html_structure import html_start, html_accuracy_loss_cha
 # SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
 # USE try and catch to skip error if there is no adv file for that build nr and so on
 
+# !!!! Problem maybe because, getting from github redo the file, so make the jason file insted, 
+# and set if len is larger than 2 (build nr: 0, 1), 
 
 def build_nr_now():
     file_path = "report_interactive/build_list.json"
@@ -62,8 +64,8 @@ def main():
 
     # --- Accuracy & Loss --- |
     
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr_now}.json")
-    html_content += "<h3>" + f"{file_path}/val_acc_and_loss{build_nr_now}.json" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr_now()}.json")
+    html_content += "<h3>" + f"{file_path}/val_acc_and_loss{build_nr_now()}.json" + "<h3>"
 
     with open(full_file_path, "r") as json_file:
         data_accuracy_loss = json.load(json_file)
@@ -86,8 +88,8 @@ def main():
 
     # --- Confusion Matrix --- |
 
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix{build_nr_now}.json")
-    html_content += "<h3>" + f"{file_path}/confusion_matrix{build_nr_now}.json" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix{build_nr_now()}.json")
+    html_content += "<h3>" + f"{file_path}/confusion_matrix{build_nr_now()}.json" + "<h3>"
 
     with open(full_file_path, "r") as json_file:
         data_heatmap = json.load(json_file)
@@ -101,8 +103,8 @@ def main():
     
     # --- Classification Report --- |
 
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr_now}.html")
-    html_content += "<h3>" + f"{file_path}/plot_classification_report{build_nr_now}.html" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr_now()}.html")
+    html_content += "<h3>" + f"{file_path}/plot_classification_report{build_nr_now()}.html" + "<h3>"
 
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
@@ -123,8 +125,8 @@ def main():
     html_content += "<div id='content_analyze' class='display'><h2>ANALYZE</h2>"
 
     # --- PCS & Mean Softmax Score --- |
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax{build_nr_now}.html")
-    html_content += "<h3>" + f"{file_path}/plot_pcs_mean_softmax{build_nr_now}.html" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax{build_nr_now()}.html")
+    html_content += "<h3>" + f"{file_path}/plot_pcs_mean_softmax{build_nr_now()}.html" + "<h3>"
 
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
@@ -138,8 +140,8 @@ def main():
 
     # --- Entropy Scores --- |
 
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores{build_nr_now}.html")
-    html_content += "<h3>" + f"{file_path}/plot_dist_entropy_scores{build_nr_now}.html" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores{build_nr_now()}.html")
+    html_content += "<h3>" + f"{file_path}/plot_dist_entropy_scores{build_nr_now()}.html" + "<h3>"
 
     with open(full_file_path, "r") as file:
         data_content = file.readlines()

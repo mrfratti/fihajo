@@ -73,7 +73,7 @@ class VisualizeTraining:
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         nr = build_list_info("accuracy_loss_nr")
-        file_path = f"{self.plot_dir}/val_acc_and_loss{nr}.json"
+        file_path = f"{self.plot_dir}/val_acc_and_loss_1.json"
         
         full_file_path = os.path.join(os.getcwd(), file_path)
         with open(full_file_path, 'w') as file:
