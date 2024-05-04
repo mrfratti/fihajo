@@ -94,7 +94,7 @@ class Cifar10ModelBuilder(ModelBuilderInterface):
         self.optimizer_name = optimizer
         self.learning_rate = learning_rate
 
-    def create_model(self, stochastic_mode: StochasticMode):
+    def create_model(self):
         model = uwiz.models.StochasticSequential([
             layers.Conv2D(16, kernel_size=(3, 3), padding="same", activation="relu", input_shape=(32, 32, 3)),
             layers.MaxPooling2D(pool_size=(2, 2), strides=2),
