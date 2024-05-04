@@ -34,7 +34,7 @@ pipeline {
             steps {
                 timestamps { echo ">>>>>>>>>>Running Unit Tests>>>>>>>>>>"}
                 sh '''
-                python3 -m unittest discover -s tests
+                python3 -m unittest discover -v -s ./tests
                 '''
             }
         }
