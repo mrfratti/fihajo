@@ -34,10 +34,17 @@ class TestSendReportData(unittest.TestCase):
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.dump')
     def test_filenames_setter(self, mock_json_dump, mock_file):
-        self.send_report_data._filenames = {}
-        self.send_report_data.filenames = {'new': 'data'}
-        mock_file.assert_called_once_with(self.send_report_data._path_json, "w", encoding="UTF-8")
-        mock_json_dump.assert_called_once()
+        with patch.object(self.send_report_data, '_load_json', return_value={'existing': 'data'}):
+            self.send_report_data.filenames = {'new': 'data'}
+            expected_data = {'existing': 'data', 'new': 'data'}
+            mock_file.assert_called_once_with(self.send_report_data._path_json, "w", encoding="UTF-8")
+            mock_json_dump.assert_called_once_with(expected_data, mock_file())
+
+        with self.assertRaises(TypeError):
+            self.send_report_data.filenames = "not a dict"
+
+        with self.assertRaises(ValueError):
+            self.send_report_data.filenames = {}
 
     @patch('builtins.print')
     def test_filenames_getter(self, mock_print):
