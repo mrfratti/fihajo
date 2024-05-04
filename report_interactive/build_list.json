@@ -1,13 +1,8 @@
 {
     "build_nr": [],
     "train_nr": [],
-    "accuracy_loss_file": [],
     "evaluate_nr": [],
-    "confusion_matrix_file": [],
-    "classification_report_file": [],
     "analyse_nr": [],
-    "pcs_mean_softmax_score_file": [],
-    "entropy_score_file": [],
     "adv_nr": []
 }
   

@@ -16,6 +16,8 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 
+from report_interactive.test2_render_html_for_eChart import build_list_info
+
 
 class VisualizeTraining:
     """_summary_
@@ -52,6 +54,7 @@ class VisualizeTraining:
         plt.xlabel(xlabel)
         plt.legend()
 
+
         # --- Interactive Chart | Accuracy & Loss --- |
 
         history_data = history.history
@@ -69,10 +72,11 @@ class VisualizeTraining:
         }
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        # file_path_2 = f"{self.plot_dir}/val_acc_and_loss_{date_time}.json"
-        file_path_2 = f"{self.plot_dir}/val_acc_and_loss.json"
+        build_nr = build_list_info("build_nr")
+        nr = build_list_info("accuracy_loss_nr")
+        file_path = f"{self.plot_dir}/val_acc_and_loss{nr}.json"
         
-        full_file_path = os.path.join(os.getcwd(), file_path_2)
+        full_file_path = os.path.join(os.getcwd(), file_path)
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
 
@@ -128,6 +132,7 @@ class VisualizeTraining:
 
 
 class VisualizeEvaluation:
+
     def __init__(self, plot_dir="report/reports/data/plots/evaluation"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
@@ -178,9 +183,8 @@ class VisualizeEvaluation:
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-        # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix.json")
+        nr = build_list_info("confusion_matrix_nr")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix{nr}.json")
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
 
@@ -226,7 +230,8 @@ class VisualizeEvaluation:
             yaxis_title=""
         )
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report.html")
+        nr = build_list_info("confusion_matrix_nr")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{nr}.json")
         pio.write_html(fig, file = full_file_path)
 
 
@@ -385,8 +390,8 @@ class VisualizeUncertainty:
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
-
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax.html")
+        nr = build_list_info("pcs_mean_softmax_score_nr")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax{nr}.html")
         pio.write_html(fig, file=full_file_path)
 
 
@@ -520,8 +525,9 @@ class VisualizeUncertainty:
             legend_title = "Legend",
         )
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores.html")
-        pio.write_html(fig, file=full_file_path)
+        nr = build_list_info("entropy_scores")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores{nr}.html")
+        pio.write_html(fig, file = full_file_path)
 
 
 
