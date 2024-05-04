@@ -36,10 +36,10 @@ def build_list_info(option):
     with open(full_file_path, "r") as file:
         data_build_info = json.load(file)
     
-    if not data_build_info[option]:
+    if not data_build_info["build_nr"]:
         next_number = 1
     else:
-        number_last = data_build_info[option][-1]
+        number_last = data_build_info["build_nr"][-1]
         next_number = number_last + 1
 
     data_build_info[option].append(next_number)
