@@ -36,18 +36,15 @@ def build_list_info(option):
     with open(full_file_path, "r") as file:
         data_build_info = json.load(file)
     
-    if not data_build_info["build_nr"]:
-        next_number = 1
-    else:
-        number_last = data_build_info["build_nr"][-1]
-        next_number = number_last + 1
+    number_last = data_build_info["build_nr"][-1]
+    number_next = number_last + 1
 
-    data_build_info[option].append(next_number)
+    data_build_info[option].append(number_next)
 
     with open(full_file_path, "w") as file:
         json.dump(data_build_info, file, indent=4)
 
-    next_number_text = "_build_" + next_number
+    next_number_text = "_build_" + number_next
     return next_number_text
 
 
@@ -179,6 +176,8 @@ def main():
 
     with open("report_interactive/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
+
+    build_list_info("build_nr")
 
 
 

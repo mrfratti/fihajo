@@ -72,7 +72,6 @@ class VisualizeTraining:
         }
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        build_nr = build_list_info("build_nr")
         nr = build_list_info("accuracy_loss_nr")
         file_path = f"{self.plot_dir}/val_acc_and_loss{nr}.json"
         

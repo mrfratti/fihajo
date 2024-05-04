@@ -1,11 +1,11 @@
 {
-    "build_nr": [],
-    "accuracy_loss_nr": [],
-    "confusion_matrix_nr": [],
-    "classification_report_nr": [],
-    "pcs_mean_softmax_score_nr": [],
-    "entropy_scores": [],
+    "build_nr": [0],
+    "accuracy_loss_nr": [0],
+    "confusion_matrix_nr": [0],
+    "classification_report_nr": [0],
+    "pcs_mean_softmax_score_nr": [0],
+    "entropy_scores": [0],
 
-    "adv_nr": []
+    "adv_nr": [0]
 }
   
