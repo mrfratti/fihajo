@@ -21,7 +21,7 @@ class TestModelBuilders(unittest.TestCase):
     def test_model_creation(self, name, builder_class, num_layers, first_layer_type, input_shape):
         if name == 'CIFAR10':
             builder = builder_class(self.stochastic_mode, 'adam', 0.001)
-            model = builder.create_model(self.stochastic_mode)  # Correcting method call here
+            model = builder.create_model(self.stochastic_mode)
         else:
             builder = builder_class(self.stochastic_mode, 'adam', 0.001)
             model = builder.create_model()
