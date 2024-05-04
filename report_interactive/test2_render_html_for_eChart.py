@@ -15,7 +15,7 @@ def create_cheack_file():
         "adversarial_evaluation": [0]
     }
 
-    file_path = "build_list.json"
+    file_path = "report_interactive/build_list.json"
 
     if not os.path.exists(file_path):
         with open(file_path, 'w') as file:
