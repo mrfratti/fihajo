@@ -296,7 +296,7 @@ def main():
 
 
     # --- TRAINING --- |
-    html_content += "<div id='content_training' class='display'>"
+    html_content += "<div id='content_training' class='display'><h2>TRAINING</h2>"
 
     # --- Accuracy & Loss --- |
     
@@ -319,7 +319,7 @@ def main():
 
 
     # --- EVALUATION --- |
-    html_content += "<div id='content_evaluate' class='display'>"
+    html_content += "<div id='content_evaluate' class='display'><h2>EVALUATION</h2>"
 
     # --- Confusion Matrix --- |
 
@@ -354,8 +354,8 @@ def main():
 
 
 
-    # --- ANALYYZE --- |
-    html_content += "<div id='content_analyze' class='display'>"
+    # --- ANALYZE --- |
+    html_content += "<div id='content_analyze' class='display'><h2>ANALYZE</h2>"
 
     # --- PCS & Mean Softmax Score --- |
     file_path = main_path + "/analyze"
@@ -391,7 +391,7 @@ def main():
     # --- ALL AI MODEL --- |
 
     # Show pie chart of all ai model accurcy, so they know what to chooce
-    html_content += "<div id='content_aAImd' class='display'>content_aAImd</div>"
+    html_content += "<div id='content_aAImd' class='display'>content_aAImd</div><h2>ALL AI MODEL</h2>"
 
 
     # --- HTML FOUNDATION --- |
