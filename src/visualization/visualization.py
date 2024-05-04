@@ -502,7 +502,7 @@ class VisualizeUncertainty:
         )
 
         value_mean = np.mean(entropy_scores)
-        value_max_height = np.histogram(entropy_scores, bins=50, density=True)[0].max()
+        value_max_height = max(np.histogram(entropy_scores, bins='auto')[0])
 
         fig.add_trace(
             go.Scatter(
