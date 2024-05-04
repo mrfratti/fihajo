@@ -46,7 +46,7 @@ def build_list_info(option):
     with open(full_file_path, "w") as file:
         json.dump(data_build_info, file, indent=4)
 
-    next_number_text = "_build_" + str(number_last)
+    next_number_text = "_build_" + str(number_next)
     return next_number_text
 
 
