@@ -504,15 +504,15 @@ class VisualizeUncertainty:
         value_mean = np.mean(entropy_scores)
         value_max_height = max(np.histogram(entropy_scores, bins='auto')[0])
 
-        fig.add_trace(
-            go.Scatter(
-                y = [0, value_max_height],
-                mode = "lines",
-                name = "Mean",
-                line = dict(color="black", dash="dash", width=2)
-            ),
-            row=1, col=1
-        )
+        # fig.add_trace(
+        #     go.Scatter(
+        #         y = [0, value_max_height],
+        #         mode = "lines",
+        #         name = "Mean",
+        #         line = dict(color="black", dash="dash", width=2)
+        #     ),
+        #     row=1, col=1
+        # )
 
         fig.add_vline(x=value_mean, line=dict(color="black", dash="dash", width=2))
 
