@@ -1,19 +1,31 @@
 import os
 import json
 
-from html_structure import *
+from html_structure import html_start, html_accuracy_loss_chart, html_heatmap_chart, html_end
 
 # Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
 # so we can use that info to make 1 file where they can see all build graf and compare
 # jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
 
 # JASON STRUCTURE:
-# build :   1,2,3
+# build :   1, 2, 3
 # adv   :   2
-# evaluate  :   1,2,3
+# evaluate  :   1, 2,3
 
 # SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
 # USE try and catch to skip error if there is no adv file for that build nr and so on
+
+def build_list_info(option):
+    with open("build_list.json", "r") as file:
+        data_build_info = json.load(file)
+    
+    number_last = data_build_info[option][-1]
+    next_number = number_last + 1
+
+    data_build_info[option].append(next_number)
+
+    with open("build_list.json", "w") as file:
+        json.dump(data_build_info, file, indent=4)
 
 def main():
 
