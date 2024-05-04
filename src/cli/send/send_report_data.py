@@ -148,8 +148,8 @@ class SendReportData:
         images = []
         self._filenames = self._load_json()
 
-        for key in self._filenames.keys():
-            img_data = self._img(key, self._filenames)
+        for i in range(len(self._filenames)-1,0,-1):
+            img_data = self._img(list(self._filenames.keys())[i], self._filenames)
             if img_data is not None:
                 images.append(img_data)
 
