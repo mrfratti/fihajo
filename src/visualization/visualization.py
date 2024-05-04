@@ -226,7 +226,7 @@ class VisualizeEvaluation:
             yaxis_title="Metrics"
         )
 
-        full_file_path = os.path.join(os.getcwd(), "plot_classification_report.html")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report.html")
         pio.write_html(fig, file = full_file_path)
 
 
@@ -484,6 +484,44 @@ class VisualizeUncertainty:
         filename = self._save_plot("dist_entropy")
         plt.show()
         self._plot_file_names["entropy_distrubution"] = filename
+
+
+        # --- Interactive Chart | Entropy Scores --- |
+
+        fig = go.Figure(
+            data = [go.Histogram(
+                x = entropy_scores,
+                nbinsx = 50,
+                name = "Clean Data",
+                marker_color = "blue",
+                histnorm = 'probability density'
+            )]
+        )
+
+        value_mean = np.mean(entropy_scores)
+        value_max_height = np.histogram(entropy_scores, bins=50, density=True)[0].max()
+
+        fig.add_trace(
+            go.Scatter(
+                x = [0, value_mean],
+                y = [0, value_max_height],
+                mode = "lines",
+                name = "Mean",
+                line = dict(color="black", dash="dash", width=2)
+            )
+        )
+
+        fig.update_layout(
+            title="Histogram with Density Estimate and Mean Line",
+            xaxis_title="Entropy Scores",
+            yaxis_title="Density",
+            legend_title="Legend",
+        )
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores.html")
+        pio.write_html(fig, file=full_file_path)
+
+
 
 
 
