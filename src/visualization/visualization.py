@@ -488,14 +488,17 @@ class VisualizeUncertainty:
 
         # --- Interactive Chart | Entropy Scores --- |
 
-        fig = go.Figure(
-            data = [go.Histogram(
+        fig = make_subplots(rows=1, cols=1, subplot_titles=["test"])
+
+        fig.add_trace(
+            go.Histogram(
                 x = entropy_scores,
                 nbinsx = 50,
                 name = "Clean Data",
                 marker_color = "blue",
                 histnorm = 'probability density'
-            )]
+            ),
+            row=1, col=1
         )
 
         value_mean = np.mean(entropy_scores)
@@ -508,7 +511,8 @@ class VisualizeUncertainty:
                 mode = "lines",
                 name = "Mean",
                 line = dict(color="black", dash="dash", width=2)
-            )
+            ),
+            row=1, col=1
         )
 
         fig.update_layout(
