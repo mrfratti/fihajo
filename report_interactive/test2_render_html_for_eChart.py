@@ -31,12 +31,10 @@ def html_start():
 def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
     html_content = f"""
     
-    <div id="content_training" class="display">
-        <div class="charts_box">
-            <h2>Training</h2>
-            <div id="chart_accuracy" class="chart_line_1"></div>
-            <div id="chart_loss" class="chart_line_1"></div>
-        </div>
+    <div class="charts_box">
+        <h2>Training</h2>
+        <div id="chart_accuracy" class="chart_line_1"></div>
+        <div id="chart_loss" class="chart_line_1"></div>
     </div>
 
     <script>
@@ -193,9 +191,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div id="content_evaluate">
-            <div id="chart_heatmap" class="display"></div>
-        </div>
+        <div id="chart_heatmap" class="display"></div>
 
         <script>
             var js_chart_heatmap = echarts.init(document.getElementById('chart_heatmap'));
@@ -300,7 +296,10 @@ def main():
 
 
     # --- TRAINING --- |
+    html_content += "<div id='content_training' class='display'>"
+
     # --- Accuracy & Loss --- |
+    
     file_path = main_path + "/training"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss.json")
 
@@ -315,10 +314,15 @@ def main():
 
     html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
 
+    html_content += "</div>"
+
 
 
     # --- EVALUATION --- |
+    html_content += "<div id='content_evaluate' class='display'>"
+
     # --- Confusion Matrix --- |
+
     file_path = main_path + "/evaluation"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix.json")
 
@@ -331,7 +335,7 @@ def main():
 
     html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
 
-
+    
     # --- Classification Report --- |
 
     file_path = main_path + "/evaluation"
@@ -339,34 +343,31 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyze' class='display'>"
-
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
     content_content = data_content[content_start:content_end]
     content_string = "".join(content_content)
-
     html_content += content_string
+
+
     html_content += "</div>"
 
 
+
     # --- ANALYYZE --- |
-    
+    html_content += "<div id='content_analyze' class='display'>"
+
     # --- PCS & Mean Softmax Score --- |
     file_path = main_path + "/analyze"
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax.html")
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyze' class='display'>"
-
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
     content_content = data_content[content_start:content_end]
     content_string = "".join(content_content)
-
     html_content += content_string
-    html_content += "</div>"
 
 
     # --- Entropy Scores --- |
@@ -376,14 +377,13 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    html_content += "<div id='content_analyze' class='display'>"
-
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
     content_content = data_content[content_start:content_end]
     content_string = "".join(content_content)
-
     html_content += content_string
+
+
     html_content += "</div>"
 
 
