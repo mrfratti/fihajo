@@ -230,7 +230,7 @@ class VisualizeEvaluation:
         )
 
         nr = build_nr_now("build_nr")
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{nr}.json")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{nr}.html")
         pio.write_html(fig, file = full_file_path)
 
 
