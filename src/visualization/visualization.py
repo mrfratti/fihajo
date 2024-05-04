@@ -516,13 +516,6 @@ class VisualizeUncertainty:
 
         # fig.add_vline(x=value_mean, line=dict(color="black", dash="dash", width=2))
 
-        fig.update_layout(
-            title="Histogram with Density Estimate and Mean Line",
-            xaxis_title="Entropy Scores",
-            yaxis_title="Density",
-            legend_title="Legend",
-        )
-
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores.html")
         pio.write_html(fig, file=full_file_path)
 
