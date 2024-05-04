@@ -8,10 +8,10 @@ This repository contains the AI Model Uncertainty Analysis Tool, a command-line 
 [![Python unittest CI](https://github.com/mrfratti/fihajo/actions/workflows/python-test.yml/badge.svg)](https://github.com/mrfratti/fihajo/actions/workflows/python-test.yml)
 ## Features 
 
-- **Uncertainty Quantification:** Leverages the Uncertainty Wizard library to quantify the uncertainty in AI models.
+- **Uncertainty Quantification:** 
 - **Visualization:** Visualizes the uncertainty distribution as histograms.
 - **High Uncertainty Identification:** Identifies and highlights inputs with high uncertainty, displaying their uncertainty values and model predictions.
-- **Report Generation:** Generates a user-friendly report summarizing the uncertainty analysis.
+- **Report Generation:**
 
 ## Installation
 
@@ -32,18 +32,11 @@ docker start image-name
 ```
 ## Usage 
 
-<span style="color:red;font-style:italic">Instructions on how to use the command-line tool.</span>
+
 
 ## Development
 
 This project is set up with Jenkins for continuous integration and deployment. 
-
-
-## Prerequisites 
-
-- Docker
-- Jenkins
-- Basic understanding of Python, TensorFlow, and command-line interfaces.
 
 
 ## Setting Up the Development Environment
@@ -56,6 +49,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 # Contact
 
-- Firat Celebi: firat.celebi@hotmail.com
-- Joakim Hole Polden: b3ej8wktk@mozmail.com
-- Harykaran Lambotharan: h.lambotharan@stud.uis.no
+- Firat Celebi
+- Joakim Hole Polden
+- Harykaran Lambotharan

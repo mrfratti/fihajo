@@ -55,7 +55,7 @@ class VisualizeTraining:
         # Loss
         self._plot_results(history, mode="loss", title="Model loss")
         filename = self._save_plot("val_acc_and_loss")
-        plt.show()
+        #plt.show()
         self._plot_file_names["training"] = filename
 
     def plot_adversarial_training_results(self, history):
@@ -66,7 +66,7 @@ class VisualizeTraining:
         # loss
         self._plot_results(history, mode="loss", title="Adversarial Training Loss")
         filename = self._save_plot("adv_train_acc_loss")
-        plt.show()
+        #plt.show()
         self._plot_file_names["adversarialTraining"] = filename
 
     def _save_plot(self, filename):
@@ -110,7 +110,7 @@ class VisualizeEvaluation:
             plt.axis("off")
         plt.tight_layout()
         filename = self._save_plot("predictions")
-        plt.show()
+        #plt.show()
         self._plot_file_names["predictions"] = filename
 
     def plot_confusion_matrix(self, y_true, y_pred, classes):
@@ -131,7 +131,7 @@ class VisualizeEvaluation:
         plt.ylabel("True Label", fontsize=18)
         plt.xlabel("Predicted Label", fontsize=18)
         filename = self._save_plot("confusion_matrix")
-        plt.show()
+        #plt.show()
         self._plot_file_names["confusion_matrix"] = filename
 
     def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
@@ -149,7 +149,7 @@ class VisualizeEvaluation:
         )
         plt.title("Classification Report", fontsize=20)
         filename = self._save_plot("classification_report")
-        plt.show()
+        #plt.show()
         self._plot_file_names["classification_report"] = filename
 
     def plot_adversarial_examples(self, model, x_test, eps, num_samples=25):
@@ -190,7 +190,7 @@ class VisualizeEvaluation:
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
 
         filename = self._save_plot("adversarial_examples")
-        plt.show()
+        #plt.show()
         self._plot_file_names["adversarial_examples"] = filename
 
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
@@ -207,7 +207,7 @@ class VisualizeEvaluation:
             plt.text(i, acc + 2, f"{acc:.2f}", ha="center", va="bottom")
 
         filename = self._save_plot("accuracy_comparison")
-        plt.show()
+        #plt.show()
         self._plot_file_names["accuracy_comparison"] = filename
 
     def _save_plot(self, filename):
@@ -257,7 +257,7 @@ class VisualizeUncertainty:
         plt.title("Distribution of Mean Softmax Scores", fontsize=20)
         plt.tight_layout()
         filename = self._save_plot("pcs_meansoftmax")
-        plt.show()
+        #plt.show()
         self._plot_file_names["pcs_meansoftmax"] = filename
 
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
@@ -277,7 +277,7 @@ class VisualizeUncertainty:
         plt.title("Distribution of PCS and Mean Softmax Scores", fontsize=20)
         plt.legend()
         filename = self._save_plot("dist_pcs_meansoftmax")
-        plt.show()
+        #plt.show()
         self._plot_file_names["distrubution_meansoftmax"] = filename
 
     def plot_pcs_ms_inverse(self, pcs_mean_softmax_scores):
@@ -330,7 +330,7 @@ class VisualizeUncertainty:
         plt.legend()
         plt.tight_layout()
         filename = self._save_plot("pcs_ms_inverse")
-        plt.show()
+        #plt.show()
         self._plot_file_names["pcs_inverse"] = filename
 
     def plot_dist_entropy_scores(self, entropy_scores):
@@ -348,23 +348,24 @@ class VisualizeUncertainty:
         plt.title("Histogram of Predictive Entropy", fontsize=20)
         plt.legend()
         filename = self._save_plot("dist_entropy")
-        plt.show()
+        #plt.show()
         self._plot_file_names["entropy_distrubution"] = filename
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
+        num_samples = min(num_samples, len(x_test))
         # Sort the indices of the entropy scores in descending order
         sorted_indices = np.argsort(entropy_scores)[::-1]
 
         # Plot the most uncertain examples
         plt.figure(figsize=(8, 8))
         for i in range(num_samples):
+            index = sorted_indices[i]
             plt.subplot(5, 5, i + 1)
-            plt.imshow(x_test[sorted_indices[i]], cmap="gray")
+            plt.imshow(x_test[index].reshape(28, 28), cmap='gray')
             plt.title(f"Entropy: {entropy_scores[sorted_indices[i]]:.2f}")
             plt.axis("off")
         plt.tight_layout()
         filename = self._save_plot("high_uncertain_inputs")
-        plt.show()
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
     def plot_predictive_conf_entropy_scores(self, predictive_confidence, entropy_scores):
@@ -381,7 +382,7 @@ class VisualizeUncertainty:
         plt.ylabel("Entropy Score", fontsize=18)
         plt.title("Predictive Confidence vs Entropy Score", fontsize=18)
         filename = self._save_plot("pred_vs_entropy")
-        plt.show()
+        #plt.show()
         self._plot_file_names["prediction_vs_entrophy"] = filename
 
     def _save_plot(self, filename):
