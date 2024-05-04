@@ -216,11 +216,11 @@ class VisualizeEvaluation:
                 z=data_heatmap.values,
                 x=data_heatmap.columns,
                 y=data_heatmap.index,
-                coloraxis="coloraxis"
+                colorscale='Viridis',
+                hoverongaps=False
             )
         )
         fig.update_layout(
-            coloraxis=dict(colorscale='Viridis'),
             title="Classification Report",
             xaxis_title="",
             yaxis_title=""
