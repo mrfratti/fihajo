@@ -19,6 +19,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 5rem;
 }
 header h1 {
   margin-left: 2rem;
@@ -33,10 +34,9 @@ header h1 {
   main {
     grid-template-columns: auto;
   }
-  .right,
-  .left {
+  section {
     img {
-      max-height: 100vh;
+      max-height: 90vh;
     }
   }
 }
@@ -50,21 +50,26 @@ header h1 {
   main {
     grid-template-columns: 1fr 1fr;
   }
+  header {
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+  }
   .left img:hover {
     transform: translate(0, -7%) scale(1.1);
   }
   .right img:hover {
     transform: translate(0, -7%) scale(1.1);
   }
-  .right,
-  .left {
+  section {
     img {
-      max-height: 80vh;
+      max-height: 75vh;
     }
   }
 }
 
 main {
+  margin-top: 5rem;
   display: grid;
   gap: 1em;
   padding: 0.8em;
@@ -81,6 +86,18 @@ h4 {
   font-optical-sizing: auto;
   font-weight: 300;
   text-align: center;
+}
+footer {
+  width: 100%;
+  height: 3rem;
+  align-items: center;
+  background-color: $header_color;
+  display: flex;
+  justify-content: center;
+  color: #fefefe;
+}
+main section {
+  width: 100%;
 }
 
 .right,
@@ -201,15 +218,13 @@ h4 {
   margin-right: 15%;
 }
 
-@media only screen and (min-width: 800px) {
+@media (pointer: fine) and (min-width: 1500px) {
   nav {
     font-size: 19px;
-    width: 40%;
     box-sizing: border-box;
   }
   nav ul {
     width: 100%;
-    max-width: 700px;
     display: flex;
     justify-content: space-evenly;
     padding-left: 0px;
@@ -217,6 +232,7 @@ h4 {
   }
 }
 nav {
+  margin-right: 2rem;
   font-size: 19px;
   box-sizing: border-box;
 }
@@ -232,7 +248,7 @@ nav li {
 }
 nav li a {
   color: rgb(212, 212, 212);
-  padding: 42px 10px;
+  padding: 1.7rem 10px;
   text-decoration: none;
   text-align: center;
   white-space: nowrap;
