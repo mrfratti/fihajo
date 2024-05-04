@@ -2,6 +2,7 @@ $background: #eeeeee;
 $font_color: #222831;
 $border_color: #eee;
 $header_color: #1a358f;
+$pixelwidth: 1200px;
 html,
 body {
   height: 100%;
@@ -16,50 +17,68 @@ header {
   width: 100%;
   background-color: $header_color;
   padding: 0;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 5rem;
-}
-header h1 {
-  margin-left: 2rem;
-  font-size: 2.6rem;
-  color: $border_color;
-  font-weight: 300;
+  h1 {
+    margin-left: 2rem;
+    color: $border_color;
+    font-weight: 300;
+  }
 }
 /* Media query for smaller screens */
-@media only screen and (max-width: 1500px),
-  (max-resolution: 192dpi),
-  (max-resolution: 2dppx) {
+@media only screen and (max-width: $pixelwidth),
+  (pointer: none),
+  (pointer: coarse) {
   main {
     grid-template-columns: auto;
+
+    section {
+      img {
+        max-height: 90vh;
+      }
+    }
   }
-  section {
-    img {
-      max-height: 90vh;
+  header {
+    height: 32rem;
+    h1 {
+      margin-top: 0.7rem;
+      margin-left: 0;
+      font-size: 1.7rem;
     }
   }
 }
-// mobile
-@media (pointer: none), (pointer: coarse) {
-  main {
-    grid-template-columns: auto;
+
+@media (pointer: fine) and (min-width: $pixelwidth) and (max-width: 1600px) {
+  header {
+    font-size: 0.8em;
+  }
+  section {
+    .right,
+    .left {
+      grid-template-rows: auto auto auto;
+    }
   }
 }
-@media (pointer: fine) and (min-width: 1500px) {
+@media (pointer: fine) and (min-width: $pixelwidth) {
   main {
     grid-template-columns: 1fr 1fr;
   }
   header {
+    justify-content: space-between;
     position: fixed;
     top: 0;
-    z-index: 9999;
+    z-index: 1000;
+    display: flex;
   }
   .left img:hover {
     transform: translate(0, -7%) scale(1.1);
   }
   .right img:hover {
     transform: translate(0, -7%) scale(1.1);
+  }
+  .right,
+  .left {
+    grid-template-rows: 1fr 5fr 2fr;
   }
   section {
     img {
@@ -103,7 +122,6 @@ main section {
 .right,
 .left {
   display: grid;
-  grid-template-rows: 1fr 4fr 2fr;
   width: 100%;
   height: 100%;
   background-color: #fff;
@@ -210,30 +228,44 @@ main section {
     }
   }
 }
-
-.mpld3-figure {
-  display: flex;
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
-}
-
-@media (pointer: fine) and (min-width: 1500px) {
+@media only screen and (max-width: $pixelwidth),
+  (pointer: none),
+  (pointer: coarse) {
   nav {
-    font-size: 19px;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ul {
+      display: grid;
+
+      li {
+        background-color: #0000002d;
+        width: 15rem;
+        margin: 2px;
+        a {
+          padding: 0.7rem 10px;
+        }
+      }
+    }
+  }
+}
+@media (pointer: fine) and (min-width: $pixelwidth) {
+  nav {
+    font-size: 1.1em;
+    margin-right: 2rem;
   }
   nav ul {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-    padding-left: 0px;
-    align-items: center;
+  }
+  nav li a {
+    padding: 1.5em 10px;
   }
 }
+
 nav {
-  margin-right: 2rem;
-  font-size: 19px;
   box-sizing: border-box;
 }
 nav ul {
@@ -248,10 +280,9 @@ nav li {
 }
 nav li a {
   color: rgb(212, 212, 212);
-  padding: 1.7rem 10px;
   text-decoration: none;
   text-align: center;
-  white-space: nowrap;
+  z-index: 1200;
 }
 nav li a:hover {
   border-bottom: 2px solid rgb(11, 121, 247);
