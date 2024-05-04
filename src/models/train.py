@@ -22,6 +22,8 @@ from src.cli.string_styling import StringStyling
 from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 
+from report_interactive.test2_render_html_for_eChart import build_list_info
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
@@ -95,6 +97,7 @@ class Trainer:
 
         visualizer = VisualizeTraining()
         visualizer.plot_training_results(history)
+        build_list_info("training")
         self._plot_file_names.update(visualizer.plot_file_names)
 
     def adversarial_training(self):

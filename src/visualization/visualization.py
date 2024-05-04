@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 
-from report_interactive.test2_render_html_for_eChart import build_list_info
+from report_interactive.test2_render_html_for_eChart import build_nr_now
 
 
 class VisualizeTraining:
@@ -72,7 +72,7 @@ class VisualizeTraining:
         }
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        nr = build_list_info("accuracy_loss_nr")
+        nr = build_nr_now("build_nr")
         file_path = f"{self.plot_dir}/val_acc_and_loss{nr}.json"
         
         full_file_path = os.path.join(os.getcwd(), file_path)
@@ -182,7 +182,7 @@ class VisualizeEvaluation:
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-        nr = build_list_info("confusion_matrix_nr")
+        nr = build_nr_now("build_nr")
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix{nr}.json")
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
@@ -229,7 +229,7 @@ class VisualizeEvaluation:
             yaxis_title=""
         )
 
-        nr = build_list_info("classification_report_nr")
+        nr = build_nr_now("build_nr")
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{nr}.json")
         pio.write_html(fig, file = full_file_path)
 
@@ -389,7 +389,7 @@ class VisualizeUncertainty:
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
-        nr = build_list_info("pcs_mean_softmax_score_nr")
+        nr = build_nr_now("build_nr")
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax{nr}.html")
         pio.write_html(fig, file=full_file_path)
 
@@ -524,7 +524,7 @@ class VisualizeUncertainty:
             legend_title = "Legend",
         )
 
-        nr = build_list_info("entropy_scores")
+        nr = build_nr_now("build_nr")
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores{nr}.html")
         pio.write_html(fig, file = full_file_path)
 

@@ -18,14 +18,14 @@ from report_interactive.html_structure import html_start, html_accuracy_loss_cha
 # !!!! Problem maybe because, getting from github redo the file, so make the jason file insted, 
 # and set if len is larger than 2 (build nr: 0, 1), 
 
-def build_nr_now():
+def build_nr_now(option):
     file_path = "report_interactive/build_list.json"
     full_file_path = os.path.join(os.getcwd(), file_path)
 
     with open(full_file_path, "r") as file:
         data_build_info = json.load(file)
 
-    number_last = data_build_info["build_nr"][-1]
+    number_last = data_build_info[option][-1]
     number_last_text = "_build_" + str(number_last)
 
     return number_last_text
@@ -46,18 +46,14 @@ def build_list_info(option):
     with open(full_file_path, "w") as file:
         json.dump(data_build_info, file, indent=4)
 
-    next_number_text = "_build_" + str(number_next)
-    return next_number_text
-
 
 def main():
 
     main_path = "report/reports/data/plots"
-    build_list_info("build_nr")
 
     # --- HTML FOUNDATION --- |
     html_content  = html_start()
-
+    build_nr = build_nr_now("build_nr")
 
     # --- TRAINING --- |
     file_path = main_path + "/training"
@@ -65,8 +61,8 @@ def main():
 
     # --- Accuracy & Loss --- |
     
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr_now()}.json")
-    html_content += "<h3>" + f"{file_path}/val_acc_and_loss{build_nr_now()}.json" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr}.json")
+    html_content += "<h3>" + f"{file_path}/val_acc_and_loss{build_nr}.json" + "<h3>"
 
     with open(full_file_path, "r") as json_file:
         data_accuracy_loss = json.load(json_file)
@@ -89,8 +85,8 @@ def main():
 
     # --- Confusion Matrix --- |
 
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix{build_nr_now()}.json")
-    html_content += "<h3>" + f"{file_path}/confusion_matrix{build_nr_now()}.json" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix{build_nr}.json")
+    html_content += "<h3>" + f"{file_path}/confusion_matrix{build_nr}.json" + "<h3>"
 
     with open(full_file_path, "r") as json_file:
         data_heatmap = json.load(json_file)
@@ -104,8 +100,8 @@ def main():
     
     # --- Classification Report --- |
 
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr_now()}.html")
-    html_content += "<h3>" + f"{file_path}/plot_classification_report{build_nr_now()}.html" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr}.html")
+    html_content += "<h3>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<h3>"
 
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
@@ -126,8 +122,8 @@ def main():
     html_content += "<div id='content_analyze' class='display'><h2>ANALYZE</h2>"
 
     # --- PCS & Mean Softmax Score --- |
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax{build_nr_now()}.html")
-    html_content += "<h3>" + f"{file_path}/plot_pcs_mean_softmax{build_nr_now()}.html" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax{build_nr}.html")
+    html_content += "<h3>" + f"{file_path}/plot_pcs_mean_softmax{build_nr}.html" + "<h3>"
 
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
@@ -141,8 +137,8 @@ def main():
 
     # --- Entropy Scores --- |
 
-    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores{build_nr_now()}.html")
-    html_content += "<h3>" + f"{file_path}/plot_dist_entropy_scores{build_nr_now()}.html" + "<h3>"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores{build_nr}.html")
+    html_content += "<h3>" + f"{file_path}/plot_dist_entropy_scores{build_nr}.html" + "<h3>"
 
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
@@ -179,6 +175,8 @@ def main():
 
     with open("report_interactive/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
+
+    build_list_info("build_nr")
 
 
 

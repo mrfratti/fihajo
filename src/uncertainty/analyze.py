@@ -7,6 +7,8 @@ import pandas as pd
 from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
+from report_interactive.test2_render_html_for_eChart import build_list_info
+
 
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO)
 
@@ -55,6 +57,7 @@ class Analyzer:
         self.pcs_mean_softmax()
         self.analyze_entropy(x_test)
         self.table_generator(x_test, y_test)
+        build_list_info("analyze")
 
     def run_quantified(self, x_test):
         """
