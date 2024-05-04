@@ -383,7 +383,7 @@ def main():
     # --- HTML FOUNDATION --- |
     html_content += html_end()
 
-    with open("report/reports/interactive_chart.html", "w") as html_file:
+    with open("report_interactive/interactive_chart.html", "w") as html_file:
         html_file.write(html_content)
 
 
