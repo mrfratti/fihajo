@@ -359,8 +359,7 @@ def main():
     with open(full_file_path, "r") as file:
         data_content = file.readlines()
 
-    # html_content += "<div id='content_analyze'>"
-    html_content += "<div>"
+    html_content += "<div id='content_analyze'>"
 
     content_start = data_content.index("<body>\n") + 1
     content_end = data_content.index("</body>\n")
@@ -372,6 +371,22 @@ def main():
 
 
     # --- Entropy Scores --- |
+
+    file_path = main_path + "/analyze"
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax.html")
+    with open(full_file_path, "r") as file:
+        data_content = file.readlines()
+
+    html_content += "<div id='content_analyze'>"
+
+    content_start = data_content.index("<body>\n") + 1
+    content_end = data_content.index("</body>\n")
+    content_content = data_content[content_start:content_end]
+    content_string = "".join(content_content)
+
+    html_content += content_string
+    html_content += "</div>"
+
 
 
     # --- ALL AI MODEL --- |
