@@ -7,57 +7,9 @@ def html_start():
     <head>
 
         <title>Interactive Charts</title>
+        <link rel="stylesheet" href="main.css">
+        <script src="main.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
-
-        <style>
-
-            header {{
-                text-align: center;
-                padding: 20px;
-                font-size: 20px;
-                background: rgba(138, 91, 145, 0.8);
-            }}
-            button {{
-                margin: 5px;
-                padding: 10px 20px;
-                cursor: pointer;
-            }}
-
-
-            #content_training {{
-                justify-content: center;
-                align-items: center;
-            }}
-
-            #content_evaluate {{
-                justify-content: center;
-                align-items: center;
-            }}
-
-            #content_analyze {{
-                justify-content: center;
-                align-items: center;
-            }}
-            
-
-            #charts_box {{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }}
-            .chart_line_1 {{
-                width: 600px;
-                height: 400px;
-            }}
-
-            
-            #chart_heatmap {{
-                width: 800px;
-                height: 600px;
-                margin: 50px auto;
-            }}
-
-        </style>
 
     </head>
     <body>
@@ -70,19 +22,6 @@ def html_start():
         <button onclick="option_show()">All AI model data</button>
     </header>
     
-    <script>
-        function change_text() {{
-            document.getElementById("content_training").innerHTML = "TESTING!";
-        }}
-
-        function option_show(option) {{
-            document.getElementById("content_training").hidden = true;
-            document.getElementById("content_evaluate").hidden = true;
-            document.getElementById("content_analyze").hidden = true;
-
-            document.getElementById(option).hidden = false;
-        }}
-    </script>
     """
 
     return html_content
