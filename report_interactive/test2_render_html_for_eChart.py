@@ -191,7 +191,7 @@ def html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_
 
     html_content =  f"""
 
-        <div id="chart_heatmap" class="display"></div>
+        <div id="chart_heatmap"></div>
 
         <script>
             var js_chart_heatmap = echarts.init(document.getElementById('chart_heatmap'));
