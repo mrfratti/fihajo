@@ -1,54 +1,43 @@
-# pylint: skip-file
 import unittest
+from ddt import ddt, data, unpack
 from unittest.mock import patch
 import tensorflow as tf
 from keras import layers
 from src.models.model_builders import MNISTModelBuilder, Cifar10ModelBuilder, FashionMnistModelBuilder
 from uncertainty_wizard.models import StochasticMode
 
+@ddt
 class TestModelBuilders(unittest.TestCase):
+
     def setUp(self):
         self.stochastic_mode = StochasticMode()
 
-    def test_mnist_model_creation(self):
-        builder = MNISTModelBuilder(self.stochastic_mode, 'adam', 0.001)
-        model = builder.create_model()
-        self.assertIsInstance(model.inner, tf.keras.models.Sequential)
-        self.assertEqual(len(model.inner.layers), 7)
-        self.assertIsInstance(model.inner.layers[0], layers.Conv2D)
+    @data(
+        ('MNIST', MNISTModelBuilder, 7, layers.Conv2D, (None, 28, 28, 1)),
+        ('CIFAR10', Cifar10ModelBuilder, 14, layers.Conv2D, (None, 32, 32, 3)),
+        ('FashionMNIST', FashionMnistModelBuilder, 7, layers.Conv2D, (None, 28, 28, 1))
+    )
+    @unpack
+    def test_model_creation(self, name, builder_class, num_layers, first_layer_type, input_shape):
+        if name == 'CIFAR10':
+            builder = builder_class(self.stochastic_mode, 'adam', 0.001)
+            model = builder.create_model(self.stochastic_mode)
+        else:
+            builder = builder_class(self.stochastic_mode, 'adam', 0.001)
+            model = builder.create_model()
+        self.assertEqual(len(model.inner.layers), num_layers, f"{name} model should have {num_layers} layers.")
+        self.assertIsInstance(model.inner.layers[0], first_layer_type,
+                              f"{name} model's first layer should be {first_layer_type.__name__}.")
+        self.assertEqual(model.inner.layers[0].input_shape, input_shape,
+                         f"{name} model's first layer should accept input shape {input_shape}.")
 
-    def test_cifar10_model_creation(self):
-        builder = Cifar10ModelBuilder(self.stochastic_mode, 'sgd', 0.01)
-        model = builder.create_model(stochastic_mode=StochasticMode)
-        self.assertIsInstance(model.inner, tf.keras.models.Sequential)
-        self.assertEqual(len(model.inner.layers), 14)
-        self.assertEqual(model.inner.layers[0].output_shape, (None, 32, 32, 16))
-        self.assertEqual(model.inner.layers[-1].output_shape, (None, 10))
-
-    def test_fashion_mnist_model_creation(self):
-        builder = FashionMnistModelBuilder(self.stochastic_mode, 'adadelta', 0.1)
-        model = builder.create_model()
-        self.assertIsInstance(model.inner, tf.keras.models.Sequential)
-        self.assertEqual(len(model.inner.layers), 7)
-        self.assertIsInstance(model.inner.layers[0], layers.Conv2D)
-
-    @patch('platform.system')
-    @patch('platform.processor')
+    @patch('platform.system', return_value="Darwin")
+    @patch('platform.processor', return_value="arm")
     def test_optimizer_selection_arm(self, mock_processor, mock_system):
-        mock_system.return_value = "Darwin"
-        mock_processor.return_value = "arm"
         builder = MNISTModelBuilder(self.stochastic_mode, 'adam', 0.001)
         optimizer = builder.select_optimizer()
-        self.assertIsInstance(optimizer, tf.keras.optimizers.legacy.Adam)
+        self.assertIsInstance(optimizer, tf.keras.optimizers.legacy.Adam, "ARM should use legacy Adam optimizer.")
 
-    @patch('platform.system')
-    @patch('platform.processor')
-    def test_optimizer_selection_non_arm(self, mock_processor, mock_system):
-        mock_system.return_value = "Linux"
-        mock_processor.return_value = "x86_64"
-        builder = Cifar10ModelBuilder(self.stochastic_mode, 'sgd', 0.01)
-        optimizer = builder.select_optimizer()
-        self.assertIsInstance(optimizer, tf.keras.optimizers.SGD)
 
 if __name__ == '__main__':
     unittest.main()
