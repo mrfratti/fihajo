@@ -3,20 +3,38 @@ import json
 
 from report_interactive.html_structure import html_start, html_accuracy_loss_chart, html_heatmap_chart, html_end
 
-# Make function for adding +1 or build nr from jenkins too a jason file, that will be used for every stage, 
-# so we can use that info to make 1 file where they can see all build graf and compare
-# jason structure: sum: 5      traning: 1, 2, 3,       adv: 2, 3,       evaluate
+# set in function with user option(argparse) in traning where it set in diffrent structure for nurons and so on
 
-# JASON STRUCTURE:
-# build :   1, 2, 3
-# adv   :   2
-# evaluate  :   1, 2,3
+import json
+import os
 
-# SUM should help with how many in totall, it help out for eks: adv where it start with 2, 3, we need a variable helper!
-# USE try and catch to skip error if there is no adv file for that build nr and so on
+def create_cheack_file():
+    default_data = {
+        "build_nr": [0],
+        "training": [0],
+        "evaluation": [0],
+        "analyze": [0],
+        "adversarial_evaluation": [0]
+    }
 
-# !!!! Problem maybe because, getting from github redo the file, so make the jason file insted, 
-# and set if len is larger than 2 (build nr: 0, 1), 
+    file_path = "report_interactive/build_list.json"
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as file:
+            json.dump(default_data, file, indent=4)
+
+
+def build_nr_now(option):
+    file_path = "report_interactive/build_list.json"
+    full_file_path = os.path.join(os.getcwd(), file_path)
+
+    with open(full_file_path, "r") as file:
+        data_build_info = json.load(file)
+
+    number_last = data_build_info[option][-1]
+    number_last_text = "_build_" + str(number_last)
+
+    return number_last_text
 
 def build_nr_now(option):
     file_path = "report_interactive/build_list.json"
