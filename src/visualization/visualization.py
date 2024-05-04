@@ -216,17 +216,17 @@ class VisualizeEvaluation:
                 z=data_heatmap.values,
                 x=data_heatmap.columns,
                 y=data_heatmap.index,
-                coloraxis=dict(colorscale='Viridis')
+                coloraxis="coloraxis"
             )
         )
-
         fig.update_layout(
+            coloraxis=dict(colorscale='Viridis'),
             title="Classification Metrics Heatmap",
             xaxis_title="Class",
             yaxis_title="Metrics"
         )
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report.html")
+        full_file_path = os.path.join(os.getcwd(), "plot_classification_report.html")
         pio.write_html(fig, file = full_file_path)
 
 
