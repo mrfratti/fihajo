@@ -229,7 +229,7 @@ class VisualizeEvaluation:
             yaxis_title=""
         )
 
-        nr = build_list_info("confusion_matrix_nr")
+        nr = build_list_info("classification_report_nr")
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{nr}.json")
         pio.write_html(fig, file = full_file_path)
 
