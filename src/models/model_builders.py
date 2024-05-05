@@ -45,11 +45,6 @@ class BaseModelBuilder(ModelBuilderInterface):
 
 
 class MNISTModelBuilder(BaseModelBuilder):
-    """
-    This class provides utilities for working with the dataset including loading and preprocessing data
-    and creating a stochastic model for classification.
-    """
-
     def create_model(self):
         """
         Creates and compiles a stochastic CNN model for the MNIST dataset using uncertainty_wizard.
@@ -70,7 +65,6 @@ class MNISTModelBuilder(BaseModelBuilder):
 
 
 class Cifar10ModelBuilder(BaseModelBuilder):
-
     def create_model(self):
         model = uwiz.models.StochasticSequential([
             layers.Conv2D(16, kernel_size=(3, 3), padding="same", activation="relu", input_shape=(32, 32, 3)),
