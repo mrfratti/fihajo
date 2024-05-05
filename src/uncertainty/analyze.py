@@ -58,7 +58,7 @@ class Analyzer:
         self.pcs_mean_softmax()
         self.analyze_entropy(x_test)
         self.table_generator(x_test, y_test)
-        self._interactive_generator("analyze")
+        self._interactive_generator.build_list_info("analyze")
 
     def run_quantified(self, x_test):
         """
