@@ -36,8 +36,7 @@ button {
 
 #charts_box {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 50px auto;
 }
 .chart_line_1 {
     width: 600px;
