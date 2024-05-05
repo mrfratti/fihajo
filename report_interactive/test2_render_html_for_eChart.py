@@ -12,6 +12,7 @@ def create_cheack_file():
         "training": [0],
         "evaluation": [0],
         "analyze": [0],
+        "adversarial_training": [0],
         "adversarial_evaluation": [0]
     }
 
@@ -72,17 +73,20 @@ def main():
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr}.json")
     html_content += "<h3>" + f"{file_path}/val_acc_and_loss{build_nr}.json" + "<h3>"
 
-    with open(full_file_path, "r") as json_file:
-        data_accuracy_loss = json.load(json_file)
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as json_file:
+            data_accuracy_loss = json.load(json_file)
 
-    data_al_x = data_accuracy_loss["x"]
-    data_al_accuracy = data_accuracy_loss["accuracy"]
-    data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
-    data_al_loss = data_accuracy_loss["loss"]
-    data_al_val_loss = data_accuracy_loss["val_loss"]
+        data_al_x = data_accuracy_loss["x"]
+        data_al_accuracy = data_accuracy_loss["accuracy"]
+        data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
+        data_al_loss = data_accuracy_loss["loss"]
+        data_al_val_loss = data_accuracy_loss["val_loss"]
 
-    html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
+        html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
 
+
+    # --- |
     html_content += "</div>"
 
 
@@ -95,15 +99,15 @@ def main():
 
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix{build_nr}.json")
     html_content += "<h3>" + f"{file_path}/confusion_matrix{build_nr}.json" + "<h3>"
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as json_file:
+            data_heatmap = json.load(json_file)
 
-    with open(full_file_path, "r") as json_file:
-        data_heatmap = json.load(json_file)
+        heatmap_columns = list({item['column'] for item in data_heatmap})
+        heatmap_rows = list({item['row'] for item in data_heatmap})
+        heatmap_max_value = max(item['value'] for item in data_heatmap)
 
-    heatmap_columns = list({item['column'] for item in data_heatmap})
-    heatmap_rows = list({item['row'] for item in data_heatmap})
-    heatmap_max_value = max(item['value'] for item in data_heatmap)
-
-    html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
+        html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
 
 
     # --- Classification Report --- |
@@ -111,14 +115,15 @@ def main():
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr}.html")
     html_content += "<h3>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<h3>"
 
-    with open(full_file_path, "r") as file:
-        data_content = file.readlines()
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as file:
+            data_content = file.readlines()
 
-    content_start = data_content.index("<body>\n") + 1
-    content_end = data_content.index("</body>\n")
-    content_content = data_content[content_start:content_end]
-    content_string = "".join(content_content)
-    html_content += content_string
+        content_start = data_content.index("<body>\n") + 1
+        content_end = data_content.index("</body>\n")
+        content_content = data_content[content_start:content_end]
+        content_string = "".join(content_content)
+        html_content += content_string
 
 
     html_content += "</div>"
@@ -133,14 +138,15 @@ def main():
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax{build_nr}.html")
     html_content += "<h3>" + f"{file_path}/plot_pcs_mean_softmax{build_nr}.html" + "<h3>"
 
-    with open(full_file_path, "r") as file:
-        data_content = file.readlines()
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as file:
+            data_content = file.readlines()
 
-    content_start = data_content.index("<body>\n") + 1
-    content_end = data_content.index("</body>\n")
-    content_content = data_content[content_start:content_end]
-    content_string = "".join(content_content)
-    html_content += content_string
+        content_start = data_content.index("<body>\n") + 1
+        content_end = data_content.index("</body>\n")
+        content_content = data_content[content_start:content_end]
+        content_string = "".join(content_content)
+        html_content += content_string
 
 
     # --- Entropy Scores --- |
@@ -148,14 +154,15 @@ def main():
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores{build_nr}.html")
     html_content += "<h3>" + f"{file_path}/plot_dist_entropy_scores{build_nr}.html" + "<h3>"
 
-    with open(full_file_path, "r") as file:
-        data_content = file.readlines()
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as file:
+            data_content = file.readlines()
 
-    content_start = data_content.index("<body>\n") + 1
-    content_end = data_content.index("</body>\n")
-    content_content = data_content[content_start:content_end]
-    content_string = "".join(content_content)
-    html_content += content_string
+        content_start = data_content.index("<body>\n") + 1
+        content_end = data_content.index("</body>\n")
+        content_content = data_content[content_start:content_end]
+        content_string = "".join(content_content)
+        html_content += content_string
 
 
     html_content += "</div>"
@@ -169,16 +176,17 @@ def main():
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_adversarial_training_results{build_nr}.json")
     html_content += "<h3>" + f"{file_path}/plot_adversarial_training_results{build_nr}.json" + "<h3>"
 
-    with open(full_file_path, "r") as json_file:
-        data_accuracy_loss = json.load(json_file)
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as json_file:
+            data_accuracy_loss = json.load(json_file)
 
-    data_al_x = data_accuracy_loss["x"]
-    data_al_accuracy = data_accuracy_loss["accuracy"]
-    data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
-    data_al_loss = data_accuracy_loss["loss"]
-    data_al_val_loss = data_accuracy_loss["val_loss"]
+        data_al_x = data_accuracy_loss["x"]
+        data_al_accuracy = data_accuracy_loss["accuracy"]
+        data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
+        data_al_loss = data_accuracy_loss["loss"]
+        data_al_val_loss = data_accuracy_loss["val_loss"]
 
-    html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
+        html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
 
     html_content += "</div>"
 

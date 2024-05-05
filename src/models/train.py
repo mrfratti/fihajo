@@ -65,11 +65,13 @@ class Trainer:
             message = "Adversarial training enabled.\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting adversarial training on %s dataset", self.args.dataset)
+            build_list_info("adversarial_training")
             self.adversarial_training()
         else:
             message = f"Getting ready for training the model on {self.args.dataset} dataset\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting training.")
+            build_list_info("training")
             self.training()
 
     def training(self):
@@ -98,7 +100,6 @@ class Trainer:
 
         visualizer = VisualizeTraining()
         visualizer.plot_training_results(history)
-        build_list_info("training")
         self._plot_file_names.update(visualizer.plot_file_names)
 
     def adversarial_training(self):
