@@ -15,24 +15,18 @@ class ModelBuilderInterface(ABC):
     def create_model(self, stochastic_mode: StochasticMode):
         pass
 
-class BaseModelBuilder(ModelBuilderInterface):
-    def __init__(self, stochastic_mode: StochasticMode, optimizer_name="adadelta", learning_rate=None):
-        self.stochastic_mode = stochastic_mode
-        self.optimizer_name = optimizer_name
-        self.learning_rate = learning_rate
 
-    def select_optimizer(self):
-        """Selects the appropriate optimizer based on platform and specified attributes."""
-        platform_prefix = "legacy." if platform.system() == "Darwin" and platform.processor() == "arm" else ""
-        optimizer_class = getattr(optimizers, f"{platform_prefix}{self.optimizer_name.capitalize()}", optimizers.Adadelta)
-        return optimizer_class() if self.learning_rate is None else optimizer_class(learning_rate=self.learning_rate)
-
-
-class MNISTModelBuilder(BaseModelBuilder):
+class MNISTModelBuilder(ModelBuilderInterface):
     """
     This class provides utilities for working with the dataset including loading and preprocessing data
     and creating a stochastic model for classification.
     """
+
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
+        self.stochastic_mode = stochastic_mode
+        self.optimizer_name = optimizer
+        self.learning_rate = learning_rate
+
     def create_model(self):
         """
         Creates and compiles a stochastic CNN model for the MNIST dataset using uncertainty_wizard.
@@ -57,10 +51,48 @@ class MNISTModelBuilder(BaseModelBuilder):
             optimizer=optimizer,
             metrics=["accuracy"],
         )
+
         return model
 
+    def select_optimizer(self):
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.legacy.Adam()
+                    if self.learning_rate is None
+                    else optimizers.legacy.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.legacy.SGD()
+                    if self.learning_rate is None
+                    else optimizers.legacy.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
+        else:
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.Adam()
+                    if self.learning_rate is None
+                    else optimizers.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.SGD()
+                    if self.learning_rate is None
+                    else optimizers.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.Adadelta()
+        return opt
 
-class Cifar10ModelBuilder(BaseModelBuilder):
+
+class Cifar10ModelBuilder(ModelBuilderInterface):
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
+        self.stochastic_mode = stochastic_mode
+        self.optimizer_name = optimizer
+        self.learning_rate = learning_rate
 
     def create_model(self):
         model = uwiz.models.StochasticSequential([
@@ -90,8 +122,45 @@ class Cifar10ModelBuilder(BaseModelBuilder):
 
         return model
 
+    def select_optimizer(self):
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.legacy.Adam()
+                    if self.learning_rate is None
+                    else optimizers.legacy.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.legacy.SGD()
+                    if self.learning_rate is None
+                    else optimizers.legacy.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
+        else:
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.Adam()
+                    if self.learning_rate is None
+                    else optimizers.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.SGD()
+                    if self.learning_rate is None
+                    else optimizers.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.Adadelta()
+        return opt
 
-class FashionMnistModelBuilder(BaseModelBuilder):
+
+class FashionMnistModelBuilder(ModelBuilderInterface):
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
+        self.stochastic_mode = stochastic_mode
+        self.optimizer_name = optimizer
+        self.learning_rate = learning_rate
 
     def create_model(self):
         model = uwiz.models.StochasticSequential(
@@ -115,3 +184,36 @@ class FashionMnistModelBuilder(BaseModelBuilder):
         )
 
         return model
+
+    def select_optimizer(self):
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.legacy.Adam()
+                    if self.learning_rate is None
+                    else optimizers.legacy.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.legacy.SGD()
+                    if self.learning_rate is None
+                    else optimizers.legacy.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
+        else:
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.Adam()
+                    if self.learning_rate is None
+                    else optimizers.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.SGD()
+                    if self.learning_rate is None
+                    else optimizers.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.Adadelta()
+        return opt
