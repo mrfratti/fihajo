@@ -600,7 +600,14 @@ class VisualizeUncertainty:
             data=go.Scatter(
                 x=predictive_confidence,
                 y=entropy_scores,
-                mode='markers'
+                mode='markers',
+                marker=dict(
+                    color=entropy_scores,
+                    colorbar=dict(title='Predictive Entropy'),
+                    colorscale='Viridis',
+                    size=10,
+                    opacity=1 
+                )
             )
         )
 
