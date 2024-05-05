@@ -54,10 +54,14 @@ def build_list_info(option):
 def main():
 
     main_path = "report/reports/data/plots"
+    
+
 
     # --- HTML FOUNDATION --- |
     html_content  = html_start()
     build_nr = build_nr_now("build_nr")
+
+
 
     # --- TRAINING --- |
     file_path = main_path + "/training"
@@ -101,7 +105,7 @@ def main():
 
     html_content += html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
 
-    
+
     # --- Classification Report --- |
 
     full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr}.html")
@@ -158,11 +162,27 @@ def main():
 
 
     # --- ADV --- |
-    file_path = main_path + "/????????????????"
-    html_content += "<div id='content_analyze' class='display'><h2>?????????????????</h2>"
+    html_content += "<div id='content_analyze' class='display'><h2>Adversarial Training</h2>"
+
+    # --- plot_adversarial_training_results --- |
+    file_path = main_path + "/training" # from path: training
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_adversarial_training_results{build_nr}.json")
+    html_content += "<h3>" + f"{file_path}/plot_adversarial_training_results{build_nr}.json" + "<h3>"
+
+    with open(full_file_path, "r") as json_file:
+        data_accuracy_loss = json.load(json_file)
+
+    data_al_x = data_accuracy_loss["x"]
+    data_al_accuracy = data_accuracy_loss["accuracy"]
+    data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
+    data_al_loss = data_accuracy_loss["loss"]
+    data_al_val_loss = data_accuracy_loss["val_loss"]
+
+    html_content += html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
+
+    html_content += "</div>"
 
     # need to add try and catch for to find if the file exist
-    html_content += "</div>"
 
 
 
