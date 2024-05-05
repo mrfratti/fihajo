@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 
-from report_interactive.test2_render_html_for_eChart import build_nr_now
+from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
 
 
 class VisualizeTraining:
@@ -28,6 +28,7 @@ class VisualizeTraining:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
+        self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
 
 
     def _plot_results(self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]):
@@ -71,8 +72,7 @@ class VisualizeTraining:
         }
 
         # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        nr = build_nr_now("build_nr")
-        file_path = f"{self.plot_dir}/val_acc_and_loss{nr}.json"
+        file_path = f"{self.plot_dir}/val_acc_and_loss{self._build_nr_now}.json"
         
         full_file_path = os.path.join(os.getcwd(), file_path)
         with open(full_file_path, 'w') as file:
@@ -161,6 +161,7 @@ class VisualizeEvaluation:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
+        self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
 
     def plot_predictions(self, model, x_test, y_true, num_samples=25):
         predictions = model.predict(x_test[:num_samples])
@@ -207,8 +208,7 @@ class VisualizeEvaluation:
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-        nr = build_nr_now("build_nr")
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix{nr}.json")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix{self._build_nr_now}.json")
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
 
@@ -254,8 +254,7 @@ class VisualizeEvaluation:
             yaxis_title=""
         )
 
-        nr = build_nr_now("build_nr")
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{nr}.html")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{self._build_nr_now}.html")
         pio.write_html(fig, file = full_file_path)
 
 
@@ -346,6 +345,7 @@ class VisualizeUncertainty:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
+        self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
 
 
 
@@ -411,8 +411,7 @@ class VisualizeUncertainty:
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
-        nr = build_nr_now("build_nr")
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax{nr}.html")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax{self._build_nr_now}.html")
         pio.write_html(fig, file=full_file_path)
 
 
@@ -546,8 +545,7 @@ class VisualizeUncertainty:
             legend_title = "Legend",
         )
 
-        nr = build_nr_now("build_nr")
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores{nr}.html")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores{self._build_nr_now}.html")
         pio.write_html(fig, file = full_file_path)
 
 
@@ -611,8 +609,7 @@ class VisualizeUncertainty:
             yaxis_title="Entropy Score",
         )
 
-        nr = build_nr_now("build_nr")
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictive_conf_entropy_scores{nr}.html")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictive_conf_entropy_scores{self._build_nr_now}.html")
         pio.write_html(fig, file = full_file_path)
 
 
