@@ -16,6 +16,7 @@ openpyxl==3.1.2
 bandit==1.7.8
 Pillow>=10.3.0
 ddt==1.7.2
+Plotly==5.22.0
 wheel==0.43.0
 oauthlib==3.2.2
 cryptography==42.0.6
