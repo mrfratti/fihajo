@@ -1,7 +1,7 @@
 import os
 import json
 
-from report_interactive.html_structure import html_start, html_accuracy_loss_chart, html_heatmap_chart, html_end
+from html_structure import html_start, html_accuracy_loss_chart, html_heatmap_chart, html_end
 
 # set in function with user option(argparse) in traning where it set in diffrent structure for nurons and so on
 
@@ -54,7 +54,7 @@ def build_list_info(option):
 
 def main():
 
-    main_path = "report/reports/data/plots"
+    main_path = "src/report/reports/data/plots"
     
 
 
