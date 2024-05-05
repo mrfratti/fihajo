@@ -108,7 +108,7 @@ pipeline {
 
         stage('Generate HTML Report 2') {
             steps {
-                sh "python -m report_interactive.test2_render_html_for_eChart"
+                sh "python -m report_interactive.interactive_html_generator"
                 publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
