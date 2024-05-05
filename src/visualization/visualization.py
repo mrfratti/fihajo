@@ -109,27 +109,27 @@ class VisualizeTraining:
 
 
         # --- Interactive Chart | Adversarial Training Results --- |
-        history_data = history.history
+        # history_data = history.history
 
-        x_value = []
-        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-            x_value.append(x_axis_nr)
+        # x_value = []
+        # for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
+        #     x_value.append(x_axis_nr)
 
-        data_info = {
-            "x":            x_value,
-            "accuracy":     history_data["accuracy"],
-            "val_accuracy": history_data["val_accuracy"],
-            "loss":         history_data["loss"],
-            "val_loss":     history_data["val_loss"]
-        }
+        # data_info = {
+        #     "x":            x_value,
+        #     "accuracy":     history_data["accuracy"],
+        #     "val_accuracy": history_data["val_accuracy"],
+        #     "loss":         history_data["loss"],
+        #     "val_loss":     history_data["val_loss"]
+        # }
 
-        # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        nr = build_nr_now("build_nr")
-        file_path = f"{self.plot_dir}/plot_adversarial_training_results{nr}.json"
+        # # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        # nr = build_nr_now("build_nr")
+        # file_path = f"{self.plot_dir}/plot_adversarial_training_results{nr}.json"
         
-        full_file_path = os.path.join(os.getcwd(), file_path)
-        with open(full_file_path, 'w') as file:
-            json.dump(data_info, file, indent=4)
+        # full_file_path = os.path.join(os.getcwd(), file_path)
+        # with open(full_file_path, 'w') as file:
+        #     json.dump(data_info, file, indent=4)
         
 
         
