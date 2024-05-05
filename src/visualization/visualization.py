@@ -593,6 +593,29 @@ class VisualizeUncertainty:
         plt.show()
         self._plot_file_names["prediction_vs_entrophy"] = filename
 
+
+        # --- Interactive Chart | predictive_conf_entropy_scores --- |
+
+        fig = go.Figure(
+            data=go.Scatter(
+                x=predictive_confidence,
+                y=entropy_scores,
+                mode='markers'
+            )
+        )
+
+        fig.update_layout(
+            title="Predictive Confidence vs Entropy Score",
+            xaxis_title="Predictive Confidence",
+            yaxis_title="Entropy Score",
+        )
+
+        nr = build_nr_now("build_nr")
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictive_conf_entropy_scores{nr}.html")
+        pio.write_html(fig, file = full_file_path)
+
+
+
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.png"

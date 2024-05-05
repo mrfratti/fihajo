@@ -165,6 +165,23 @@ def main():
         html_content += content_string
 
 
+    # --- Entropy Scatter Scores --- |
+
+    full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictive_conf_entropy_scores{build_nr}.html")
+    html_content += "<h3>" + f"{file_path}/plot_predictive_conf_entropy_scores{build_nr}.html" + "<h3>"
+
+    if os.path.exists(full_file_path):
+        with open(full_file_path, "r") as file:
+            data_content = file.readlines()
+
+        content_start = data_content.index("<body>\n") + 1
+        content_end = data_content.index("</body>\n")
+        content_content = data_content[content_start:content_end]
+        content_string = "".join(content_content)
+        html_content += content_string
+
+    
+    # --- |
     html_content += "</div>"
 
 
