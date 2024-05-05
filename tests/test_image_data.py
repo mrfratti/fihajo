@@ -1,6 +1,6 @@
 import unittest
 
-from report.image_data import ImageData
+from src.report.image_data import ImageData
 
 
 class TestImageData(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestImageData(unittest.TestCase):
 
     def test_image_location_should_be_string(self):
         with self.assertRaises(TypeError):
-            self.image.image_location = 3
+            self.image.image_location = 1
 
     def test_about_image_should_be_string(self):
         with self.assertRaises(TypeError):
@@ -17,7 +17,7 @@ class TestImageData(unittest.TestCase):
 
     def test_image_header_should_be_string(self):
         with self.assertRaises(TypeError):
-            self.image.header_image = 2
+            self.image.header_image = 3
 
     def test_image_location_should_not_empty(self):
         with self.assertRaises(ValueError):

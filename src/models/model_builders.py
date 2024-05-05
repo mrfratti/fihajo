@@ -95,28 +95,22 @@ class Cifar10ModelBuilder(ModelBuilderInterface):
         self.learning_rate = learning_rate
 
     def create_model(self):
-        model = uwiz.models.StochasticSequential(
-            [
-                layers.Conv2D(
-                    32,
-                    (3, 3),
-                    padding="same",
-                    activation="relu",
-                    input_shape=(32, 32, 3),
-                ),
-                layers.Conv2D(32, (3, 3), activation="relu"),
-                layers.MaxPooling2D(pool_size=(2, 2)),
-                UwizBernoulliDropout(0.25, stochastic_mode=self.stochastic_mode),
-                layers.Conv2D(64, (3, 3), padding="same", activation="relu"),
-                layers.Conv2D(64, (3, 3), activation="relu"),
-                layers.MaxPooling2D(pool_size=(2, 2)),
-                layers.Dropout(0.25),
-                layers.Flatten(),
-                layers.Dense(512, activation="relu"),
-                layers.Dropout(0.5),
-                layers.Dense(10, activation="softmax"),
-            ]
-        )
+        model = uwiz.models.StochasticSequential([
+            layers.Conv2D(16, kernel_size=(3, 3), padding="same", activation="relu", input_shape=(32, 32, 3)),
+            layers.MaxPooling2D(pool_size=(2, 2), strides=2),
+            layers.Conv2D(32, kernel_size=(3, 3), padding="same", activation="relu"),
+            layers.MaxPooling2D(pool_size=(2, 2), strides=2),
+            layers.Conv2D(64, kernel_size=(3, 3), padding="same", activation="relu"),
+            layers.MaxPooling2D(pool_size=(2, 2), strides=2),
+            layers.Conv2D(128, kernel_size=(3, 3), padding="same", activation="relu"),
+            layers.MaxPooling2D(pool_size=(2, 2), strides=2),
+            layers.Flatten(),
+            layers.Dense(512, activation="relu"),
+            layers.Dropout(0.25),
+            layers.Dense(256, activation="relu"),
+            layers.Dense(64, activation="relu"),
+            layers.Dense(10, activation="softmax")
+        ])
 
         optimizer = self.select_optimizer()
 
