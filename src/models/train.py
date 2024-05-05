@@ -16,7 +16,7 @@ from src.cli.string_styling import StringStyling
 from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 
-from report_interactive.test2_render_html_for_eChart import build_list_info, create_cheack_file
+from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
@@ -44,6 +44,7 @@ class Trainer:
         self.test_dataset = test_dataset
         self.loss_object = CategoricalCrossentropy(from_logits=False)
         self._plot_file_names = {}
+        self._interactive_generator = Interactive_Html_Generator()
 
     @property
     def plot_file_names(self) -> dict:
@@ -54,18 +55,18 @@ class Trainer:
         """
         Selects the training method based on whether adversarial training is enabled via command-line arguments.
         """
-        create_cheack_file()
+        self._interactive_generator.create_cheack_file()
         if self.args.adv:
             message = "Adversarial training enabled.\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting adversarial training on %s dataset", self.args.dataset)
-            build_list_info("adversarial_training")
+            self._interactive_generator.build_list_info("adversarial_training")
             self.adversarial_training()
         else:
             message = f"Getting ready for training the model on {self.args.dataset} dataset\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting training.")
-            build_list_info("training")
+            self._interactive_generator.build_list_info("training")
             self.training()
 
     def training(self):

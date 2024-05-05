@@ -11,7 +11,7 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from src.visualization.visualization import VisualizeEvaluation
 from src.weight_processing.weight_manager import WeightManager
 
-from report_interactive.test2_render_html_for_eChart import build_list_info
+from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
@@ -36,6 +36,7 @@ class Evaluator:
         self.model = self._weightmanager.current_model
         self.adversarial_evaluated = args.adv_eval
         self._plot_file_names = {}
+        self._interactive_generator = Interactive_Html_Generator()
 
     @property
     def default_path(self) -> str:
@@ -50,11 +51,11 @@ class Evaluator:
 
         self._weightmanager.loading_effect(duration=15, message="Loading model weights")
         self.evaluation(x_test, y_test, plot_results=not self.args.adv_eval)
-        build_list_info("evaluation")
-
+        interactive_generator = Interactive_Html_Generator()
+        self._interactive_generator.build_list_info("evaluation")
         if self.args.adv_eval:
             self.adversarial_evaluation(x_test, y_test)
-            build_list_info("adversarial_evaluation")
+            self._interactive_generator.build_list_info("evaluation")
 
     def evaluation(self, x_test, y_test, plot_results=True):
         # Evaluate the model
