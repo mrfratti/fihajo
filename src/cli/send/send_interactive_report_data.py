@@ -166,4 +166,4 @@ class SendInteractiveReportData:
             report_location=report_location,
             images=images,
         )
-        self.delete_json()
+        # self.delete_json()
