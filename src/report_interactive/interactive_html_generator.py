@@ -173,8 +173,8 @@ class Interactive_Html_Generator:
 
             return number_last_text
         
-        else:
-            return "ERROR no file"
+        # else:
+        #     return "ERROR no file"
 
 
     def build_list_info(self, option):
