@@ -12,7 +12,7 @@ class InteractiveHtmlGeneratorApi:
         self._report.head = "<div>SUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUp</div>"
         self._report.main = "<div>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</div>"
         self._report.html_store_location="./"
-        self._report.filename = "test_index.html"
+        self._report.filename = "test_index"
 
         self._generator.write_html()
 
