@@ -16,7 +16,7 @@ class HtmlGenerator:
 
     def __init__(self) -> None:
         self._image_data_list = []
-        self._html_report = HtmlData()
+        self._html_report = None
 
     @property
     def image_data(self) -> int:
@@ -71,7 +71,7 @@ class HtmlGenerator:
             self._img()
             return
         if self._html_report.main:
-            doc.asis(self.html_report.main)
+            doc.asis(self._html_report.main)
             return
         else:
             with tag("div", klass="error"):
