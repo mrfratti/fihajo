@@ -14,8 +14,6 @@ import plotly
 import plotly.graph_objects as plotly_graph_objects
 from plotly.subplots import make_subplots
 
-from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
-
 
 class VisualizeTraining:
     """_summary_
