@@ -26,8 +26,6 @@ class VisualizeTraining:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-
-        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr"))
         self._interactive_plot_file_names = {}
 
 
@@ -165,8 +163,6 @@ class VisualizeEvaluation:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-        
-        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
         self._interactive_plot_file_names = {}
 
 
@@ -398,8 +394,6 @@ class VisualizeUncertainty:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-
-        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
         self._interactive_plot_file_names = {}
 
 
@@ -666,8 +660,8 @@ class VisualizeUncertainty:
             yaxis_title="Entropy Score",
         )
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictive_conf_entropy_scores{self._build_nr_now}.html")
-        plotly.io.write_html(fig, file = full_file_path)
+        filename = self._save_interactive_plot_html("prediction_vs_entrophy", fig)
+        self._interactive_plot_file_names["prediction_vs_entrophy"] = filename
 
 
 
