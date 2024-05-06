@@ -19,11 +19,9 @@ from src.models.model_builders import (
 from src.models.train import Trainer
 from src.models.eval import Evaluator
 from src.uncertainty.analyze import Analyzer
-from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
 
 class CLIApp:
     def __init__(self):
-        self._interactive_html = Interactive_Html_Generator()
         self.parser = self.setup_parser()
         self._plot_file_names = {}
         self._interactive_plot_file_names = {}
