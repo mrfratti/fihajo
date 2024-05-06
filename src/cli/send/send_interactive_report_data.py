@@ -1,7 +1,7 @@
 import json
 import os
 
-from src.report.API.html_generator_api import HtmlGeneratorApi
+from src.report.API.html_interactive_generator_api import InteractiveHtmlGeneratorApi
 from src.report.image_data import ImageData
 
 class SendInteractiveReportData:
@@ -161,9 +161,10 @@ class SendInteractiveReportData:
             raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating "
                              "a report!")
 
-        HtmlGeneratorApi(
-            report_filename=report_filename,
-            report_location=report_location,
-            images=images,
-        )
-        # self.delete_json()
+        # InteractiveHtmlGeneratorApi(
+        #     report_filename=report_filename,
+        #     report_location=report_location,
+        #     images=images,
+        # )
+        InteractiveHtmlGeneratorApi()
+        self.delete_json()
