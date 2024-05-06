@@ -4,6 +4,8 @@ import json
 
 from uncertainty_wizard.models import StochasticMode
 from src.cli.send.send_report_data import SendReportData
+from src.cli.send.send_interactive_report_data import SendInteractiveReportData
+
 from src.datasets.dataset_handler import (
     MnistDatasetHandler,
     Cifar10DatasetHandler,
@@ -93,9 +95,6 @@ class CLIApp:
     def add_interactive_report_subparser(self, subparsers):
         report_interactive_parser = subparsers.add_parser("reportInteractive", help="Genereate interactive report")
         report_interactive_parser.set_defaults(func=self.reportInteractive)
-
-    def reportInteractive(self, args=""):
-        self._interactive_html.generate()
         
 
     def check_positive(self, value):
@@ -255,6 +254,23 @@ class CLIApp:
 
         except TypeError as e:
             logging.warning("main.report: %s", e)
+
+    def reportInteractive(self, args=""):
+        """Run report generation"""
+        send_data = SendInteractiveReportData()
+        if args and hasattr(args, 'adv_eval'):
+            send_data.adversarial_evaluated = args.adv_eval
+        else:
+            send_data.adversarial_evaluated = False
+
+        try:
+            send_data.send()
+        except ValueError as e:
+            logging.warning("main.report: %s", e)
+
+        except TypeError as e:
+            logging.warning("main.report: %s", e)
+
 
     def load_config(self, file_path):
         """loading predefined configuration file in json format"""
