@@ -281,7 +281,7 @@ class VisualizeEvaluation:
         )
 
         filename = self._save_interactive_plot_html("classification_report", fig)
-        self._interactive_plot_file_names["confusion_matrix"] = filename
+        self._interactive_plot_file_names["classification_report"] = filename
 
 
 
