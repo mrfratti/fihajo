@@ -39,12 +39,8 @@ class CLIApp:
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
-        # self.add_report_subparser(subparsers)
-        
-        report_test = subparsers.add_parser('reportinteractive', help="test")
-        report_test.set_defaults(func=self.generate_interactive_report)
-
-
+        self.add_interactive_report_subparser(subparsers)
+    
         return parser
 
     def add_train_subparser(self, subparsers):
@@ -94,8 +90,8 @@ class CLIApp:
         report_parser.set_defaults(func=self.report)
 
     def add_interactive_report_subparser(self, subparsers):
-        report_parser = subparsers.add_parser('reportinteractive', help="Genereate interactive report")
-        report_parser.set_defaults(func=self.generate_interactive_report)
+        report_interactive_parser = subparsers.add_parser('report_interactive', help="Genereate interactive report")
+        report_interactive_parser.set_defaults(func=self.generate_interactive_report)
 
     def generate_interactive_report(self):
         Interactive_Html_Generator.generate()
