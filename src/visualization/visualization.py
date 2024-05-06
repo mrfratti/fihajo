@@ -323,7 +323,20 @@ class VisualizeEvaluation:
         self._plot_file_names["accuracy_comparison"] = filename
 
 
-        # --- Interactive Chart | Classification Report --- |
+        # --- Interactive Chart | plot_accuracy_comparison --- |
+
+        bar_data = go.Bar(
+            x = labels,
+            y = accuracies,
+            marker_color = ["Clean", "FGSM", "PGD"]
+            )
+        
+        fig = go.Figure(bar_data)
+
+        fig.update_layout(
+            title="Model Accuracy: Clean vs Adversarial Examples",
+            yaxis_title="Accuracy (%)",
+        )
 
         
 
