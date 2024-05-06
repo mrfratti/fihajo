@@ -53,7 +53,6 @@ class Interactive_Html_Generator:
         with open(full_file_path, "w") as file:
             json.dump(data_build_info, file, indent=4)
 
-
     def generate(self):
 
         main_path = "src/report/reports/data/plots"

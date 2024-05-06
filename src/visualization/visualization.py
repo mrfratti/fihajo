@@ -9,7 +9,6 @@ from cleverhans.tf2.attacks.fast_gradient_method import fast_gradient_method
 from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient_descent
 from src.cli.string_styling import StringStyling
 
-# --- Interactive Chart --- |
 import json
 import plotly.express as px
 import plotly.graph_objects as go

@@ -39,7 +39,10 @@ class CLIApp:
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
-        self.add_interactive_report_subparser(subparsers)
+        # self.add_report_subparser(subparsers)
+        
+        report_test = subparsers.add_parser('reportinteractive', help="test")
+        report_test.set_defaults(func=self.generate_interactive_report)
 
 
         return parser
