@@ -16,8 +16,6 @@ from src.cli.string_styling import StringStyling
 from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 
-from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
-
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
