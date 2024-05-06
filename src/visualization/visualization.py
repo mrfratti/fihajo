@@ -10,6 +10,7 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from src.cli.string_styling import StringStyling
 
 import json
+import plotly
 import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
@@ -260,7 +261,9 @@ class VisualizeEvaluation:
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{self._build_nr_now}.html")
-        pio.write_html(fig, file = full_file_path)
+        plot = plotly.offline.plot(fig, include_plotlyjs=False, output_type='div')
+        print(plot)
+        # pio.write_html(fig, file = full_file_path)
 
 
 

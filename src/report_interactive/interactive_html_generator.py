@@ -152,7 +152,7 @@ class Interactive_Html_Generator:
 
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         default_data = {
-            "build_nr": [date_time],
+            "build_nr": date_time,
         }
         file_path = "src/report_interactive/build_list.json"
         if not os.path.exists(file_path):
