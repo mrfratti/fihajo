@@ -161,10 +161,10 @@ class SendInteractiveReportData:
             raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating "
                              "a report!")
 
-        # InteractiveHtmlGeneratorApi(
-        #     report_filename=report_filename,
-        #     report_location=report_location,
-        #     images=images,
-        # )
-        InteractiveHtmlGeneratorApi()
+        InteractiveHtmlGeneratorApi(
+            report_filename=report_filename,
+            report_location=report_location,
+            images=images,
+        )
+        # InteractiveHtmlGeneratorApi()
         self.delete_json()
