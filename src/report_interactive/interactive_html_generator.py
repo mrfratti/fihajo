@@ -174,7 +174,7 @@ class Interactive_Html_Generator:
             with open(full_file_path, "r") as file:
                 data_build_info = json.load(file)
             
-            number_last = data_build_info[option][-1]
+            number_last = data_build_info[option]
             number_last_text = "_build_" + str(number_last)
 
             return number_last_text
