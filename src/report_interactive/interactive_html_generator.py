@@ -103,7 +103,7 @@ class Interactive_Html_Generator:
         html_content += "<div id='content_analyze' class='display'><h2>Adversarial Training</h2>"
 
         # --- plot_adversarial_training_results --- |
-        file_path = main_path + "/training" # from path: training
+        file_path = main_path + "/training"
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_adversarial_training_results{build_nr}.json")
 
         if os.path.exists(full_file_path):
@@ -122,6 +122,12 @@ class Interactive_Html_Generator:
         html_content += "</div>"
 
         # need to add try and catch for to find if the file exist
+
+        file_path = main_path + "/evaluation"
+        full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_accuracy_comparison{build_nr}.html")
+        html_content += self.create_div_file_html(full_file_path)
+        html_content += "<p>" + f"{file_path}/plot_accuracy_comparison{build_nr}.html" + "<p>"
+        
 
         # --- ALL AI MODEL --- |
   
