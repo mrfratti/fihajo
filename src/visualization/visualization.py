@@ -338,6 +338,9 @@ class VisualizeEvaluation:
             yaxis_title="Accuracy (%)",
         )
 
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix{self._build_nr_now}.json")
+        pio.write_html(fig, file=full_file_path)
+
         
 
 
