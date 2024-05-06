@@ -67,9 +67,9 @@ class Interactive_Html_Generator:
         html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
 
         # --- plot_predictions --- |
-        full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictions{build_nr}.png")
-        html_content = f"<img src={full_file_path} alt='plot predictions'>"
-        html_content += "<p>" + f"{file_path}/plot_predictions{build_nr}.html" + "<p>"
+        # full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictions{build_nr}.png")
+        # html_content = f"<img src={full_file_path} alt='plot predictions'>"
+        # html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
 
         # --- |
         html_content += "</div>"
@@ -151,7 +151,7 @@ class Interactive_Html_Generator:
             "adversarial_evaluation": [0]
         }
 
-        file_path = "src/report_interactive/build_list.json"
+        file_path = "report_interactive/build_list.json"
 
         if not os.path.exists(file_path):
             with open(file_path, 'w') as file:
@@ -161,7 +161,7 @@ class Interactive_Html_Generator:
 
 
     def build_nr_now(self, option):
-        file_path = "src/report_interactive/build_list.json"
+        file_path = "report_interactive/build_list.json"
         full_file_path = os.path.join(os.getcwd(), file_path)
 
         if not os.path.exists(full_file_path):
@@ -178,7 +178,7 @@ class Interactive_Html_Generator:
 
 
     def build_list_info(self, option):
-        file_path = "src/report_interactive/build_list.json"
+        file_path = "report_interactive/build_list.json"
         full_file_path = os.path.join(os.getcwd(), file_path)
 
         with open(full_file_path, "r") as file:
