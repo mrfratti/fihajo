@@ -29,7 +29,7 @@ class Interactive_Html_Data:
 
 
 
-    def html_accuracy_loss_chart(data_x, accuracy, val_accuracy, loss, val_loss):
+    def html_accuracy_loss_chart(self, data_x, accuracy, val_accuracy, loss, val_loss):
         html_content = f"""
         
         <div class="charts_box">
@@ -267,7 +267,7 @@ class Interactive_Html_Data:
 
 
     def html_end(self):
-        html_content = f"""
+        html_content = """
 
         # </body>
         # </html>

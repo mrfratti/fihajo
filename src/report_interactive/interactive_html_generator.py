@@ -6,7 +6,7 @@ from src.report_interactive.interactive_html_data import Interactive_Html_Data
 
 class Interactive_Html_Generator:
     def __init__(self):
-        self._html_data = Interactive_Html_Data
+        self._html_data = Interactive_Html_Data()
 
     def create_cheack_file(self):
         default_data = {
@@ -223,7 +223,7 @@ class Interactive_Html_Generator:
         # --- HTML FOUNDATION --- |
         html_content += self._html_data.html_end()
 
-        with open("report_interactive/interactive_chart.html", "w") as html_file:
+        with open("src/report_interactive/interactive_chart.html", "w") as html_file:
             html_file.write(html_content)
 
         self.build_list_info("build_nr")

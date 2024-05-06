@@ -21,6 +21,7 @@ from src.report_interactive.interactive_html_generator import Interactive_Html_G
 
 class CLIApp:
     def __init__(self):
+        self._interactive_html = Interactive_Html_Generator()
         self.parser = self.setup_parser()
         self._plot_file_names = {}
 
@@ -90,11 +91,11 @@ class CLIApp:
         report_parser.set_defaults(func=self.report)
 
     def add_interactive_report_subparser(self, subparsers):
-        report_interactive_parser = subparsers.add_parser('report_interactive', help="Genereate interactive report")
-        report_interactive_parser.set_defaults(func=self.generate_interactive_report)
+        report_interactive_parser = subparsers.add_parser("reportInteractive", help="Genereate interactive report")
+        report_interactive_parser.set_defaults(func=self.reportInteractive)
 
-    def generate_interactive_report(self):
-        Interactive_Html_Generator.generate()
+    def reportInteractive(self, args=""):
+        self._interactive_html.generate()
         
 
     def check_positive(self, value):
