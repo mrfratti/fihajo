@@ -26,7 +26,6 @@ class Interactive_Html_Generator:
 
         # --- Accuracy & Loss --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr}.json")
-        html_content += "<h3>" + f"{file_path}/val_acc_and_loss{build_nr}.json" + "<h3>"
 
         if os.path.exists(full_file_path):
             with open(full_file_path, "r") as json_file:
@@ -38,6 +37,7 @@ class Interactive_Html_Generator:
             data_al_loss = data_accuracy_loss["loss"]
             data_al_val_loss = data_accuracy_loss["val_loss"]
 
+            html_content += "<p>" + f"{file_path}/val_acc_and_loss{build_nr}.json" + "<p>"
             html_content += self._html_data.html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
 
         # --- |
@@ -50,7 +50,6 @@ class Interactive_Html_Generator:
 
         # --- Confusion Matrix --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/confusion_matrix{build_nr}.json")
-        html_content += "<h3>" + f"{file_path}/confusion_matrix{build_nr}.json" + "<h3>"
         if os.path.exists(full_file_path):
             with open(full_file_path, "r") as json_file:
                 data_heatmap = json.load(json_file)
@@ -59,12 +58,13 @@ class Interactive_Html_Generator:
             heatmap_rows = list({item['row'] for item in data_heatmap})
             heatmap_max_value = max(item['value'] for item in data_heatmap)
 
+            html_content += "<p>" + f"{file_path}/confusion_matrix{build_nr}.json" + "<p>"
             html_content += self._html_data.html_heatmap_chart(data_heatmap, heatmap_columns, heatmap_rows, heatmap_max_value)
 
         # --- Classification Report --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_classification_report{build_nr}.html")
         html_content += self.create_div_file_html(full_file_path)
-        html_content += "<h3>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<h3>"
+        html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
 
         # --- |
         html_content += "</div>"
@@ -77,18 +77,18 @@ class Interactive_Html_Generator:
         # --- PCS & Mean Softmax Score --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_pcs_mean_softmax{build_nr}.html")
         html_content += self.create_div_file_html(full_file_path)
-        html_content += "<h3>" + f"{file_path}/plot_pcs_mean_softmax{build_nr}.html" + "<h3>"
+        html_content += "<p>" + f"{file_path}/plot_pcs_mean_softmax{build_nr}.html" + "<p>"
 
         # --- Entropy Scores --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_dist_entropy_scores{build_nr}.html")
         html_content += self.create_div_file_html(full_file_path)
-        html_content += "<h3>" + f"{file_path}/plot_dist_entropy_scores{build_nr}.html" + "<h3>"
+        html_content += "<p>" + f"{file_path}/plot_dist_entropy_scores{build_nr}.html" + "<p>"
 
         # --- Entropy Scatter Scores --- |
 
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictive_conf_entropy_scores{build_nr}.html")
         html_content += self.create_div_file_html(full_file_path)
-        html_content += "<h3>" + f"{file_path}/plot_predictive_conf_entropy_scores{build_nr}.html" + "<h3>"
+        html_content += "<p>" + f"{file_path}/plot_predictive_conf_entropy_scores{build_nr}.html" + "<p>"
         
         # --- |
         html_content += "</div>"
@@ -100,7 +100,6 @@ class Interactive_Html_Generator:
         # --- plot_adversarial_training_results --- |
         file_path = main_path + "/training" # from path: training
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_adversarial_training_results{build_nr}.json")
-        html_content += "<h3>" + f"{file_path}/plot_adversarial_training_results{build_nr}.json" + "<h3>"
 
         if os.path.exists(full_file_path):
             with open(full_file_path, "r") as json_file:
@@ -112,6 +111,7 @@ class Interactive_Html_Generator:
             data_al_loss = data_accuracy_loss["loss"]
             data_al_val_loss = data_accuracy_loss["val_loss"]
 
+            html_content += "<p>" + f"{file_path}/plot_adversarial_training_results{build_nr}.json" + "<p>"
             html_content += self._html_data.html_accuracy_loss_chart(data_al_x, data_al_accuracy, data_al_val_accuracy, data_al_loss, data_al_val_loss)
 
         html_content += "</div>"
@@ -134,6 +134,7 @@ class Interactive_Html_Generator:
 
         self.build_list_info("build_nr")
     
+
 
     def create_cheack_file(self):
         default_data = {
