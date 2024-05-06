@@ -17,7 +17,7 @@ from src.models.model_builders import (
 from src.models.train import Trainer
 from src.models.eval import Evaluator
 from src.uncertainty.analyze import Analyzer
-
+from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
 
 class CLIApp:
     def __init__(self):
@@ -39,6 +39,8 @@ class CLIApp:
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
+        self.add_interactive_report_subparser(subparsers)
+
 
         return parser
 
@@ -87,6 +89,14 @@ class CLIApp:
     def add_report_subparser(self, subparsers):
         report_parser = subparsers.add_parser("report", help="Genereate report")
         report_parser.set_defaults(func=self.report)
+
+    def add_interactive_report_subparser(self, subparsers):
+        report_parser = subparsers.add_parser('report_interactive', help="Genereate interactive report")
+        report_parser.set_defaults(func=self.generate_interactive_report)
+
+    def generate_interactive_report(self):
+        Interactive_Html_Generator.generate()
+        
 
     def check_positive(self, value):
         ivalue = int(value)
