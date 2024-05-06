@@ -26,9 +26,9 @@ class VisualizeTraining:
     def __init__(self, plot_dir="src/report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
-
         self._plot_file_names = {}
-        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+
+        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr"))
         self._interactive_plot_file_names = {}
 
 
@@ -72,14 +72,9 @@ class VisualizeTraining:
             "val_loss":     history_data["val_loss"]
         }
 
-        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        file_path = f"{self.plot_dir}/val_acc_and_loss_{date_time}.json"
 
-        self._interactive_plot_file_names["training"] = file_path
-
-        full_file_path = os.path.join(os.getcwd(), file_path)
-        with open(full_file_path, 'w') as file:
-            json.dump(data_info, file, indent=4)
+        filename = self._save_interactive_plot("val_acc_and_loss", data_info)
+        self._interactive_plot_file_names["training"] = filename
         
 
 
@@ -143,6 +138,17 @@ class VisualizeTraining:
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
+        return f"{self.plot_dir}/{filename}"
+    
+
+    def _save_interactive_plot(self, filename, data_info):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.json"
+ 
+        full_file_path = os.path.join(os.getcwd(), filename)
+        with open(full_file_path, 'w') as file:
+            json.dump(data_info, file, indent=4)
+
         return f"{self.plot_dir}/{filename}"
 
     @property
