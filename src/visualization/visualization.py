@@ -26,8 +26,10 @@ class VisualizeTraining:
     def __init__(self, plot_dir="src/report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
+
         self._plot_file_names = {}
-        self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+        self._interactive_plot_file_names = {}
 
 
     def _plot_results(self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]):
@@ -70,12 +72,15 @@ class VisualizeTraining:
             "val_loss":     history_data["val_loss"]
         }
 
-        # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        file_path = f"{self.plot_dir}/val_acc_and_loss{self._build_nr_now}.json"
-        
+        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        file_path = f"{self.plot_dir}/val_acc_and_loss_{date_time}.json"
+
+        self._interactive_plot_file_names["training"] = file_path
+
         full_file_path = os.path.join(os.getcwd(), file_path)
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
+        
 
 
 
@@ -107,27 +112,28 @@ class VisualizeTraining:
 
 
         # --- Interactive Chart | Adversarial Training Results --- |
-        # history_data = history.history
+        history_data = history.history
 
-        # x_value = []
-        # for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-        #     x_value.append(x_axis_nr)
+        x_value = []
+        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
+            x_value.append(x_axis_nr)
 
-        # data_info = {
-        #     "x":            x_value,
-        #     "accuracy":     history_data["accuracy"],
-        #     "val_accuracy": history_data["val_accuracy"],
-        #     "loss":         history_data["loss"],
-        #     "val_loss":     history_data["val_loss"]
-        # }
+        data_info = {
+            "x":            x_value,
+            "accuracy":     history_data["accuracy"],
+            "val_accuracy": history_data["val_accuracy"],
+            "loss":         history_data["loss"],
+            "val_loss":     history_data["val_loss"]
+        }
 
-        # # date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        # nr = build_nr_now("build_nr")
-        # file_path = f"{self.plot_dir}/plot_adversarial_training_results{nr}.json"
+        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        file_path = f"{self.plot_dir}/plot_adversarial_training_results_{date_time}.json"
         
-        # full_file_path = os.path.join(os.getcwd(), file_path)
-        # with open(full_file_path, 'w') as file:
-        #     json.dump(data_info, file, indent=4)
+        self._interactive_plot_file_names["training"] = file_path
+
+        full_file_path = os.path.join(os.getcwd(), file_path)
+        with open(full_file_path, 'w') as file:
+            json.dump(data_info, file, indent=4)
         
 
         
