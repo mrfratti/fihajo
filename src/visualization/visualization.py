@@ -22,6 +22,8 @@ class VisualizeTraining:
     generate plot and storing plots
     """
 
+    # !!!!!!!!!!!!!!!!!! _interactive_plot_file_names   |   ,aybe fix dict
+
     def __init__(self, plot_dir="src/report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
@@ -153,6 +155,21 @@ class VisualizeTraining:
                 StringStyling.box_style(message="visualizer: missing filnames in dict")
             )
         return self._plot_file_names
+    
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._interactive_plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._interactive_plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._interactive_plot_file_names
 
 
 
@@ -353,6 +370,12 @@ class VisualizeEvaluation:
         plt.close()
         return f"{self.plot_dir}/{filename}"
     
+    def _save_interactive_plot(self, filename):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.png"
+        plt.savefig(os.path.join(self.plot_dir, filename))
+        plt.close()
+        return f"{self.plot_dir}/{filename}"
 
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -387,6 +410,22 @@ class VisualizeEvaluation:
                 StringStyling.box_style(message="visualizer: missing filnames in dict")
             )
         return self._plot_file_names
+    
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._interactive_plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._interactive_plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._interactive_plot_file_names
+
 
 
 class VisualizeUncertainty:
@@ -693,3 +732,19 @@ class VisualizeUncertainty:
                 StringStyling.box_style(message="visualizer: missing filnames in dict")
             )
         return self._plot_file_names
+    
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._interactive_plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._interactive_plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._interactive_plot_file_names
+
