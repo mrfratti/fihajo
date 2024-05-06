@@ -198,13 +198,14 @@ class CLIApp:
             if args.report:
                 self.report()
 
-            # send_interactive_data = SendInteractiveReportData()
-            # send_interactive_data.adversarial_evaluated = args.adv_eval
-            # send_interactive_data.filenames = evaluator.plot_file_names
+            send_interactive_data = SendInteractiveReportData()
+            send_interactive_data.adversarial_evaluated = args.adv_eval
+            send_interactive_data.filenames = evaluator.interactive_plot_file_names
             
-            # logging.debug("Evaluation complete, filenames: %s", evaluator.plot_file_names)
-            # if args.reportInteractive:
-            #     self.reportInteractive()
+            logging.debug("Evaluation complete, filenames: %s", evaluator.interactive_plot_file_names)
+            if args.reportInteractive:
+                self.reportInteractive()
+
         except Exception as e:
             logging.error("An error occurred during evaluation: %s", e)
 
@@ -247,9 +248,9 @@ class CLIApp:
             if args.report:
                 self.report()
 
-            # SendInteractiveReportData().filenames = analyzer.interactive_plot_file_names
-            # if args.reportInteractive:
-            #     self.reportInteractive()
+            SendInteractiveReportData().filenames = analyzer.interactive_plot_file_names
+            if args.reportInteractive:
+                self.reportInteractive()
 
         except Exception as e:
             logging.error("An error occurred during uncertainty analysis: %s", e)
