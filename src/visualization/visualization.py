@@ -265,8 +265,8 @@ class VisualizeEvaluation:
 
         plot = plotly.offline.plot(fig, include_plotlyjs=False, output_type='div', filename="html_test.html")
         print(plot)
-        plot2 = pio.to_html(fig, include_plotlyjs=False, full_html=False, filename="html_test.html")
-        print(plot2)
+        # plot2 = pio.to_html(fig, include_plotlyjs=False, full_html=False)
+        # print(plot2)
 
 
 

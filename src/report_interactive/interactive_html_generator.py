@@ -151,9 +151,11 @@ class Interactive_Html_Generator:
     def create_cheack_file(self):
 
         date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+
         default_data = {
             "build_nr": date_time,
         }
+        
         file_path = "src/report_interactive/build_list.json"
         if not os.path.exists(file_path):
             with open(file_path, 'w') as file:
@@ -175,7 +177,7 @@ class Interactive_Html_Generator:
                 data_build_info = json.load(file)
             
             number_last = data_build_info[option]
-            number_last_text = "_build_" + str(number_last)
+            number_last_text = "_build_" + number_last
 
             return number_last_text
         
