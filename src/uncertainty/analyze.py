@@ -183,6 +183,6 @@ class Analyzer:
     def plot_file_names(self) -> dict:
         return self._plot_file_names
     
-    @interactive_plot_file_names.setter
-    def _interactive_plot_file_names(self) -> dict:
+    @property
+    def interactive_plot_file_names(self) -> dict:
         return self._interactive_plot_file_names
