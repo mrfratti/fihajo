@@ -7,6 +7,10 @@ from src.report.image_data import ImageData
 class SendInteractiveReportData:
     """sends data to htmlGeneratorApi"""
 
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # Put inn data path in list too from visualtitation
+    # orgin report is used in each funtion(main.py): training, evaluate ..... 
+
     def __init__(self):
         self._filenames = {}
         self.adversarial_evaluated = False
@@ -15,8 +19,6 @@ class SendInteractiveReportData:
     def delete_json(self):
         if os.path.exists(self._path_json):
             os.remove(self._path_json)
-
-    # Put inn data path in list too from visualtitation
 
     @property
     def filenames(self):

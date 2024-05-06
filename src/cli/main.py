@@ -239,6 +239,7 @@ class CLIApp:
         except Exception as e:
             logging.error("An error occurred during uncertainty analysis: %s", e)
 
+
     def report(self, args=""):
         """Run report generation"""
         send_data = SendReportData()
@@ -254,6 +255,7 @@ class CLIApp:
 
         except TypeError as e:
             logging.warning("main.report: %s", e)
+
 
     def reportInteractive(self, args=""):
         """Run report generation"""
