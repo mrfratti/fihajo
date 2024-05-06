@@ -261,9 +261,12 @@ class VisualizeEvaluation:
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{self._build_nr_now}.html")
-        plot = plotly.offline.plot(fig, include_plotlyjs=False, output_type='div')
+        pio.write_html(fig, file = full_file_path)
+
+        plot = plotly.offline.plot(fig, include_plotlyjs=False, output_type='div', filename="html_test.html")
         print(plot)
-        # pio.write_html(fig, file = full_file_path)
+        # plot2 = pio.to_html(fig, include_plotlyjs=False, full_html=False)
+        # print(plot2)
 
 
 
