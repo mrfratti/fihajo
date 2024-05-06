@@ -8,56 +8,12 @@ class Interactive_Html_Generator:
     def __init__(self):
         self._html_data = Interactive_Html_Data()
 
-    def create_cheack_file(self):
-        default_data = {
-            "build_nr": [0],
-            "training": [0],
-            "evaluation": [0],
-            "analyze": [0],
-            "adversarial_training": [0],
-            "adversarial_evaluation": [0]
-        }
 
-        file_path = "report_interactive/build_list.json"
-
-        if not os.path.exists(file_path):
-            with open(file_path, 'w') as file:
-                json.dump(default_data, file, indent=4)
-
-
-    def build_nr_now(self, option):
-        file_path = "report_interactive/build_list.json"
-        full_file_path = os.path.join(os.getcwd(), file_path)
-
-        with open(full_file_path, "r") as file:
-            data_build_info = json.load(file)
-
-        number_last = data_build_info[option][-1]
-        number_last_text = "_build_" + str(number_last)
-
-        return number_last_text
-
-
-    def build_list_info(self, option):
-        file_path = "report_interactive/build_list.json"
-        full_file_path = os.path.join(os.getcwd(), file_path)
-
-        with open(full_file_path, "r") as file:
-            data_build_info = json.load(file)
-        
-        number_last = data_build_info["build_nr"][-1]
-        number_next = number_last + 1
-
-        data_build_info[option].append(number_next)
-
-        with open(full_file_path, "w") as file:
-            json.dump(data_build_info, file, indent=4)
 
     def generate(self):
 
         main_path = "src/report/reports/data/plots"
         
-
 
         # --- HTML FOUNDATION --- |
         html_content  = self._html_data.html_start()
@@ -227,9 +183,51 @@ class Interactive_Html_Generator:
             html_file.write(html_content)
 
         self.build_list_info("build_nr")
+    
 
 
+    def create_cheack_file(self):
+        default_data = {
+            "build_nr": [0],
+            "training": [0],
+            "evaluation": [0],
+            "analyze": [0],
+            "adversarial_training": [0],
+            "adversarial_evaluation": [0]
+        }
+
+        file_path = "report_interactive/build_list.json"
+
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as file:
+                json.dump(default_data, file, indent=4)
 
 
-# if __name__ == "__main__":
-#     main()
+    def build_nr_now(self, option):
+        file_path = "report_interactive/build_list.json"
+        full_file_path = os.path.join(os.getcwd(), file_path)
+
+        with open(full_file_path, "r") as file:
+            data_build_info = json.load(file)
+
+        number_last = data_build_info[option][-1]
+        number_last_text = "_build_" + str(number_last)
+
+        return number_last_text
+
+
+    def build_list_info(self, option):
+        file_path = "report_interactive/build_list.json"
+        full_file_path = os.path.join(os.getcwd(), file_path)
+
+        with open(full_file_path, "r") as file:
+            data_build_info = json.load(file)
+        
+        number_last = data_build_info["build_nr"][-1]
+        number_next = number_last + 1
+
+        data_build_info[option].append(number_next)
+
+        with open(full_file_path, "w") as file:
+            json.dump(data_build_info, file, indent=4)
+
