@@ -69,7 +69,7 @@ class Interactive_Html_Generator:
 
         # --- plot_predictions --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictions{build_nr}.png")
-        html_content = f"<img src={full_file_path} alt='plot predictions'>"
+        html_content += f"<img src={full_file_path} alt='plot predictions'>"
         html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
 
         # --- |
@@ -144,7 +144,7 @@ class Interactive_Html_Generator:
         with open("src/report_interactive/interactive_chart.html", "w") as html_file:
             html_file.write(html_content)
 
-        self.delete_cheack_file()
+        # !!!!!!!!!!!!! self.delete_cheack_file()
     
 
 # Add date number insted for build_list_info !!!!!!!!!!!!!!!!!!!!!!!
