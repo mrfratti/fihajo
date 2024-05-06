@@ -17,10 +17,12 @@ class Interactive_Html_Generator:
         html_content  = self._html_data.html_start()
         build_nr = self.build_nr_now("build_nr")
 
+        if build_nr == "ERROR no file":
+            html_content += "<h1> !NEED TO RUN AI MODEL WITH COMMAND! <h1>"
 
         # --- TRAINING --- |
         file_path = main_path + "/training"
-        html_content += "<div id='content_training' class='display'><h2>TRAINING</h2>"
+        html_content += "<div id='content_training' class='display'><h2>TRAINING</h2><br><br>"
 
         # --- Accuracy & Loss --- |
         full_file_path = os.path.join(os.getcwd(), f"{file_path}/val_acc_and_loss{build_nr}.json")
@@ -156,13 +158,17 @@ class Interactive_Html_Generator:
         file_path = "report_interactive/build_list.json"
         full_file_path = os.path.join(os.getcwd(), file_path)
 
-        with open(full_file_path, "r") as file:
-            data_build_info = json.load(file)
+        if not os.path.exists(full_file_path):
+            with open(full_file_path, "r") as file:
+                data_build_info = json.load(file)
+            
+            number_last = data_build_info[option][-1]
+            number_last_text = "_build_" + str(number_last)
 
-        number_last = data_build_info[option][-1]
-        number_last_text = "_build_" + str(number_last)
-
-        return number_last_text
+            return number_last_text
+        
+        else:
+            return "ERROR no file"
 
 
     def build_list_info(self, option):
