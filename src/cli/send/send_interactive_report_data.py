@@ -167,4 +167,4 @@ class SendInteractiveReportData:
             images=images,
         )
         # InteractiveHtmlGeneratorApi()
-        self.delete_json()
+        # self.delete_json()
