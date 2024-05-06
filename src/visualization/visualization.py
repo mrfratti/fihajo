@@ -267,10 +267,8 @@ class VisualizeEvaluation:
             title="Classification Report"
         )
 
-        plot = plotly.offline.plot(fig, include_plotlyjs=False, output_type='div', filename="html_test.html")
-        print(plot)
-        # plot2 = pio.to_html(fig, include_plotlyjs=False, full_html=False)
-        # print(plot2)
+        filename = self._save_interactive_plot_html("classification_report", fig)
+        self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
 
@@ -348,8 +346,8 @@ class VisualizeEvaluation:
             yaxis_title="Accuracy (%)",
         )
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_accuracy_comparison{self._build_nr_now}.json")
-        plotly.io.write_html(fig, file=full_file_path)
+        filename = self._save_interactive_plot_html("accuracy_comparison", fig)
+        self._interactive_plot_file_names["accuracy_comparison"] = filename
 
 
     def _save_plot(self, filename):
@@ -359,17 +357,17 @@ class VisualizeEvaluation:
         plt.close()
         return f"{self.plot_dir}/{filename}"
     
-    def _save_interactive_plot(self, filename):
+
+    def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        filename = f"{filename}_{timestamp}.png"
-        plt.savefig(os.path.join(self.plot_dir, filename))
-        plt.close()
+        filename = f"{filename}_{timestamp}.html"
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        
         return f"{self.plot_dir}/{filename}"
     
     def _save_interactive_plot_json(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.json"
-
         full_file_path = os.path.join(os.getcwd(), filename)
         
         with open(full_file_path, 'w') as file:
@@ -400,7 +398,9 @@ class VisualizeUncertainty:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-        self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+
+        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+        self._interactive_plot_file_names = {}
 
 
 
@@ -466,8 +466,8 @@ class VisualizeUncertainty:
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax{self._build_nr_now}.html")
-        plotly.io.write_html(fig, file=full_file_path)
+        filename = self._save_interactive_plot_html("pcs_meansoftmax", fig)
+        self._interactive_plot_file_names["pcs_meansoftmax"] = filename
 
 
 
@@ -491,6 +491,8 @@ class VisualizeUncertainty:
         filename = self._save_plot("dist_pcs_meansoftmax")
         #plt.show()
         self._plot_file_names["distrubution_meansoftmax"] = filename
+
+
 
     def plot_pcs_ms_inverse(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
@@ -600,8 +602,8 @@ class VisualizeUncertainty:
             legend_title = "Legend",
         )
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores{self._build_nr_now}.html")
-        plotly.io.write_html(fig, file = full_file_path)
+        filename = self._save_interactive_plot_html("entropy_distrubution", fig)
+        self._interactive_plot_file_names["entropy_distrubution"] = filename
 
 
 
@@ -674,6 +676,13 @@ class VisualizeUncertainty:
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
+        return f"{self.plot_dir}/{filename}"
+    
+    def _save_interactive_plot_html(self, filename, data_info):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.html"
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        
         return f"{self.plot_dir}/{filename}"
 
     @property
