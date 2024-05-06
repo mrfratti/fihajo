@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from mpld3 import fig_to_html, plugins
+#from mpld3 import fig_to_html, plugins
 import numpy as np
 
 
@@ -13,10 +13,10 @@ class HtmlPlot:
     def plot(self) -> str:
         """Returns html code of an plot"""
         plot = ""
-        for line in fig_to_html(self._fig, include_libraries=True).splitlines():
-            if -1 == line.find("//") or -1 != line.find("https://"):
-                plot += line.replace("<style>", "").replace("</style>", "")
-        return plot
+        # for line in fig_to_html(self._fig, include_libraries=True).splitlines():
+        #     if -1 == line.find("//") or -1 != line.find("https://"):
+        #         plot += line.replace("<style>", "").replace("</style>", "")
+        # return plot
 
     @plot.setter
     def plot(self, sizeN=100):
@@ -30,8 +30,8 @@ class HtmlPlot:
         self._ax.grid(color="white", linestyle="solid")
         self._ax.set_title("Scatter Plot Example", size=20)
         labels = ["point {0}".format(i + 1) for i in range(sizeN)]
-        tooltip = plugins.PointLabelTooltip(scatter, labels=labels)
-        plugins.connect(self._fig, tooltip)
+        #tooltip = plugins.PointLabelTooltip(scatter, labels=labels)
+        #plugins.connect(self._fig, tooltip)
 
     @property
     def header(self):
