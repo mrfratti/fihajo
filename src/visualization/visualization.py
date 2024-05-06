@@ -581,7 +581,6 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_inverse"] = filename
      
 
-
     def plot_dist_entropy_scores(self, entropy_scores):
         plt.figure(figsize=(20, 10))
         sns.histplot(entropy_scores, bins=50, kde=True, color="blue", label="Clean Data")
@@ -637,10 +636,6 @@ class VisualizeUncertainty:
 
         filename = self._save_interactive_plot_html("entropy_distrubution", fig)
         self._interactive_plot_file_names["entropy_distrubution"] = filename
-
-
-
-
 
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
