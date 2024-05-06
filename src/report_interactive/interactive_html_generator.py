@@ -1,7 +1,7 @@
 import os
 import json
 
-from src.report_interactive.html_structure import Interactive_Html_Data
+from src.report_interactive.interactive_html_data import Interactive_Html_Data
 # from src.report_interactive
 
 class Interactive_Html_Generator:
