@@ -144,6 +144,7 @@ class Interactive_Html_Generator:
             html_file.write(html_content)
 
         self.build_list_info("build_nr")
+        self.delete_cheack_file()
     
 
 
@@ -156,13 +157,15 @@ class Interactive_Html_Generator:
             "adversarial_training": [0],
             "adversarial_evaluation": [0]
         }
-
         file_path = "src/report_interactive/build_list.json"
-
         if not os.path.exists(file_path):
             with open(file_path, 'w') as file:
                 json.dump(default_data, file, indent=4)
 
+    def delete_cheack_file(self):
+        file_path = "src/report_interactive/build_list.json"
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 
 

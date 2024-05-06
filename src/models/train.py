@@ -60,13 +60,11 @@ class Trainer:
             message = "Adversarial training enabled.\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting adversarial training on %s dataset", self.args.dataset)
-            # self._interactive_generator.build_list_info("adversarial_training")
             self.adversarial_training()
         else:
             message = f"Getting ready for training the model on {self.args.dataset} dataset\n"
             self._weightmanager.loading_effect(duration=15, message=message)
             logging.info("Starting training.")
-            self._interactive_generator.build_list_info("training")
             self.training()
 
     def training(self):

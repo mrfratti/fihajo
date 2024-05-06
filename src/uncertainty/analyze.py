@@ -7,8 +7,6 @@ import pandas as pd
 from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
-from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
-
 
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO)
 
@@ -39,7 +37,6 @@ class Analyzer:
         self.mean_softmax_scores = None
         self.pcs_scores = None
         self._plot_file_names = {}
-        self._interactive_generator = Interactive_Html_Generator()
 
     @property
     def default_path(self) -> str:
@@ -58,7 +55,7 @@ class Analyzer:
         self.pcs_mean_softmax()
         self.analyze_entropy(x_test)
         self.table_generator(x_test, y_test)
-        self._interactive_generator.build_list_info("analyze")
+
 
     def run_quantified(self, x_test):
         """
