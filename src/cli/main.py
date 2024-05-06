@@ -135,12 +135,20 @@ class CLIApp:
         (x_train, y_train), (x_test, y_test) = dataset_handler.load_and_preprocess()
 
         try:
+            # process
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
+
+            # find and save to data
             SendReportData().filenames = trainer.plot_file_names
             if args.report:
                 self.report()
+            
+            SendInteractiveReportData().filenames = trainer.interactive_plot_file_names
+            if args.reportInteractive:
+                self.reportInteractive()
+
         except Exception as e:
             logging.error("An error occurred during training: %s", e)
 

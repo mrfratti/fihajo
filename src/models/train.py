@@ -44,18 +44,24 @@ class Trainer:
         self.test_dataset = test_dataset
         self.loss_object = CategoricalCrossentropy(from_logits=False)
         self._plot_file_names = {}
-        self._interactive_generator = Interactive_Html_Generator()
+        self._interactive_plot_file_names = {}
+
 
     @property
     def plot_file_names(self) -> dict:
         """List of plot filenames"""
         return self._plot_file_names
 
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """List of plot filenames"""
+        return self._interactive_plot_file_names
+    
     def train(self):
         """
         Selects the training method based on whether adversarial training is enabled via command-line arguments.
         """
-        self._interactive_generator.create_cheack_file()
+
         if self.args.adv:
             message = "Adversarial training enabled.\n"
             self._weightmanager.loading_effect(duration=15, message=message)
@@ -94,6 +100,7 @@ class Trainer:
         visualizer = VisualizeTraining()
         visualizer.plot_training_results(history)
         self._plot_file_names.update(visualizer.plot_file_names)
+        self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
 
     def adversarial_training(self):
         """
@@ -184,6 +191,7 @@ class Trainer:
         visualizer = VisualizeTraining()
         visualizer.plot_adversarial_training_results(adv_training_history)
         self._plot_file_names.update(visualizer.plot_file_names)
+        self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
 
     def save_model(self):
         """saving model weights"""
