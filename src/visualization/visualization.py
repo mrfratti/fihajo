@@ -11,8 +11,7 @@ from src.cli.string_styling import StringStyling
 
 import json
 import plotly
-import plotly.graph_objects as go
-import plotly.io as pio
+import plotly.graph_objects as plotly_graph_objects
 from plotly.subplots import make_subplots
 
 from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
@@ -73,11 +72,9 @@ class VisualizeTraining:
         }
 
 
-        filename = self._save_interactive_plot("val_acc_and_loss", data_info)
+        filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
         self._interactive_plot_file_names["training"] = filename
         
-
-
 
     def plot_training_results(self, history):
         # Plot training & validation accuracy and loss
@@ -121,16 +118,8 @@ class VisualizeTraining:
             "val_loss":     history_data["val_loss"]
         }
 
-        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        file_path = f"{self.plot_dir}/plot_adversarial_training_results_{date_time}.json"
-        
-        self._interactive_plot_file_names["training"] = file_path
-
-        full_file_path = os.path.join(os.getcwd(), file_path)
-        with open(full_file_path, 'w') as file:
-            json.dump(data_info, file, indent=4)
-        
-
+        filename = self._save_interactive_plot_json("adversarial_training_results", data_info)
+        self._interactive_plot_file_names["adversarialTraining"] = filename
         
 
     def _save_plot(self, filename):
@@ -141,11 +130,12 @@ class VisualizeTraining:
         return f"{self.plot_dir}/{filename}"
     
 
-    def _save_interactive_plot(self, filename, data_info):
+    def _save_interactive_plot_json(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.json"
  
         full_file_path = os.path.join(os.getcwd(), filename)
+        
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
 
@@ -167,12 +157,18 @@ class VisualizeTraining:
         return self._plot_file_names
 
 
+
+
+
 class VisualizeEvaluation:
     def __init__(self, plot_dir="src/report/reports/data/plots/evaluation"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-        self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+        
+        # self._build_nr_now = Interactive_Html_Generator().build_nr_now("build_nr")
+        self._interactive_plot_file_names = {}
+
 
     def plot_predictions(self, model, x_test, y_true, num_samples=25):
         predictions = model.predict(x_test[:num_samples])
@@ -189,10 +185,10 @@ class VisualizeEvaluation:
         #plt.show()
         self._plot_file_names["predictions"] = filename
 
-        # --- Interactive Chart | plot_predictions --- |
+        # --- Interactive Chart | plot predictions --- |
 
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictions{self._build_nr_now}.json")
-        plt.savefig(full_file_path)
+        filename = self._save_interactive_plot("predictions")
+        self._interactive_plot_file_names["predictions"] = filename
 
 
     def plot_confusion_matrix(self, y_true, y_pred, classes):
@@ -225,9 +221,8 @@ class VisualizeEvaluation:
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/confusion_matrix{self._build_nr_now}.json")
-        with open(full_file_path, 'w') as file:
-            json.dump(data_info, file, indent=4)
+        filename = self._save_interactive_plot_json("confusion_matrix", data_info)
+        self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
 
@@ -256,8 +251,8 @@ class VisualizeEvaluation:
         df_report.drop("support", errors="ignore", inplace=True)
         data_heatmap = df_report[["precision", "recall", "f1-score"]].T
         
-        fig = go.Figure(
-            data = go.Heatmap(
+        fig = plotly_graph_objects.Figure(
+            data = plotly_graph_objects.Heatmap(
                 x = data_heatmap.columns,
                 y = data_heatmap.index,
                 z = data_heatmap.values,
@@ -271,9 +266,6 @@ class VisualizeEvaluation:
         fig.update_layout(
             title="Classification Report"
         )
-
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{self._build_nr_now}.html")
-        pio.write_html(fig, file = full_file_path)
 
         plot = plotly.offline.plot(fig, include_plotlyjs=False, output_type='div', filename="html_test.html")
         print(plot)
@@ -343,13 +335,13 @@ class VisualizeEvaluation:
 
         # --- Interactive Chart | plot_accuracy_comparison --- |
 
-        bar_data = go.Bar(
+        bar_data = plotly_graph_objects.Bar(
             x = labels,
             y = accuracies,
             marker_color = ["Clean", "FGSM", "PGD"]
             )
         
-        fig = go.Figure(bar_data)
+        fig = plotly_graph_objects.Figure(bar_data)
 
         fig.update_layout(
             title="Model Accuracy: Clean vs Adversarial Examples",
@@ -357,10 +349,7 @@ class VisualizeEvaluation:
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_accuracy_comparison{self._build_nr_now}.json")
-        pio.write_html(fig, file=full_file_path)
-
-        
-
+        plotly.io.write_html(fig, file=full_file_path)
 
 
     def _save_plot(self, filename):
@@ -369,6 +358,26 @@ class VisualizeEvaluation:
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
         return f"{self.plot_dir}/{filename}"
+    
+    def _save_interactive_plot(self, filename):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.png"
+        plt.savefig(os.path.join(self.plot_dir, filename))
+        plt.close()
+        return f"{self.plot_dir}/{filename}"
+    
+    def _save_interactive_plot_json(self, filename, data_info):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.json"
+
+        full_file_path = os.path.join(os.getcwd(), filename)
+        
+        with open(full_file_path, 'w') as file:
+            json.dump(data_info, file, indent=4)
+
+        return f"{self.plot_dir}/{filename}"
+    
+
 
     @property
     def plot_file_names(self) -> dict:
@@ -428,28 +437,28 @@ class VisualizeUncertainty:
 
 
         # First subplot for PCS scores
-        fig.add_trace(go.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
+        fig.add_trace(plotly_graph_objects.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
 
-        fig.add_trace(go.Scatter(x=[uncertainty_threshold_pcs, uncertainty_threshold_pcs], 
+        fig.add_trace(plotly_graph_objects.Scatter(x=[uncertainty_threshold_pcs, uncertainty_threshold_pcs], 
                                 y=[0, max(np.histogram(pcs_scores, bins='auto')[0])], 
                                 mode="lines", name=f'95th percentile: {uncertainty_threshold_pcs:.2f}', 
                                 line=dict(color='red', dash='dash')), row=1, col=1)
         
-        fig.add_trace(go.Scatter(x=[np.mean(pcs_inverse), np.mean(pcs_inverse)], 
+        fig.add_trace(plotly_graph_objects.Scatter(x=[np.mean(pcs_inverse), np.mean(pcs_inverse)], 
                                 y=[0, max(np.histogram(pcs_scores, bins='auto')[0])], 
                                 mode="lines", name=f'Mean PCS: {np.mean(pcs_scores):.2f}', 
                                 line=dict(color='yellow', dash='dash')), row=1, col=1)
 
 
         # Second subplot for Mean Softmax scores
-        fig.add_trace(go.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
+        fig.add_trace(plotly_graph_objects.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
 
-        fig.add_trace(go.Scatter(x=[uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
+        fig.add_trace(plotly_graph_objects.Scatter(x=[uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
                                 y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
                                 mode="lines", name=f'95th percentile: {uncertainty_threshold_mean_softmax:.2f}', 
                                 line=dict(color='red', dash='dash')), row=1, col=2)
         
-        fig.add_trace(go.Scatter(x=[np.mean(mean_softmax_inverse), np.mean(mean_softmax_inverse)], 
+        fig.add_trace(plotly_graph_objects.Scatter(x=[np.mean(mean_softmax_inverse), np.mean(mean_softmax_inverse)], 
                                 y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
                                 mode="lines", name=f'Mean Softmax: {np.mean(mean_softmax_scores):.2f}', 
                                 line=dict(color='yellow', dash='dash')), row=1, col=2)
@@ -458,7 +467,7 @@ class VisualizeUncertainty:
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_pcs_mean_softmax{self._build_nr_now}.html")
-        pio.write_html(fig, file=full_file_path)
+        plotly.io.write_html(fig, file=full_file_path)
 
 
 
@@ -562,7 +571,7 @@ class VisualizeUncertainty:
         fig = make_subplots(rows=1, cols=1, subplot_titles=[""])
 
         fig.add_trace(
-            go.Histogram(
+            plotly_graph_objects.Histogram(
                 x = entropy_scores,
                 nbinsx = 50,
                 name = "Clean Data",
@@ -592,7 +601,7 @@ class VisualizeUncertainty:
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_dist_entropy_scores{self._build_nr_now}.html")
-        pio.write_html(fig, file = full_file_path)
+        plotly.io.write_html(fig, file = full_file_path)
 
 
 
@@ -636,8 +645,8 @@ class VisualizeUncertainty:
 
         # --- Interactive Chart | predictive_conf_entropy_scores --- |
 
-        fig = go.Figure(
-            data=go.Scatter(
+        fig = plotly_graph_objects.Figure(
+            data=plotly_graph_objects.Scatter(
                 x=predictive_confidence,
                 y=entropy_scores,
                 mode='markers',
@@ -656,7 +665,7 @@ class VisualizeUncertainty:
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictive_conf_entropy_scores{self._build_nr_now}.html")
-        pio.write_html(fig, file = full_file_path)
+        plotly.io.write_html(fig, file = full_file_path)
 
 
 
