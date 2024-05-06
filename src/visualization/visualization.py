@@ -10,7 +10,6 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from src.cli.string_styling import StringStyling
 
 import json
-import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
@@ -237,20 +236,21 @@ class VisualizeEvaluation:
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
         data_heatmap = df_report[["precision", "recall", "f1-score"]].T
-
+        
         fig = go.Figure(
-            data=go.Heatmap(
-                z=data_heatmap.values,
-                x=data_heatmap.columns,
-                y=data_heatmap.index,
-                colorscale='Viridis',
-                hoverongaps=False
+            data = go.Heatmap(
+                x = data_heatmap.columns,
+                y = data_heatmap.index,
+                z = data_heatmap.values,
+                colorscale = 'Viridis',
+                value = data_heatmap.round(2).astype(str),
+                texttemplate = "%{value}",
+                hoverinfo = "value"
             )
         )
+        
         fig.update_layout(
-            title="Classification Report",
-            xaxis_title="",
-            yaxis_title=""
+            title="Classification Report"
         )
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_classification_report{self._build_nr_now}.html")
