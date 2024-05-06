@@ -176,7 +176,7 @@ class VisualizeEvaluation:
         #plt.show()
         self._plot_file_names["predictions"] = filename
 
-        # --- Interactive Chart | Confusion Matrix --- |
+        # --- Interactive Chart | plot_predictions --- |
 
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictions{self._build_nr_now}.json")
         plt.savefig(full_file_path)
@@ -321,6 +321,13 @@ class VisualizeEvaluation:
         filename = self._save_plot("accuracy_comparison")
         #plt.show()
         self._plot_file_names["accuracy_comparison"] = filename
+
+
+        # --- Interactive Chart | Classification Report --- |
+
+        
+
+
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")

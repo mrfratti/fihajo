@@ -67,9 +67,9 @@ class Interactive_Html_Generator:
         html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
 
         # --- plot_predictions --- |
-        # full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictions{build_nr}.png")
-        # html_content = f"<img src={full_file_path} alt='plot predictions'>"
-        # html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
+        full_file_path = os.path.join(os.getcwd(), f"{file_path}/plot_predictions{build_nr}.png")
+        html_content = f"<img src={full_file_path} alt='plot predictions'>"
+        html_content += "<p>" + f"{file_path}/plot_classification_report{build_nr}.html" + "<p>"
 
         # --- |
         html_content += "</div>"
