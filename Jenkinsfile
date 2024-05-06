@@ -113,7 +113,7 @@ pipeline {
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'report_interactive/',
+                    reportDir: 'src/report_interactive/',
                     reportFiles: 'interactive_chart.html',
                     reportName: "HTML Report 2"
                 ]
