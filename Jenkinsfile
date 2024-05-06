@@ -108,7 +108,7 @@ pipeline {
 
         stage('Generate HTML Report 2') {
             steps {
-                sh "python3 -m src.cli.main report_interactive"
+                sh "python3 -m src.cli.main reportinteractive"
                 publishHTML target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,

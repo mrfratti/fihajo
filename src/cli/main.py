@@ -91,7 +91,7 @@ class CLIApp:
         report_parser.set_defaults(func=self.report)
 
     def add_interactive_report_subparser(self, subparsers):
-        report_parser = subparsers.add_parser('report_interactive', help="Genereate interactive report")
+        report_parser = subparsers.add_parser('reportinteractive', help="Genereate interactive report")
         report_parser.set_defaults(func=self.generate_interactive_report)
 
     def generate_interactive_report(self):
