@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 
 from src.report_interactive.interactive_html_data import Interactive_Html_Data
 
@@ -143,19 +144,15 @@ class Interactive_Html_Generator:
         with open("src/report_interactive/interactive_chart.html", "w") as html_file:
             html_file.write(html_content)
 
-        self.build_list_info("build_nr")
         self.delete_cheack_file()
     
 
-
+# Add date number insted for build_list_info !!!!!!!!!!!!!!!!!!!!!!!
     def create_cheack_file(self):
+
+        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         default_data = {
-            "build_nr": [0],
-            "training": [0],
-            "evaluation": [0],
-            "analyze": [0],
-            "adversarial_training": [0],
-            "adversarial_evaluation": [0]
+            "build_nr": [date_time],
         }
         file_path = "src/report_interactive/build_list.json"
         if not os.path.exists(file_path):
@@ -184,22 +181,6 @@ class Interactive_Html_Generator:
         
         # else:
         #     return "ERROR no file"
-
-
-    def build_list_info(self, option):
-        file_path = "src/report_interactive/build_list.json"
-        full_file_path = os.path.join(os.getcwd(), file_path)
-
-        with open(full_file_path, "r") as file:
-            data_build_info = json.load(file)
-        
-        number_last = data_build_info["build_nr"][-1]
-        number_next = number_last + 1
-
-        data_build_info[option].append(number_next)
-
-        with open(full_file_path, "w") as file:
-            json.dump(data_build_info, file, indent=4)
 
 
     def create_div_file_html(self, full_file_path):

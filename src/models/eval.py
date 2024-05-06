@@ -11,8 +11,6 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from src.visualization.visualization import VisualizeEvaluation
 from src.weight_processing.weight_manager import WeightManager
 
-from src.report_interactive.interactive_html_generator import Interactive_Html_Generator
-
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
