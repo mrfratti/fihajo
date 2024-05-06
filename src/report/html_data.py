@@ -32,7 +32,7 @@ class HtmlData:
     @main.setter
     def main(self, tag)->str:
         if isinstance(tag,str):
-            self.main=tag
+            self._main=tag
         
     @property
     def header_text(self) -> str:
