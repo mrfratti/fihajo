@@ -176,6 +176,12 @@ class VisualizeEvaluation:
         #plt.show()
         self._plot_file_names["predictions"] = filename
 
+        # --- Interactive Chart | Confusion Matrix --- |
+
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/plot_predictions{self._build_nr_now}.json")
+        plt.savefig(full_file_path)
+
+
     def plot_confusion_matrix(self, y_true, y_pred, classes):
         # Compute confusion matrix
         cm = confusion_matrix(y_true, y_pred)
