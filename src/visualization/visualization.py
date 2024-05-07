@@ -385,7 +385,7 @@ class VisualizeEvaluation:
     def _save_interactive_plot_json(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.json"
-        full_file_path = os.path.join(os.getcwd(), filename)
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/{filename}")
         
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
