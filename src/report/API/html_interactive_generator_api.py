@@ -1,6 +1,6 @@
 from src.report.html_data import HtmlData
 from src.report.interactive.html_generator import InteractiveHtmlGenerator
-from src.report.interactive.interactive_html_data import InteractiveImageData
+from src.report.interactive.image_data import InteractiveImageData
 
 
 # class InteractiveHtmlGeneratorApi:
