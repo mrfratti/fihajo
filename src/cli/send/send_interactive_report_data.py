@@ -14,7 +14,7 @@ class SendInteractiveReportData:
     def __init__(self):
         self._filenames = {}
         self.adversarial_evaluated = False
-        self._path_json = "data/send_interactive.json"
+        self._path_json = "data/interactive/send_interactive.json"
     
     def delete_json(self):
         if os.path.exists(self._path_json):
