@@ -461,48 +461,8 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_meansoftmax"] = filename
 
 
-        # --- Interactive Chart | plot_pcs_ms_inverse --- |
+        # --- Interactive Chart | plot_pcs_mean_softmax --- |
 
-        pcs_inverse = 1 - pcs_scores
-        uncertainty_threshold_pcs = np.percentile(pcs_inverse, 95)
-        mean_softmax_inverse = 1 - mean_softmax_scores
-        uncertainty_threshold_mean_softmax = np.percentile(mean_softmax_inverse, 95)
-
-        fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
-
-
-        # First subplot for PCS scores
-        fig.add_trace(plotly_graph_objects.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
-
-        fig.add_trace(plotly_graph_objects.Scatter(x=[uncertainty_threshold_pcs, uncertainty_threshold_pcs], 
-                                y=[0, max(np.histogram(pcs_scores, bins='auto')[0])], 
-                                mode="lines", name=f'95th percentile: {uncertainty_threshold_pcs:.2f}', 
-                                line=dict(color='red', dash='dash')), row=1, col=1)
-        
-        fig.add_trace(plotly_graph_objects.Scatter(x=[np.mean(pcs_inverse), np.mean(pcs_inverse)], 
-                                y=[0, max(np.histogram(pcs_scores, bins='auto')[0])], 
-                                mode="lines", name=f'Mean PCS: {np.mean(pcs_scores):.2f}', 
-                                line=dict(color='yellow', dash='dash')), row=1, col=1)
-
-
-        # Second subplot for Mean Softmax scores
-        fig.add_trace(plotly_graph_objects.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
-
-        fig.add_trace(plotly_graph_objects.Scatter(x=[uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
-                                y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
-                                mode="lines", name=f'95th percentile: {uncertainty_threshold_mean_softmax:.2f}', 
-                                line=dict(color='red', dash='dash')), row=1, col=2)
-        
-        fig.add_trace(plotly_graph_objects.Scatter(x=[np.mean(mean_softmax_inverse), np.mean(mean_softmax_inverse)], 
-                                y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
-                                mode="lines", name=f'Mean Softmax: {np.mean(mean_softmax_scores):.2f}', 
-                                line=dict(color='yellow', dash='dash')), row=1, col=2)
-
-        fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
-                        yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
-
-        filename = self._save_interactive_plot_html("pcs_meansoftmax", fig)
-        self._interactive_plot_file_names["pcs_meansoftmax"] = filename
 
 
 
@@ -529,17 +489,16 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | plot_distribution_pcs_ms_scores --- |
-        list_data = [pcs_scores, mean_softmax_scores]
-        list_labels = ['PCS Score', 'Mean Softmax Score']
 
-        fig = plotly_figure_factory.create_distplot(list_data, list_labels, show_hist=True, show_rug=False, bin_size=.5)
+        fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
 
-        fig.update_layout(
-            title_text='Distribution of PCS and Mean Softmax Scores',
-            xaxis_title_text='Predictive Confidence Score & Mean Softmax Scores',
-            yaxis_title_text='Distribution of PCS and Mean Softmax Scores',
-            bargap=0.2,
-        )
+        fig.add_trace(plotly_graph_objects.Histogram(x=pcs_scores, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
+
+        fig.add_trace(plotly_graph_objects.Histogram(x=mean_softmax_scores, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
+
+
+        fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
+                        yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
         filename = self._save_interactive_plot_html("dist_pcs_meansoftmax", fig)
         self._interactive_plot_file_names["distrubution_meansoftmax"] = filename
@@ -598,6 +557,41 @@ class VisualizeUncertainty:
         filename = self._save_plot("pcs_ms_inverse")
         #plt.show()
         self._plot_file_names["pcs_inverse"] = filename
+
+
+        # --- Interactive Chart | pcs_ms_inverse --- |
+  
+        fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores as Uncertainty", "Distribution of Mean Softmax Scores as Uncertainty"))
+
+        fig.add_trace(plotly_graph_objects.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
+
+        fig.add_trace(plotly_graph_objects.Scatter(x=[uncertainty_threshold_pcs, uncertainty_threshold_pcs], 
+                                y = [0, max(np.histogram(pcs_scores, bins='auto')[0])], 
+                                mode = "lines", name = f'95th percentile: {uncertainty_threshold_pcs:.2f}', 
+                                line = dict(color='red', dash='dash')), row=1, col=1)
+        
+        fig.add_trace(plotly_graph_objects.Scatter(x=[np.mean(pcs_inverse), np.mean(pcs_inverse)], 
+                                y = [0, max(np.histogram(pcs_scores, bins='auto')[0])], 
+                                mode = "lines", name = f'Mean PCS: {np.mean(pcs_scores):.2f}', 
+                                line = dict(color='yellow', dash='dash')), row=1, col=1)
+
+        fig.add_trace(plotly_graph_objects.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
+
+        fig.add_trace(plotly_graph_objects.Scatter(x=[uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
+                                y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
+                                mode="lines", name=f'95th percentile: {uncertainty_threshold_mean_softmax:.2f}', 
+                                line=dict(color='red', dash='dash')), row=1, col=2)
+        
+        fig.add_trace(plotly_graph_objects.Scatter(x=[np.mean(mean_softmax_inverse), np.mean(mean_softmax_inverse)], 
+                                y=[0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
+                                mode="lines", name=f'Mean Softmax: {np.mean(mean_softmax_scores):.2f}', 
+                                line=dict(color='yellow', dash='dash')), row=1, col=2)
+
+        fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
+                        yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
+
+        filename = self._save_interactive_plot_html("pcs_ms_inverse", fig)
+        self._interactive_plot_file_names["pcs_ms_inverse"] = filename
      
 
     def plot_dist_entropy_scores(self, entropy_scores):
@@ -740,7 +734,7 @@ class VisualizeUncertainty:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         
         return f"{self.plot_dir}/{filename}"
 

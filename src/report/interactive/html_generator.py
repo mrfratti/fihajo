@@ -104,7 +104,7 @@ class InteractiveHtmlGenerator:
                     text("Your browser does not support iframes")
             
             elif file_end_lower == '.png':
-                with tag('img', src=data.image_location, style="width:auto; height:auto;"):
+                with tag('img', src=data.image_location, style="width:100%; height:auto;"):
                     text('Image not found')
 
             with tag("div", klass="info"):
