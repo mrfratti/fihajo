@@ -45,7 +45,7 @@ class InteractiveHtmlGenerator:
         with tag("html", lang="en"):
             with tag("head"):
                 doc.stag("meta", charset="UTF-8")
-                doc.stag("link", rel="stylesheet", href="dist/style.css")
+                doc.stag("link", rel="stylesheet", href="src/report/reports/dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
 
             with tag("body"):
