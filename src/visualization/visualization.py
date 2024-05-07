@@ -185,7 +185,7 @@ class VisualizeTraining:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
@@ -285,14 +285,26 @@ class VisualizeEvaluation:
 
 
         # --- Interactive Chart | Confusion Matrix --- |
+        cm = np.flipud(cm)
+        fig = plotly_figure_factory.create_annotated_heatmap(
+            z=cm,
+            x=classes,
+            y=classes,
+            colorscale='Blues',
+            annotation_text=np.array(cm).astype(str),
+            showscale=True
+        )
 
-        data_info = []
-
-        for x in range(len(cm)):
-            for y in range(len(cm[x])):
-                data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
+        fig.update_layout(
+            title='Confusion Matrix',
+            xaxis=dict(title='Predicted Label', tickmode='array'),
+            yaxis=dict(title='True Label', tickmode='array'),
+            title_font=dict(size=20),
+            xaxis_title_font=dict(size=18),
+            yaxis_title_font=dict(size=18)
+        )
         
-        filename = self._save_interactive_plot_json("confusion_matrix", data_info)
+        filename = self._save_interactive_plot_html("confusion_matrix", fig)
         self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
@@ -440,7 +452,7 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
