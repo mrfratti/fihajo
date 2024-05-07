@@ -267,8 +267,8 @@ class VisualizeEvaluation:
                 x = data_heatmap.columns,
                 y = data_heatmap.index,
                 z = data_heatmap.values,
-                colorscale = 'Plasma',
-                text = data_heatmap.values,
+                colorscale = 'viridis',
+                text = data_heatmap.round(2).astype(str),
                 texttemplate = "%{text}",
                 hoverinfo = "text"
             )
