@@ -95,6 +95,22 @@ class VisualizeTraining:
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
 
 
+        fig.add_trace(plotly_graph_objects.Scatter(y=history["accuracy"],
+                                         mode="lines+markers",
+                                         name="Accuracy",
+                                         line=dict(dash="dot")),
+                                         row=1, col=1)
+
+        fig.add_trace(plotly_graph_objects.Scatter(y=history["loss"],
+                                         mode="lines+markers",
+                                         name="Loss",
+                                         line=dict(dash="dot")),
+                                         row=2, col=1)
+        
+        filename = self._save_interactive_plot_json("val_acc_and_loss", fig)
+        self._interactive_plot_file_names["training"] = filename
+
+
 
     def plot_adversarial_training_results(self, history):
         """_summary_"""
@@ -109,21 +125,22 @@ class VisualizeTraining:
 
 
         # --- Interactive Chart | Adversarial Training Results --- |
-        history_data = history.history
+        fig = make_subplots(rows=2, cols=1, subplot_titles=("Adversarial Training Accuracy", "Adversarial Model Loss"))
 
-        x_value = []
-        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-            x_value.append(x_axis_nr)
 
-        data_info = {
-            "x":            x_value,
-            "accuracy":     history_data["accuracy"],
-            "val_accuracy": history_data["val_accuracy"],
-            "loss":         history_data["loss"],
-            "val_loss":     history_data["val_loss"]
-        }
+        fig.add_trace(plotly_graph_objects.Scatter(y=history["accuracy"],
+                                         mode="lines+markers",
+                                         name="Accuracy",
+                                         line=dict(dash="dot")),
+                                         row=1, col=1)
 
-        filename = self._save_interactive_plot_json("adversarial_training_results", data_info)
+        fig.add_trace(plotly_graph_objects.Scatter(y=history["loss"],
+                                         mode="lines+markers",
+                                         name="Loss",
+                                         line=dict(dash="dot")),
+                                         row=2, col=1)
+
+        filename = self._save_interactive_plot_json("adv_train_acc_loss", fig)
         self._interactive_plot_file_names["adversarialTraining"] = filename
         
 
