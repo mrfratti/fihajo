@@ -267,8 +267,8 @@ class VisualizeEvaluation:
                 x = data_heatmap.columns,
                 y = data_heatmap.index,
                 z = data_heatmap.values,
-                colorscale = 'Viridis',
-                text = data_heatmap.round(2).astype(str),
+                colorscale = 'Plasma',
+                text = data_heatmap.values,
                 texttemplate = "%{text}",
                 hoverinfo = "text"
             )
@@ -378,8 +378,8 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
-        
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+
         return f"{self.plot_dir}/{filename}"
     
     def _save_interactive_plot_json(self, filename, data_info):
@@ -707,7 +707,7 @@ class VisualizeUncertainty:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
         
         return f"{self.plot_dir}/{filename}"
 
