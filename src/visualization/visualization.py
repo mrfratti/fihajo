@@ -107,7 +107,7 @@ class VisualizeTraining:
                                          line=dict(dash="dot")),
                                          row=2, col=1)
         
-        filename = self._save_interactive_plot_json("val_acc_and_loss", fig)
+        filename = self._save_interactive_plot_html("val_acc_and_loss", fig)
         self._interactive_plot_file_names["training"] = filename
 
 
@@ -140,7 +140,7 @@ class VisualizeTraining:
                                          line=dict(dash="dot")),
                                          row=2, col=1)
 
-        filename = self._save_interactive_plot_json("adv_train_acc_loss", fig)
+        filename = self._save_interactive_plot_html("adv_train_acc_loss", fig)
         self._interactive_plot_file_names["adversarialTraining"] = filename
         
 
@@ -160,6 +160,15 @@ class VisualizeTraining:
         
         with open(full_file_path, 'w') as file:
             json.dump(data_info, file, indent=4)
+
+        return f"{self.plot_dir}/{filename}"
+    
+
+    def _save_interactive_plot_html(self, filename, data_info):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.html"
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
 
@@ -732,7 +741,7 @@ class VisualizeUncertainty:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), output_type='div', include_plotlyjs=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
         
         return f"{self.plot_dir}/{filename}"
 
