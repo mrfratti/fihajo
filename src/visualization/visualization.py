@@ -12,6 +12,7 @@ from src.cli.string_styling import StringStyling
 import json
 import plotly
 import plotly.graph_objects as plotly_graph_objects
+import plotly.figure_factory as plotly_figure_factory
 from plotly.subplots import make_subplots
 
 
@@ -525,6 +526,23 @@ class VisualizeUncertainty:
         filename = self._save_plot("dist_pcs_meansoftmax")
         #plt.show()
         self._plot_file_names["distrubution_meansoftmax"] = filename
+
+
+        # --- Interactive Chart | plot_distribution_pcs_ms_scores --- |
+        list_data = [pcs_scores, mean_softmax_scores]
+        list_labels = ['PCS Score', 'Mean Softmax Score']
+
+        fig = plotly_figure_factory.create_distplot(list_data, list_labels, show_hist=True, show_rug=False, bin_size=.5)
+
+        fig.update_layout(
+            title_text='Distribution of PCS and Mean Softmax Scores',
+            xaxis_title_text='Predictive Confidence Score & Mean Softmax Scores',
+            yaxis_title_text='Distribution of PCS and Mean Softmax Scores',
+            bargap=0.2,
+        )
+
+        filename = self._save_interactive_plot_html("dist_pcs_meansoftmax", fig)
+        self._interactive_plot_file_names["distrubution_meansoftmax"] = filename
 
 
 
