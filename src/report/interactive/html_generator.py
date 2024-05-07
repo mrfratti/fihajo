@@ -25,8 +25,8 @@ class InteractiveHtmlGenerator:
 
     @image_data.setter
     def image_data(self, data):
-        if data is None or not isinstance(data, ImageData):
-            raise ValueError("Wrong data type when adding image_data")
+        # if data is None or not isinstance(data, ImageData):
+        #     raise ValueError("Wrong data type when adding image_data")
         self._image_data_list.append(data)
 
     @property
