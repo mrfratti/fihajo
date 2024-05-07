@@ -56,23 +56,23 @@ class VisualizeTraining:
 
         # --- Interactive Chart | Accuracy & Loss --- |
 
-        history_data = history.history
+        # history_data = history.history
         
-        x_value = []
-        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-            x_value.append(x_axis_nr)
+        # x_value = []
+        # for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
+        #     x_value.append(x_axis_nr)
 
-        data_info = {
-            "x":            x_value,
-            "accuracy":     history_data["accuracy"],
-            "val_accuracy": history_data["val_accuracy"],
-            "loss":         history_data["loss"],
-            "val_loss":     history_data["val_loss"]
-        }
+        # data_info = {
+        #     "x":            x_value,
+        #     "accuracy":     history_data["accuracy"],
+        #     "val_accuracy": history_data["val_accuracy"],
+        #     "loss":         history_data["loss"],
+        #     "val_loss":     history_data["val_loss"]
+        # }
 
 
-        filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
-        self._interactive_plot_file_names["training"] = filename
+        # filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
+        # self._interactive_plot_file_names["training"] = filename
         
 
     def plot_training_results(self, history):
@@ -89,6 +89,25 @@ class VisualizeTraining:
         filename = self._save_plot("val_acc_and_loss")
         #plt.show()
         self._plot_file_names["training"] = filename
+
+
+        # --- Interactive Chart | Accuracy & Loss --- |
+        fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
+
+        fig.add_trace(
+            plotly_graph_objects.Scatter(y=history['accuracy'],
+                                         name='Accuracy',
+                                         mode='lines+markers'
+                                         line=dict(dash='dot')),
+                                         row=1, col=1)
+
+        fig.add_trace(
+            plotly_graph_objects.Scatter(y=history['loss'],
+                                         mode='lines+markers',
+                                         name='Loss',
+                                         line=dict(dash='dot')),
+                                         row=2, col=1)
+
 
     def plot_adversarial_training_results(self, history):
         """_summary_"""
@@ -709,7 +728,7 @@ class VisualizeUncertainty:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), output_type='div', include_plotlyjs=True)
         
         return f"{self.plot_dir}/{filename}"
 

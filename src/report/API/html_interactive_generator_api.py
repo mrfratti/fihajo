@@ -31,8 +31,6 @@ class InteractiveHtmlGeneratorApi:
         self._generator.html_report = self._report
         text1 = report_location
         text2 = report_filename
-        # self._report.head = f"<div>{report_location}</div>" + f"<div>{report_filename}</div>"
-        # self._report.main = "<div>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</div>"
 
         for image in images:
             image_data = InteractiveImageData()
