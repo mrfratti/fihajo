@@ -560,7 +560,6 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | pcs_ms_inverse --- |
-  
         fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores as Uncertainty", "Distribution of Mean Softmax Scores as Uncertainty"))
 
         fig.add_trace(plotly_graph_objects.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
@@ -614,40 +613,16 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | Entropy Scores --- |
-        fig = make_subplots(rows=1, cols=1, subplot_titles=[""])
+        fig = make_subplots(rows=1, cols=1, subplot_titles=("Histogram of Predictive Entropy"))
 
-        fig.add_trace(
-            plotly_graph_objects.Histogram(
-                x = entropy_scores,
-                nbinsx = 50,
-                name = "Clean Data",
-                marker_color = "blue",
-                histnorm = 'probability density'
-            ),
-            row=1, col=1
-        )
+        fig.add_trace(plotly_graph_objects.Histogram(x=entropy_scores, name='Predictive Entropy', marker_color='blue'), row=1, col=1)
 
-        # value_mean = np.mean(entropy_scores)
-        # value_max_height = max(np.histogram(entropy_scores, bins='auto')[0])
+        fig.update_layout(title_text='', xaxis_title_text='Score', 
+                        yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x=[value_mean, value_mean], 
-        #         y=[0, value_max_height], 
-        #         mode="lines", name="Mean", 
-        #         line=dict(color='red', dash='dash')), 
-        #         row=1, col=1
-        #         )
-
-        fig.update_layout(
-            title = "Histogram of Predictive Entropy",
-            xaxis_title = "Predictive Entropy",
-            yaxis_title = "Frequency",
-            legend_title = "Legend",
-        )
-
-        filename = self._save_interactive_plot_html("entropy_distrubution", fig)
+        filename = self._save_interactive_plot_html("dist_entropy", fig)
         self._interactive_plot_file_names["entropy_distrubution"] = filename
+
 
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
