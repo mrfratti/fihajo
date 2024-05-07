@@ -26,7 +26,7 @@ class VisualizeTraining:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-        # self._interactive_plot_file_names = {}
+        self._interactive_plot_file_names = {}
 
 
     def _plot_results(self, history, mode, title, ylabel="", xlabel="Epoch", historytags=[]):
@@ -70,8 +70,8 @@ class VisualizeTraining:
         }
 
 
-        # filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
-        # self._interactive_plot_file_names["training"] = filename
+        filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
+        self._interactive_plot_file_names["training"] = filename
         
 
     def plot_training_results(self, history):
@@ -116,8 +116,8 @@ class VisualizeTraining:
             "val_loss":     history_data["val_loss"]
         }
 
-        # filename = self._save_interactive_plot_json("adversarial_training_results", data_info)
-        # self._interactive_plot_file_names["adversarialTraining"] = filename
+        filename = self._save_interactive_plot_json("adversarial_training_results", data_info)
+        self._interactive_plot_file_names["adversarialTraining"] = filename
         
 
     def _save_plot(self, filename):
@@ -154,20 +154,20 @@ class VisualizeTraining:
             )
         return self._plot_file_names
     
-    # @property
-    # def interactive_plot_file_names(self) -> dict:
-    #     """Returns a dictionary of filenames"""
-    #     if not isinstance(self._interactive_plot_file_names, dict):
-    #         raise ValueError(
-    #             StringStyling.box_style(
-    #                 message="visualizer: Wrong datatype for filname should be dict"
-    #             )
-    #         )
-    #     if len(self._interactive_plot_file_names) < 1:
-    #         raise ValueError(
-    #             StringStyling.box_style(message="visualizer: missing filnames in dict")
-    #         )
-    #     return self._interactive_plot_file_names
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._interactive_plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._interactive_plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._interactive_plot_file_names
 
 
 
@@ -178,7 +178,7 @@ class VisualizeEvaluation:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-        # self._interactive_plot_file_names = {}
+        self._interactive_plot_file_names = {}
 
 
     def plot_predictions(self, model, x_test, y_true, num_samples=25):
@@ -198,8 +198,8 @@ class VisualizeEvaluation:
 
         # --- Interactive Chart | plot predictions --- |
 
-        # filename = self._save_interactive_plot("predictions")
-        # self._interactive_plot_file_names["predictions"] = filename
+        filename = self._save_interactive_plot("predictions")
+        self._interactive_plot_file_names["predictions"] = filename
 
 
     def plot_confusion_matrix(self, y_true, y_pred, classes):
@@ -232,8 +232,8 @@ class VisualizeEvaluation:
             for y in range(len(cm[x])):
                 data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
         
-        # filename = self._save_interactive_plot_json("confusion_matrix", data_info)
-        # self._interactive_plot_file_names["confusion_matrix"] = filename
+        filename = self._save_interactive_plot_json("confusion_matrix", data_info)
+        self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
 
@@ -278,8 +278,8 @@ class VisualizeEvaluation:
             title="Classification Report"
         )
 
-        # filename = self._save_interactive_plot_html("classification_report", fig)
-        # self._interactive_plot_file_names["classification_report"] = filename
+        filename = self._save_interactive_plot_html("classification_report", fig)
+        self._interactive_plot_file_names["classification_report"] = filename
 
 
 
@@ -357,8 +357,8 @@ class VisualizeEvaluation:
             yaxis_title="Accuracy (%)",
         )
 
-        # filename = self._save_interactive_plot_html("accuracy_comparison", fig)
-        # self._interactive_plot_file_names["accuracy_comparison"] = filename
+        filename = self._save_interactive_plot_html("accuracy_comparison", fig)
+        self._interactive_plot_file_names["accuracy_comparison"] = filename
 
 
     def _save_plot(self, filename):
@@ -409,20 +409,20 @@ class VisualizeEvaluation:
             )
         return self._plot_file_names
     
-    # @property
-    # def interactive_plot_file_names(self) -> dict:
-    #     """Returns a dictionary of filenames"""
-    #     if not isinstance(self._interactive_plot_file_names, dict):
-    #         raise ValueError(
-    #             StringStyling.box_style(
-    #                 message="visualizer: Wrong datatype for filname should be dict"
-    #             )
-    #         )
-    #     if len(self._interactive_plot_file_names) < 1:
-    #         raise ValueError(
-    #             StringStyling.box_style(message="visualizer: missing filnames in dict")
-    #         )
-    #     return self._interactive_plot_file_names
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._interactive_plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._interactive_plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._interactive_plot_file_names
 
 
 
@@ -431,7 +431,7 @@ class VisualizeUncertainty:
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
         self._plot_file_names = {}
-        # self._interactive_plot_file_names = {}
+        self._interactive_plot_file_names = {}
 
 
 
@@ -497,8 +497,8 @@ class VisualizeUncertainty:
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='Score', 
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
 
-        # filename = self._save_interactive_plot_html("pcs_meansoftmax", fig)
-        # self._interactive_plot_file_names["pcs_meansoftmax"] = filename
+        filename = self._save_interactive_plot_html("pcs_meansoftmax", fig)
+        self._interactive_plot_file_names["pcs_meansoftmax"] = filename
 
 
 
@@ -632,8 +632,8 @@ class VisualizeUncertainty:
             legend_title = "Legend",
         )
 
-        # filename = self._save_interactive_plot_html("entropy_distrubution", fig)
-        # self._interactive_plot_file_names["entropy_distrubution"] = filename
+        filename = self._save_interactive_plot_html("entropy_distrubution", fig)
+        self._interactive_plot_file_names["entropy_distrubution"] = filename
 
 
     def high_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
@@ -692,8 +692,8 @@ class VisualizeUncertainty:
             yaxis_title="Entropy Score",
         )
 
-        # filename = self._save_interactive_plot_html("prediction_vs_entrophy", fig)
-        # self._interactive_plot_file_names["prediction_vs_entrophy"] = filename
+        filename = self._save_interactive_plot_html("prediction_vs_entrophy", fig)
+        self._interactive_plot_file_names["prediction_vs_entrophy"] = filename
 
 
 
@@ -726,18 +726,18 @@ class VisualizeUncertainty:
             )
         return self._plot_file_names
     
-    # @property
-    # def interactive_plot_file_names(self) -> dict:
-    #     """Returns a dictionary of filenames"""
-    #     if not isinstance(self._interactive_plot_file_names, dict):
-    #         raise ValueError(
-    #             StringStyling.box_style(
-    #                 message="visualizer: Wrong datatype for filname should be dict"
-    #             )
-    #         )
-    #     if len(self._interactive_plot_file_names) < 1:
-    #         raise ValueError(
-    #             StringStyling.box_style(message="visualizer: missing filnames in dict")
-    #         )
-    #     return self._interactive_plot_file_names
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """Returns a dictionary of filenames"""
+        if not isinstance(self._interactive_plot_file_names, dict):
+            raise ValueError(
+                StringStyling.box_style(
+                    message="visualizer: Wrong datatype for filname should be dict"
+                )
+            )
+        if len(self._interactive_plot_file_names) < 1:
+            raise ValueError(
+                StringStyling.box_style(message="visualizer: missing filnames in dict")
+            )
+        return self._interactive_plot_file_names
 

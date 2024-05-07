@@ -31,8 +31,18 @@ class InteractiveHtmlGeneratorApi:
         self._generator.html_report = self._report
         self._report.head = f"<div>{report_location}</div>" + f"<div>{report_filename}</div>"
         self._report.main = "<div>Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</div>"
+
+        for image in images:
+            self._report.main += "<div>"+image+"</div>"
+            image_data = ImageData()
+            image_data.header_image = image["image_header"]
+            image_data.image_location = image["image_location"]
+            image_data.about_image = image["about_image"]
+            self._generator.image_data = image_data
+
+            
         self._report.html_store_location="./"
-        self._report.filename = "test_test_index"
+        self._report.filename = "src/report/interactive/test_index"
 
         self._generator.write_html()
 
