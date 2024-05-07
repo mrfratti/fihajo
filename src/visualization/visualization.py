@@ -98,7 +98,7 @@ class VisualizeTraining:
 
         list_x_values = list(range(0, len(history_data['accuracy']) + 1))
         list_accuracy = [0] + history_data['accuracy']
-        list_loss = [0] + history_data['loss']
+        list_loss = [history_data['loss'][0]] + history_data['loss']
 
         fig.add_trace(plotly_graph_objects.Scatter(x=list_x_values,
                                                    y=list_accuracy,
@@ -140,7 +140,7 @@ class VisualizeTraining:
 
         list_x_values = list(range(0, len(history_data['accuracy']) + 1))
         list_accuracy = [0] + history_data['accuracy']
-        list_loss = [0] + history_data['loss']
+        list_loss = [history_data['loss'][0]] + history_data['loss']
 
         fig.add_trace(plotly_graph_objects.Scatter(x=list_x_values,
                                                    y=list_accuracy,
