@@ -16,7 +16,7 @@ class InteractiveHtmlGenerator:
 
     def __init__(self) -> None:
         self._image_data_list = []
-        self._html_report = None
+        self._html_report = HtmlData()
 
     @property
     def image_data(self) -> int:
@@ -41,63 +41,49 @@ class InteractiveHtmlGenerator:
         self._html_report = report
 
     def _generate(self):
-        if self._html_report is None:
-            raise ValueError("HTML data is empty")
         doc.asis("<!DOCTYPE html>")
         with tag("html", lang="en"):
             with tag("head"):
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
-                if self._html_report.head is not None:
-                    doc.asis(self._html_report.head)
+
             with tag("body"):
                 with tag("header"):
                     with tag("h1"):
                         text(self._html_report.header_text)
                     with tag("nav"):
                         with tag("ul"):
-                            self._nav()
+                            for i, data in enumerate(self._image_data_list):
+                                with tag("li"):
+                                    with tag("a", href=f"#section{i}"):
+                                        text(data.header_image)
 
                 with tag("main"):
-                    self._main()
+                    for i, data in enumerate(self._image_data_list):
+                        with tag("section", id=f"section{i}"):
+                            self._img_section(data, "right" if i % 2 == 0 else "left")
 
                 with tag("footer"):
                     text("Copyright © Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
         return doc.getvalue()
 
     def _main(self):
-        if len(self._image_data_list) > 0:
-            self._img()
-            return
-        if self._html_report.main:
-            doc.asis(self._html_report.main)
-            return
-        else:
+        if len(self._image_data_list) < 1:
             with tag("div", klass="error"):
                 with tag("h2"):
                     text("Oops!")
                 with tag("p"):
                     text("No data to show")
-                    
-    def _nav(self):
-        if self._html_report.menu is not None:
-            for i, data in enumerate(self._html_report.menu):
-                with tag("li"):
-                    with tag("a", href=f"#section{i}"):
-                        text(data)
-        if len(self._image_data_list)>0:
-            for i, data in enumerate(self._image_data_list):
-                with tag("li"):
-                    with tag("a", href=f"#section{i}"):
-                        text(data.header_image)
-      
+        else:
+            self._img()
 
     def _img(self):
         for i, data in enumerate(self._image_data_list):
-            for i, data in enumerate(self._image_data_list):
-                with tag("section", id=f"section{i}"):
-                    self._img_section(data, "right" if i % 2 == 0 else "left")
+            if i % 2 == 0:
+                self._img_section(data, "right")
+            else:
+                self._img_section(data, "left")
 
     def _img_section(self, data, section):
         with tag("div", klass=section):
