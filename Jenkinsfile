@@ -114,7 +114,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: '',
-                    reportFiles: 'test_index.html',
+                    reportFiles: 'src/report/interactive/test_index.html',
                     reportName: "HTML Report 2"
                 ]
             }
