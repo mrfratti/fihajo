@@ -86,11 +86,27 @@ class InteractiveHtmlGenerator:
                 self._img_section(data, "left")
 
     def _img_section(self, data, section):
+
+        file_path = data.image_location
+        file_split = os.path.splitext(file_path)
+        file_end_lower = file_split[1].lower()
+
         with tag("div", klass=section):
             with tag("h2"):
                 text(data.header_image)
-            with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
-                text("Your browser does not support iframes")
+
+            if file_end_lower == '.json':   
+                with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
+                    text("Your browser does not support iframes")
+
+            elif file_end_lower == '.html':
+                with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
+                    text("Your browser does not support iframes")
+            
+            elif file_end_lower == '.png':
+                with tag('img', src=file_path, style="width:auto; height:auto;"):
+                    text('Your browser does not support images')
+
             with tag("div", klass="info"):
                 with tag("div"):
                     with tag("p"):
