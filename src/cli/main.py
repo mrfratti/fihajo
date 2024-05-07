@@ -280,20 +280,20 @@ class CLIApp:
 
 
     def reportInteractive(self, args=""):
-        """Run report generation"""
-        send_data = SendInteractiveReportData()
-        if args and hasattr(args, 'adv_eval'):
-            send_data.adversarial_evaluated = args.adv_eval
-        else:
-            send_data.adversarial_evaluated = False
+        # """Run report generation"""
+        # send_data = SendInteractiveReportData()
+        # if args and hasattr(args, 'adv_eval'):
+        #     send_data.adversarial_evaluated = args.adv_eval
+        # else:
+        #     send_data.adversarial_evaluated = False
 
-        try:
-            send_data.send()
-        except ValueError as e:
-            logging.warning("main.report: %s", e)
+        # try:
+        #     send_data.send()
+        # except ValueError as e:
+        #     logging.warning("main.report: %s", e)
 
-        except TypeError as e:
-            logging.warning("main.report: %s", e)
+        # except TypeError as e:
+        #     logging.warning("main.report: %s", e)
 
 
     def load_config(self, file_path):
