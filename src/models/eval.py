@@ -12,7 +12,6 @@ from src.visualization.visualization import VisualizeEvaluation
 from src.weight_processing.weight_manager import WeightManager
 
 
-
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
 
@@ -35,7 +34,6 @@ class Evaluator:
         self.model = self._weightmanager.current_model
         self.adversarial_evaluated = args.adv_eval
         self._plot_file_names = {}
-        self._interactive_plot_file_names = {}
 
     @property
     def default_path(self) -> str:
@@ -68,7 +66,6 @@ class Evaluator:
             visualizer.plot_confusion_matrix(y_true, y_pred_classes, classes=[str(i) for i in range(10)])
             visualizer.plot_classification_report(y_true, y_pred_classes)
             self._plot_file_names.update(visualizer.plot_file_names)
-            self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
 
     def adversarial_evaluation(self, x_test, y_test):
         self.evaluation(x_test, y_test, plot_results=True)
@@ -94,16 +91,8 @@ class Evaluator:
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
         labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
-        # NB!
-        # self.plot_file_names.update(visualizer.plot_file_names)
-        self._plot_file_names.update(visualizer.plot_file_names)
-        self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
-        
+        self.plot_file_names.update(visualizer.plot_file_names)
 
     @property
     def plot_file_names(self) -> dict:
         return self._plot_file_names
-    
-    @property
-    def interactive_plot_file_names(self) -> dict:
-        return self._interactive_plot_file_names

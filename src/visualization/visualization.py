@@ -20,7 +20,7 @@ class VisualizeTraining:
     generate plot and storing plots
     """
 
-    # !!!!!!!!!!!!!!!!!! _interactive_plot_file_names   |   ,aybe fix dict
+    # !!!!!!!!!!!!!!!!!! _interactive_plot_file_names   |   maybe fix dict
 
     def __init__(self, plot_dir="src/report/reports/data/plots/training"):
         self.plot_dir = plot_dir
@@ -268,9 +268,9 @@ class VisualizeEvaluation:
                 y = data_heatmap.index,
                 z = data_heatmap.values,
                 colorscale = 'Viridis',
-                value = data_heatmap.round(2).astype(str),
-                texttemplate = "%{value}",
-                hoverinfo = "value"
+                text = data_heatmap.round(2).astype(str),
+                texttemplate = "%{text}",
+                hoverinfo = "text"
             )
         )
         
