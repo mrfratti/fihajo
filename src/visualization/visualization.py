@@ -257,7 +257,6 @@ class VisualizeEvaluation:
 
 
         # --- Interactive Chart | Classification Report --- |
-        
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
         data_heatmap = df_report[["precision", "recall", "f1-score"]].T
@@ -324,6 +323,10 @@ class VisualizeEvaluation:
         #plt.show()
         self._plot_file_names["adversarial_examples"] = filename
 
+        # --- Interactive Chart | plot_accuracy_comparison --- |
+
+
+
     def plot_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
         plt.figure(figsize=(10, 8))
         bar_positions = np.arange(len(accuracies))
@@ -343,7 +346,6 @@ class VisualizeEvaluation:
 
 
         # --- Interactive Chart | plot_accuracy_comparison --- |
-
         bar_data = plotly_graph_objects.Bar(
             x = labels,
             y = accuracies,
@@ -378,8 +380,8 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
     
@@ -600,7 +602,6 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | Entropy Scores --- |
-
         fig = make_subplots(rows=1, cols=1, subplot_titles=[""])
 
         fig.add_trace(
@@ -654,6 +655,11 @@ class VisualizeUncertainty:
         filename = self._save_plot("high_uncertain_inputs")
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
+        # --- Interactive Chart | high_uncertain_inputs --- |
+        filename = self._save_interactive_plot("high_uncertain_inputs")
+        self._interactive_plot_file_names["higly_uncertain_inputs"] = filename
+
+
     def plot_predictive_conf_entropy_scores(self, predictive_confidence, entropy_scores):
         plt.figure(figsize=(20, 10))
         plt.scatter(
@@ -704,6 +710,14 @@ class VisualizeUncertainty:
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
         return f"{self.plot_dir}/{filename}"
+    
+    def _save_interactive_plot(self, filename):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.png"
+        plt.savefig(os.path.join(self.plot_dir, filename))
+        plt.close()
+        return f"{self.plot_dir}/{filename}"
+    
     
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
