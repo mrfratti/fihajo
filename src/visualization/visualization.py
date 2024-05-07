@@ -154,20 +154,20 @@ class VisualizeTraining:
             )
         return self._plot_file_names
     
-    @property
-    def interactive_plot_file_names(self) -> dict:
-        """Returns a dictionary of filenames"""
-        if not isinstance(self._interactive_plot_file_names, dict):
-            raise ValueError(
-                StringStyling.box_style(
-                    message="visualizer: Wrong datatype for filname should be dict"
-                )
-            )
-        if len(self._interactive_plot_file_names) < 1:
-            raise ValueError(
-                StringStyling.box_style(message="visualizer: missing filnames in dict")
-            )
-        return self._interactive_plot_file_names
+    # @property
+    # def interactive_plot_file_names(self) -> dict:
+    #     """Returns a dictionary of filenames"""
+    #     if not isinstance(self._interactive_plot_file_names, dict):
+    #         raise ValueError(
+    #             StringStyling.box_style(
+    #                 message="visualizer: Wrong datatype for filname should be dict"
+    #             )
+    #         )
+    #     if len(self._interactive_plot_file_names) < 1:
+    #         raise ValueError(
+    #             StringStyling.box_style(message="visualizer: missing filnames in dict")
+    #         )
+    #     return self._interactive_plot_file_names
 
 
 
@@ -409,20 +409,20 @@ class VisualizeEvaluation:
             )
         return self._plot_file_names
     
-    @property
-    def interactive_plot_file_names(self) -> dict:
-        """Returns a dictionary of filenames"""
-        if not isinstance(self._interactive_plot_file_names, dict):
-            raise ValueError(
-                StringStyling.box_style(
-                    message="visualizer: Wrong datatype for filname should be dict"
-                )
-            )
-        if len(self._interactive_plot_file_names) < 1:
-            raise ValueError(
-                StringStyling.box_style(message="visualizer: missing filnames in dict")
-            )
-        return self._interactive_plot_file_names
+    # @property
+    # def interactive_plot_file_names(self) -> dict:
+    #     """Returns a dictionary of filenames"""
+    #     if not isinstance(self._interactive_plot_file_names, dict):
+    #         raise ValueError(
+    #             StringStyling.box_style(
+    #                 message="visualizer: Wrong datatype for filname should be dict"
+    #             )
+    #         )
+    #     if len(self._interactive_plot_file_names) < 1:
+    #         raise ValueError(
+    #             StringStyling.box_style(message="visualizer: missing filnames in dict")
+    #         )
+    #     return self._interactive_plot_file_names
 
 
 
@@ -726,18 +726,18 @@ class VisualizeUncertainty:
             )
         return self._plot_file_names
     
-    @property
-    def interactive_plot_file_names(self) -> dict:
-        """Returns a dictionary of filenames"""
-        if not isinstance(self._interactive_plot_file_names, dict):
-            raise ValueError(
-                StringStyling.box_style(
-                    message="visualizer: Wrong datatype for filname should be dict"
-                )
-            )
-        if len(self._interactive_plot_file_names) < 1:
-            raise ValueError(
-                StringStyling.box_style(message="visualizer: missing filnames in dict")
-            )
-        return self._interactive_plot_file_names
+    # @property
+    # def interactive_plot_file_names(self) -> dict:
+    #     """Returns a dictionary of filenames"""
+    #     if not isinstance(self._interactive_plot_file_names, dict):
+    #         raise ValueError(
+    #             StringStyling.box_style(
+    #                 message="visualizer: Wrong datatype for filname should be dict"
+    #             )
+    #         )
+    #     if len(self._interactive_plot_file_names) < 1:
+    #         raise ValueError(
+    #             StringStyling.box_style(message="visualizer: missing filnames in dict")
+    #         )
+    #     return self._interactive_plot_file_names
 
