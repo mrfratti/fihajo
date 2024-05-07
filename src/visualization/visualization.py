@@ -20,7 +20,7 @@ class VisualizeTraining:
     generate plot and storing plots
     """
 
-    # !!!!!!!!!!!!!!!!!! _interactive_plot_file_names   |   maybe fix dict
+    # !!!!!!!!!!!!!!!!!! _interactive_plot_file_names and interactive_plot_file_names   |   maybe fix dict
 
     def __init__(self, plot_dir="src/report/reports/data/plots/training"):
         self.plot_dir = plot_dir
