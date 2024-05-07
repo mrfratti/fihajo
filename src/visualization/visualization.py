@@ -94,19 +94,6 @@ class VisualizeTraining:
         # --- Interactive Chart | Accuracy & Loss --- |
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
 
-        fig.add_trace(
-            plotly_graph_objects.Scatter(y=history['accuracy'],
-                                         name='Accuracy',
-                                         mode='lines+markers'
-                                         line=dict(dash='dot')),
-                                         row=1, col=1)
-
-        fig.add_trace(
-            plotly_graph_objects.Scatter(y=history['loss'],
-                                         mode='lines+markers',
-                                         name='Loss',
-                                         line=dict(dash='dot')),
-                                         row=2, col=1)
 
 
     def plot_adversarial_training_results(self, history):
