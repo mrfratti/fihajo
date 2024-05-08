@@ -700,13 +700,13 @@ class VisualizeUncertainty:
             x=pcs_scores,
             name="PCS",
             marker_color="blue",
-            nbinsx=50))
+            nbinsx=100))
 
         fig.add_trace(plotly_graph_objects.Histogram(
             x=mean_softmax_scores,
             name="Mean Softmax",
             marker_color="red",
-            nbinsx=50))
+            nbinsx=100))
 
         fig.update_layout(title_text="Distribution of PCS and Mean Softmax Scores", xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores", 
                         yaxis_title_text="Frequency", bargap=0.1)
@@ -788,7 +788,7 @@ class VisualizeUncertainty:
             mode = "lines", name = f'Mean PCS: {np.mean(pcs_scores):.2f}', 
             line = dict(color='yellow', dash='dash')), row=1, col=1)
 
-        fig.add_trace(plotly_graph_objects.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=1, col=2)
+        fig.add_trace(plotly_graph_objects.Histogram(x=mean_softmax_inverse, name='Mean Softmax Scores', marker_color='lightgreen'), row=2, col=1)
 
         fig.add_trace(plotly_graph_objects.Scatter(
             x = [uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
