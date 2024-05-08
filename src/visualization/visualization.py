@@ -75,6 +75,7 @@ class VisualizeTraining:
         # self._interactive_plot_file_names["training"] = filename
         
 
+
     def plot_training_results(self, history):
         # Plot training & validation accuracy and loss
         plt.figure(figsize=(20, 10))
@@ -135,11 +136,12 @@ class VisualizeTraining:
             row=2, col=1)
         
         fig.update_xaxes(title_text="Epoch", row=1, col=1)
-        fig.update_yaxes(title_text="Accuracy", row=1, col=1)
+        fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
 
         fig.update_xaxes(title_text="Epoch", row=2, col=1)
-        fig.update_yaxes(title_text="Loss", row=2, col=1)
+        fig.update_yaxes(title_text = "Loss", row=2, col=1)
 
+        fig.update_layout(height = 1000)
 
         filename = self._save_interactive_plot_html("val_acc_and_loss", fig)
         self._interactive_plot_file_names["training"] = filename
@@ -202,14 +204,15 @@ class VisualizeTraining:
             row=2, col=1)
         
         fig.update_xaxes(title_text="Epoch", row=1, col=1)
-        fig.update_yaxes(title_text="Accuracy", row=1, col=1)
+        fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
 
         fig.update_xaxes(title_text="Epoch", row=2, col=1)
-        fig.update_yaxes(title_text="Loss", row=2, col=1)
+        fig.update_yaxes(title_text = "Loss", row=2, col=1)
 
         filename = self._save_interactive_plot_html("adv_train_acc_loss", fig)
         self._interactive_plot_file_names["adversarialTraining"] = filename
         
+
 
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -218,7 +221,6 @@ class VisualizeTraining:
         plt.close()
         return f"{self.plot_dir}/{filename}"
     
-
     def _save_interactive_plot_json(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.json"
@@ -229,12 +231,11 @@ class VisualizeTraining:
             json.dump(data_info, file, indent=4)
 
         return f"{self.plot_dir}/{filename}"
-    
 
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True) # output_type='div'
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
@@ -298,7 +299,6 @@ class VisualizeEvaluation:
         self._plot_file_names["predictions"] = filename
 
         # --- Interactive Chart | plot predictions --- |
-
         plt.figure(figsize=(20, 10))
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
@@ -445,6 +445,33 @@ class VisualizeEvaluation:
         self._plot_file_names["adversarial_examples"] = filename
 
         # --- Interactive Chart | plot_accuracy_comparison --- |
+
+        plt.figure(figsize=(2 * num_samples, 6))
+
+        plt.figure(figsize=(20, 10))
+        for i in range(num_samples):
+            # Original images
+            plt.subplot(3, num_samples, i + 1)
+            plt.imshow(x_test[i], cmap="gray")
+            plt.title(f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}", fontsize=18)
+            plt.axis("off")
+
+            # Plot FGSM adversarial images
+            plt.subplot(3, num_samples, num_samples + i + 1)
+            plt.imshow(x_adv_fgsm[i], cmap="gray")
+            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=18)
+            plt.axis("off")
+
+            # Plot PGD adversarial images
+            plt.subplot(3, num_samples, 2 * num_samples + i + 1)
+            plt.imshow(x_adv_pgd[i], cmap="gray")
+            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=18)
+            plt.axis("off")
+
+        plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
+
+        filename = self._save_interactive_plot("adversarial_examples")
+        self._interactive_plot_file_names["adversarial_examples"] = filename
 
 
 
@@ -631,7 +658,6 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | plot_distribution_pcs_ms_scores --- |
-
         fig = make_subplots(subplot_titles=(""))
 
         fig.add_trace(plotly_graph_objects.Histogram(
