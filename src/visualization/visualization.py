@@ -374,7 +374,7 @@ class VisualizeEvaluation:
         plt.ylabel("True Label", fontsize=18)
         plt.xlabel("Predicted Label", fontsize=18)
         
-        filename = self._save_interactive_plot_html("confusion_matrix", fig)
+        filename = self._save_interactive_plot("confusion_matrix")
         self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
@@ -430,7 +430,7 @@ class VisualizeEvaluation:
         )
         plt.title("Classification Report", fontsize=20)
 
-        filename = self._save_interactive_plot_html("classification_report", fig)
+        filename = self._save_interactive_plot("classification_report")
         self._interactive_plot_file_names["classification_report"] = filename
 
 
