@@ -115,6 +115,7 @@ class VisualizeTraining:
             name="Accuracy",
             hoverinfo="y+name",),
             row=1, col=1)
+        
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_accuracy,
@@ -123,6 +124,22 @@ class VisualizeTraining:
             hoverinfo="y+name",
             line=dict(dash="dot")),
             row=1, col=1)
+        
+        fig.add_annotation(
+            x = list_x_values[-1],
+            y = list_accuracy[-1],
+            text = f"Accuracy: {list_accuracy[-1]:.2f}",
+            showarrow = True,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+            xref="x1",
+            yref="y1"
+        )
+
 
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
@@ -131,6 +148,7 @@ class VisualizeTraining:
             name="Loss",
             hoverinfo="y+name",),
             row=2, col=1)
+        
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_loss,
@@ -139,6 +157,21 @@ class VisualizeTraining:
             hoverinfo="y+name",
             line=dict(dash="dot")),
             row=2, col=1)
+        
+        fig.add_annotation(
+            x = list_x_values[-1],
+            y = list_loss[-1],
+            text = f"Loss: {list_loss[-1]:.2f}",
+            showarrow = True,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+            xref="x2",
+            yref="y2"
+        )
         
         fig.update_xaxes(title_text="Epoch", row=1, col=1)
         fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
@@ -232,7 +265,7 @@ class VisualizeTraining:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
