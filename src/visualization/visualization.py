@@ -113,14 +113,15 @@ class VisualizeTraining:
             y=list_accuracy,
             mode="lines+markers",
             name="Accuracy",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",),
             row=1, col=1)
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_accuracy,
             mode="lines+markers",
             name="Validation Accuracy",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",
+            line=dict(dash="dot")),
             row=1, col=1)
 
         fig.add_trace(plotly_graph_objects.Scatter(
@@ -128,14 +129,15 @@ class VisualizeTraining:
             y=list_loss,
             mode="lines+markers",
             name="Loss",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",),
             row=2, col=1)
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_loss,
             mode="lines+markers",
             name="Validation Loss",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",
+            line=dict(dash="dot")),
             row=2, col=1)
         
         fig.update_xaxes(title_text="Epoch", row=1, col=1)
@@ -181,14 +183,15 @@ class VisualizeTraining:
             y=list_accuracy,
             mode="lines+markers",
             name="Accuracy",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",),
             row=1, col=1)
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_accuracy,
             mode="lines+markers",
             name="Validation Accuracy",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",
+            line=dict(dash="dot")),
             row=1, col=1)
 
         fig.add_trace(plotly_graph_objects.Scatter(
@@ -196,14 +199,15 @@ class VisualizeTraining:
             y=list_loss,
             mode="lines+markers",
             name="Loss",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",),
             row=2, col=1)
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_loss,
             mode="lines+markers",
             name="Validation Loss",
-            hoverinfo='y+name',),
+            hoverinfo="y+name",
+            line=dict(dash="dot")),
             row=2, col=1)
         
         fig.update_xaxes(title_text="Epoch", row=1, col=1)
@@ -695,16 +699,17 @@ class VisualizeUncertainty:
         fig.add_trace(plotly_graph_objects.Histogram(
             x=pcs_scores,
             name="PCS",
-            marker_color="blue"))
+            marker_color="blue",
+            nbinsx=50))
 
         fig.add_trace(plotly_graph_objects.Histogram(
             x=mean_softmax_scores,
             name="Mean Softmax",
             marker_color="red",
-            ))
+            nbinsx=50))
 
         fig.update_layout(title_text="Distribution of PCS and Mean Softmax Scores", xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores", 
-                        yaxis_title_text="Frequency", bargap=0.2)
+                        yaxis_title_text="Frequency", bargap=0.1)
 
         filename = self._save_interactive_plot_html("dist_pcs_meansoftmax", fig)
         self._interactive_plot_file_names["distrubution_meansoftmax"] = filename
