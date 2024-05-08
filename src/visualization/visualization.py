@@ -599,7 +599,9 @@ class VisualizeUncertainty:
         fig.add_trace(plotly_graph_objects.Histogram(
             x=mean_softmax_scores,
             name="Mean Softmax",
-            marker_color="red"))
+            marker_color="red",
+            xbins=dict(size=0.1)
+            ))
 
         fig.update_layout(title_text="Distribution of PCS and Mean Softmax Scores", xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores", 
                         yaxis_title_text="Frequency", bargap=0.1, height=600, width=1200)
