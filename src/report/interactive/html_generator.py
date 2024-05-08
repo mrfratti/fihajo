@@ -47,6 +47,7 @@ class InteractiveHtmlGenerator:
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="src/report/reports/dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
+                doc.stag('script', src="https://cdn.plot.ly/plotly-latest.min.js")
 
             with tag("body"):
                 with tag("header"):
@@ -65,7 +66,7 @@ class InteractiveHtmlGenerator:
                             self._img_section(data, "right" if i % 2 == 0 else "left")
 
                 with tag("footer"):
-                    text("Copyright © Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
+                    text("Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
         return doc.getvalue()
 
     def _main(self):
@@ -95,13 +96,8 @@ class InteractiveHtmlGenerator:
             with tag("h2"):
                 text(data.header_image)
 
-            if file_end_lower == '.json':   
-                with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
-                    text("Your browser does not support iframes")
-
-            elif file_end_lower == '.html':
-                with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
-                    text("Your browser does not support iframes")
+            if file_end_lower == '.html':
+                doc.asis(data.image_location)
             
             elif file_end_lower == '.png':
                 with tag('img', src=data.image_location, style="width:100%; height:auto;"):

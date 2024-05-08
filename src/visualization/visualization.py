@@ -899,7 +899,6 @@ class VisualizeUncertainty:
         self._interactive_plot_file_names["prediction_vs_entrophy"] = filename
 
 
-
     def _save_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.png"
