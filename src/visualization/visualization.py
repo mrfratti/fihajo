@@ -536,7 +536,7 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs='cdn', auto_open=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
@@ -839,8 +839,8 @@ class VisualizeUncertainty:
         filename = self._save_plot("high_uncertain_inputs")
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
-        # --- Interactive Chart | high_uncertain_inputs --- |
 
+        # --- Interactive Chart | high_uncertain_inputs --- |
         plt.figure(figsize=(8, 8))
         for i in range(num_samples):
             index = sorted_indices[i]
@@ -849,8 +849,6 @@ class VisualizeUncertainty:
             plt.title(f"Entropy: {entropy_scores[sorted_indices[i]]:.2f}")
             plt.axis("off")
         plt.tight_layout()
-        filename = self._save_plot("high_uncertain_inputs")
-        self._plot_file_names["higly_uncertain_inputs"] = filename
 
         filename = self._save_interactive_plot("high_uncertain_inputs")
         self._interactive_plot_file_names["higly_uncertain_inputs"] = filename
