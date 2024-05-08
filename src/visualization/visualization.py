@@ -235,8 +235,12 @@ class VisualizeTraining:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True) # output_type='div'
-        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+
+        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True) # output_type='div'    
+        div_info = plotly.offline.plot(data_info, include_plotlyjs=False, output_type="div")
+
+        with open(os.path.join(self.plot_dir, filename), 'w') as file:
+            file.write(div_info)
 
         return f"{self.plot_dir}/{filename}"
 
@@ -528,8 +532,11 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
-        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+
+        div_info = plotly.offline.plot(data_info, include_plotlyjs=False, output_type="div")
+
+        with open(os.path.join(self.plot_dir, filename), 'w') as file:
+            file.write(div_info)
 
         return f"{self.plot_dir}/{filename}"
     
@@ -911,8 +918,12 @@ class VisualizeUncertainty:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
-        
+
+        div_info = plotly.offline.plot(data_info, include_plotlyjs=False, output_type="div")
+
+        with open(os.path.join(self.plot_dir, filename), 'w') as file:
+            file.write(div_info)
+
         return f"{self.plot_dir}/{filename}"
 
     @property
