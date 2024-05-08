@@ -16,6 +16,9 @@ import plotly.figure_factory as plotly_figure_factory
 from plotly.subplots import make_subplots
 
 
+from src.report.interactive.interactive_html_data import Interactive_Html_Data
+
+
 class VisualizeTraining:
     """_summary_
     generate plot and storing plots
@@ -221,6 +224,7 @@ class VisualizeTraining:
         plt.close()
         return f"{self.plot_dir}/{filename}"
     
+    
     def _save_interactive_plot_json(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.json"
@@ -232,13 +236,26 @@ class VisualizeTraining:
 
         return f"{self.plot_dir}/{filename}"
 
+
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True) # output_type='div'
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
+    
+    # def _save_interactive_plot_html(self, filename, data_info):
+    #     timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    #     filename = f"{filename}_{timestamp}.html"
+
+    #     div_info = plotly.io.to_html(data_info, include_plotlyjs=False, full_html=False)
+
+    #     Interactive_Html_Data
+    #     with open(os.path.join(self.plot_dir, filename), 'w') as file:
+    #         file.write(div_info)
+
+    #     return f"{self.plot_dir}/{filename}"
 
     @property
     def plot_file_names(self) -> dict:
@@ -524,7 +541,7 @@ class VisualizeEvaluation:
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
         return f"{self.plot_dir}/{filename}"
-
+    
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
