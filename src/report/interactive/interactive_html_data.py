@@ -4,13 +4,14 @@ import datetime
 
 
 class Interactive_Html_Data:
-    def create_div_file_html(self, data_content):
-        html_content = ""
+    def create_div_file_html(self,data_content):
 
-        content_start = data_content.index("<body>\n") + 1
-        content_end = data_content.index("</body>\n")
-        content_content = data_content[content_start:content_end]
-        content_string = "".join(content_content)
-        html_content += content_string
+        tag_start = "<body>"
+        tag_end = "</body>"
+        content_start = data_content.find(tag_start) + len(tag_start)
+        content_end = data_content.find(tag_end)
         
-        return html_content
+        if content_start >= len(tag_start) and content_end != -1:
+            return data_content[content_start:content_end].strip()
+        else:
+            return data_content
