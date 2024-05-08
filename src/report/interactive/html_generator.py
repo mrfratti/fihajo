@@ -102,11 +102,11 @@ class InteractiveHtmlGenerator:
             #     doc.asis(div_info)
             if file_end_lower == '.html':
                 with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
-                    text("Your browser does not support iframes")
+                    text("")
 
             elif file_end_lower == '.png':
-                with tag('img', src=data.image_location, style="width:100%; height:auto;"):
-                    text('Image not found')
+                with tag("img", src=data.image_location, style="width:100%; height:auto;"):
+                    text("")
 
             with tag("div", klass="info"):
                 with tag("div"):

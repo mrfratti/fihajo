@@ -560,7 +560,7 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
@@ -641,7 +641,7 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | plot_pcs_mean_softmax --- |
-        fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
+        fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
 
         fig.add_trace(plotly_graph_objects.Histogram(
             x=pcs_scores,
@@ -656,10 +656,10 @@ class VisualizeUncertainty:
             x=mean_softmax_scores,
             name="Mean Softmax Score",
             marker_color="lightgreen"),
-            row=1, col=2)
+            row=2, col=1)
 
-        fig.update_xaxes(title_text="Mean Softmax Score", row=1, col=2)
-        fig.update_yaxes(title_text="Frequency", row=1, col=2)
+        fig.update_xaxes(title_text="Mean Softmax Score", row=2, col=1)
+        fig.update_yaxes(title_text="Frequency", row=2, col=1)
                          
         fig.update_layout(title_text="", xaxis_title_text="", yaxis_title_text="", bargap=0.2, height=600, width=1200)
 
@@ -680,7 +680,7 @@ class VisualizeUncertainty:
             kde=True,
             label="Mean Softmax",
         )
-        plt.xlabel("Predictive Confidence Score & Mean Softmax Scores", fontsize=18)
+        plt.xlabel("Predictive Confidence Score & Mean Softmax Scores", fontsize=20)
         plt.ylabel("Frequency", fontsize=18)
         plt.title("Distribution of PCS and Mean Softmax Scores", fontsize=20)
         plt.legend()
@@ -704,7 +704,7 @@ class VisualizeUncertainty:
             ))
 
         fig.update_layout(title_text="Distribution of PCS and Mean Softmax Scores", xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores", 
-                        yaxis_title_text="Frequency", height=600, width=1200)
+                        yaxis_title_text="Frequency", bargap=0.2)
 
         filename = self._save_interactive_plot_html("dist_pcs_meansoftmax", fig)
         self._interactive_plot_file_names["distrubution_meansoftmax"] = filename
@@ -767,7 +767,7 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | pcs_ms_inverse --- |
-        fig = make_subplots(rows=1, cols=2, subplot_titles=("Distribution of PCS Scores as Uncertainty", "Distribution of Mean Softmax Scores as Uncertainty"))
+        fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores as Uncertainty", "Distribution of Mean Softmax Scores as Uncertainty"))
 
         fig.add_trace(plotly_graph_objects.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
 
@@ -789,19 +789,19 @@ class VisualizeUncertainty:
             x = [uncertainty_threshold_mean_softmax, uncertainty_threshold_mean_softmax], 
             y = [0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
             mode = "lines", name = f'95th percentile: {uncertainty_threshold_mean_softmax:.2f}', 
-            line = dict(color='red', dash='dash')), row=1, col=2)
+            line = dict(color='red', dash='dash')), row=2, col=1)
         
         fig.add_trace(plotly_graph_objects.Scatter(
             x = [np.mean(mean_softmax_inverse), np.mean(mean_softmax_inverse)], 
             y = [0, max(np.histogram(mean_softmax_scores, bins='auto')[0])], 
             mode = "lines", name=f'Mean Softmax: {np.mean(mean_softmax_scores):.2f}', 
-            line = dict(color='yellow', dash='dash')), row=1, col=2)
+            line = dict(color='yellow', dash='dash')), row=2, col=1)
         
         fig.update_xaxes(title_text="Scores", row=1, col=1)
         fig.update_yaxes(title_text="Frequency", row=1, col=1)
 
-        fig.update_xaxes(title_text="Scores", row=1, col=2)
-        fig.update_yaxes(title_text="Frequency", row=1, col=2)
+        fig.update_xaxes(title_text="Scores", row=2, col=1)
+        fig.update_yaxes(title_text="Frequency", row=2, col=1)
 
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='', 
                         yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
