@@ -96,8 +96,13 @@ class InteractiveHtmlGenerator:
             with tag("h2"):
                 text(data.header_image)
 
-            if file_end_lower == '.html':
-                doc.asis(data.image_location)
+            if file_end_lower == '.json':   
+                with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
+                    text("Your browser does not support iframes")
+
+            elif file_end_lower == '.html':
+                with tag("iframe", src=data.image_location, style="width:100%; height:400px; border:none;"):
+                    text("Your browser does not support iframes")
             
             elif file_end_lower == '.png':
                 with tag('img', src=data.image_location, style="width:100%; height:auto;"):
