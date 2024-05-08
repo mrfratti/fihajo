@@ -188,6 +188,7 @@ class VisualizeTraining:
 
     def plot_adversarial_training_results(self, history):
         """_summary_"""
+        
         plt.figure(figsize=(20, 10))
         # Accuracy
         self._plot_results(history, mode="accuracy", title="Adversarial Training Accuracy")
@@ -201,7 +202,7 @@ class VisualizeTraining:
         # --- Interactive Chart | Adversarial Training Results --- |
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Adversarial Training Accuracy", "Adversarial Model Loss"))
 
-        history_data = history.history
+        history_data = history
 
         list_x_values = list(range(0, len(history_data['accuracy']) + 1))
 
@@ -218,6 +219,7 @@ class VisualizeTraining:
             name="Accuracy",
             hoverinfo="y+name",),
             row=1, col=1)
+        
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_accuracy,
@@ -226,6 +228,22 @@ class VisualizeTraining:
             hoverinfo="y+name",
             line=dict(dash="dot")),
             row=1, col=1)
+        
+        fig.add_annotation(
+            x = list_x_values[-1],
+            y = list_accuracy[-1],
+            text = f"Accuracy: {list_accuracy[-1]:.2f}",
+            showarrow = True,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+            xref="x1",
+            yref="y1"
+        )
+
 
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
@@ -234,6 +252,7 @@ class VisualizeTraining:
             name="Loss",
             hoverinfo="y+name",),
             row=2, col=1)
+        
         fig.add_trace(plotly_graph_objects.Scatter(
             x=list_x_values,
             y=list_val_loss,
@@ -242,6 +261,21 @@ class VisualizeTraining:
             hoverinfo="y+name",
             line=dict(dash="dot")),
             row=2, col=1)
+        
+        fig.add_annotation(
+            x = list_x_values[-1],
+            y = list_loss[-1],
+            text = f"Loss: {list_loss[-1]:.2f}",
+            showarrow = True,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+            xref="x2",
+            yref="y2"
+        )
         
         fig.update_xaxes(title_text="Epoch", row=1, col=1)
         fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
@@ -563,17 +597,26 @@ class VisualizeEvaluation:
 
 
         # --- Interactive Chart | plot_accuracy_comparison --- |
-        bar_data = plotly_graph_objects.Bar(
-            x = labels,
-            y = accuracies,
-            marker_color = ["Clean", "FGSM", "PGD"]
-            )
-        
-        fig = plotly_graph_objects.Figure(bar_data)
 
+        fig = plotly_graph_objects.Figure([
+            plotly_graph_objects.Bar(
+                x = labels, 
+                y = accuracies, 
+                marker_color = ["green", "blue", "red"]
+            )
+        ])
         fig.update_layout(
-            title="Model Accuracy: Clean vs Adversarial Examples",
-            yaxis_title="Accuracy (%)",
+            title_text='Model Accuracy: Clean vs Adversarial Examples',
+            title_font_size=20,
+            xaxis=dict(
+                title='Model',
+                tickmode='array',
+                tickvals=bar_positions,
+                ticktext=labels
+            ),
+            yaxis=dict(
+                title='Accuracy (%)'
+            )
         )
 
         filename = self._save_interactive_plot_html("accuracy_comparison", fig)

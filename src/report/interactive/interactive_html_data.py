@@ -4,7 +4,7 @@ import datetime
 
 
 class Interactive_Html_Data:
-    def create_div_file_html(self,data_content):
+    def create_div_file_html(self, data_content):
 
         tag_start = "<body>"
         tag_end = "</body>"
