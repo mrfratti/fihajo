@@ -342,24 +342,37 @@ class VisualizeEvaluation:
 
 
         # --- Interactive Chart | Confusion Matrix --- |
-        cm = np.flipud(cm)
-        fig = plotly_figure_factory.create_annotated_heatmap(
-            z=cm,
-            x=classes,
-            y=classes,
-            colorscale='Blues',
-            annotation_text=np.array(cm).astype(str),
-            showscale=True
-        )
+        # cm = np.flipud(cm)
+        # fig = plotly_figure_factory.create_annotated_heatmap(
+        #     z=cm,
+        #     x=classes,
+        #     y=classes,
+        #     colorscale='Blues',
+        #     annotation_text=np.array(cm).astype(str),
+        #     showscale=True
+        # )
 
-        fig.update_layout(
-            title='Confusion Matrix',
-            xaxis=dict(title='Predicted Label', tickmode='array'),
-            yaxis=dict(title='True Label', tickmode='array'),
-            title_font=dict(size=20),
-            xaxis_title_font=dict(size=18),
-            yaxis_title_font=dict(size=18)
+        # fig.update_layout(
+        #     title='Confusion Matrix',
+        #     xaxis=dict(title='Predicted Label', tickmode='array'),
+        #     yaxis=dict(title='True Label', tickmode='array'),
+        #     title_font=dict(size=20),
+        #     xaxis_title_font=dict(size=18),
+        #     yaxis_title_font=dict(size=18)
+        # )
+
+        plt.figure(figsize=(20, 15))
+        sns.heatmap(
+            cm,
+            annot=True,
+            fmt="d",
+            cmap="Blues",
+            xticklabels=classes,
+            yticklabels=classes,
         )
+        plt.title("Confusion Matrix", fontsize=20)
+        plt.ylabel("True Label", fontsize=18)
+        plt.xlabel("Predicted Label", fontsize=18)
         
         filename = self._save_interactive_plot_html("confusion_matrix", fig)
         self._interactive_plot_file_names["confusion_matrix"] = filename
@@ -386,25 +399,36 @@ class VisualizeEvaluation:
 
 
         # --- Interactive Chart | Classification Report --- |
+        # df_report = pd.DataFrame(report).transpose()
+        # df_report.drop("support", errors="ignore", inplace=True)
+        # data_heatmap = df_report[["precision", "recall", "f1-score"]].T
+        
+        # fig = plotly_graph_objects.Figure(
+        #     data = plotly_graph_objects.Heatmap(
+        #         x = data_heatmap.columns,
+        #         y = data_heatmap.index,
+        #         z = data_heatmap.values,
+        #         colorscale = 'viridis',
+        #         text = data_heatmap.round(2).astype(str),
+        #         texttemplate = "%{text}",
+        #         hoverinfo = "text"
+        #     )
+        # )
+        
+        # fig.update_layout(
+        #     title="Classification Report"
+        # )
+
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
-        data_heatmap = df_report[["precision", "recall", "f1-score"]].T
-        
-        fig = plotly_graph_objects.Figure(
-            data = plotly_graph_objects.Heatmap(
-                x = data_heatmap.columns,
-                y = data_heatmap.index,
-                z = data_heatmap.values,
-                colorscale = 'viridis',
-                text = data_heatmap.round(2).astype(str),
-                texttemplate = "%{text}",
-                hoverinfo = "text"
-            )
+        plt.figure(figsize=(20, 16))
+        sns.heatmap(
+            df_report[["precision", "recall", "f1-score"]].T,
+            annot=True,
+            cmap="viridis",
+            fmt=".2f",
         )
-        
-        fig.update_layout(
-            title="Classification Report"
-        )
+        plt.title("Classification Report", fontsize=20)
 
         filename = self._save_interactive_plot_html("classification_report", fig)
         self._interactive_plot_file_names["classification_report"] = filename
