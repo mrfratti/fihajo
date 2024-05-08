@@ -97,30 +97,49 @@ class VisualizeTraining:
         history_data = history.history
 
         list_x_values = list(range(0, len(history_data['accuracy']) + 1))
+
         list_accuracy = [0] + history_data['accuracy']
+        list_val_accuracy = [0] + history_data['val_accuracy']
+
         list_loss = [history_data['loss'][0]] + history_data['loss']
+        list_val_loss = [history_data['val_loss'][0]] + history_data['val_loss']
 
-        fig.add_trace(plotly_graph_objects.Scatter(x=list_x_values,
-                                                   y=list_accuracy,
-                                                   mode="lines+markers",
-                                                   name="Accuracy",
-                                                   line=dict(dash="dot"),
-                                                   hoverinfo='y+name',),
-                                                   row=1, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_accuracy,
+            mode="lines+markers",
+            name="Accuracy",
+            hoverinfo='y+name',),
+            row=1, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_val_accuracy,
+            mode="lines+markers",
+            name="Validation Accuracy",
+            hoverinfo='y+name',),
+            row=1, col=1)
 
-        fig.add_trace(plotly_graph_objects.Scatter(x=list_x_values,
-                                                   y=list_loss,
-                                                   mode="lines+markers",
-                                                    name="Loss",
-                                                    line=dict(dash="dot"),
-                                                    hoverinfo='y+name',),
-                                                    row=2, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_loss,
+            mode="lines+markers",
+            name="Loss",
+            hoverinfo='y+name',),
+            row=2, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_val_loss,
+            mode="lines+markers",
+            name="Validation Loss",
+            hoverinfo='y+name',),
+            row=2, col=1)
         
-        # fig.add_trace(plotly_graph_objects.Pie(labels=['Accuracy', 'Remaining'],
-        #                                         values=history_data['loss'][-1],
-        #                                         textinfo='label+percent'),
-        #                                         row=3, col=1
-        # )
+        fig.update_xaxes(title_text="Epoch", row=1, col=1)
+        fig.update_yaxes(title_text="Accuracy", row=1, col=1)
+
+        fig.update_xaxes(title_text="Epoch", row=2, col=1)
+        fig.update_yaxes(title_text="Loss", row=2, col=1)
+
 
         filename = self._save_interactive_plot_html("val_acc_and_loss", fig)
         self._interactive_plot_file_names["training"] = filename
@@ -145,24 +164,48 @@ class VisualizeTraining:
         history_data = history.history
 
         list_x_values = list(range(0, len(history_data['accuracy']) + 1))
+
         list_accuracy = [0] + history_data['accuracy']
+        list_val_accuracy = [0] + history_data['val_accuracy']
+
         list_loss = [history_data['loss'][0]] + history_data['loss']
+        list_val_loss = [history_data['val_loss'][0]] + history_data['val_loss']
 
-        fig.add_trace(plotly_graph_objects.Scatter(x=list_x_values,
-                                                   y=list_accuracy,
-                                                   mode="lines+markers",
-                                                   name="Accuracy",
-                                                   line=dict(dash="dot"),
-                                                   hoverinfo='y+name',),
-                                                   row=1, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_accuracy,
+            mode="lines+markers",
+            name="Accuracy",
+            hoverinfo='y+name',),
+            row=1, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_val_accuracy,
+            mode="lines+markers",
+            name="Validation Accuracy",
+            hoverinfo='y+name',),
+            row=1, col=1)
 
-        fig.add_trace(plotly_graph_objects.Scatter(x=list_x_values,
-                                                   y=list_loss,
-                                                   mode="lines+markers",
-                                                    name="Loss",
-                                                    line=dict(dash="dot"),
-                                                    hoverinfo='y+name',),
-                                                    row=2, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_loss,
+            mode="lines+markers",
+            name="Loss",
+            hoverinfo='y+name',),
+            row=2, col=1)
+        fig.add_trace(plotly_graph_objects.Scatter(
+            x=list_x_values,
+            y=list_val_loss,
+            mode="lines+markers",
+            name="Validation Loss",
+            hoverinfo='y+name',),
+            row=2, col=1)
+        
+        fig.update_xaxes(title_text="Epoch", row=1, col=1)
+        fig.update_yaxes(title_text="Accuracy", row=1, col=1)
+
+        fig.update_xaxes(title_text="Epoch", row=2, col=1)
+        fig.update_yaxes(title_text="Loss", row=2, col=1)
 
         filename = self._save_interactive_plot_html("adv_train_acc_loss", fig)
         self._interactive_plot_file_names["adversarialTraining"] = filename
@@ -191,7 +234,7 @@ class VisualizeTraining:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
         return f"{self.plot_dir}/{filename}"
