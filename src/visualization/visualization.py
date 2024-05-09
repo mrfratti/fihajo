@@ -968,25 +968,72 @@ class VisualizeUncertainty:
             )
         )
 
-        # fig.add_annotation(
-        #     text = f"Total plots: {len(predictive_confidence)}",
-        #     showarrow = False,
-        #     align = "center",
-        #     borderwidth = 5,
-        #     borderpad = 5,
-        #     arrowcolor = "rgb(71, 71, 71)",
-        #     bordercolor = "rgb(71, 71, 71)",
-        #     bgcolor = "rgb(255, 184, 0)",
-        # )
+        fig.add_annotation(
+            x = max(predictive_confidence),
+            y = max(entropy_scores),
+            text = f"Total plots: {len(predictive_confidence)}",
+            showarrow = False,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+        )
 
+        index_x_max = np.argmax(predictive_confidence)
+        x_max = predictive_confidence[index_x_max]
+        y_x_max = entropy_scores[index_x_max]
+
+        fig.add_annotation(
+            x = x_max,
+            y = y_x_max,
+            text = f"x:{x_max:.2f}, y:{y_x_max:.2f}",
+            showarrow = True,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+        )
+
+        index_y_max = np.argmax(entropy_scores)
+        y_max = entropy_scores[index_y_max]
+        x_y_max = predictive_confidence[index_y_max]
+
+        fig.add_annotation(
+            x = x_y_max,
+            y = y_max,
+            text = f"x:{x_y_max:.2f}, y:{y_max:.2f}",
+            showarrow = True,
+            align = "center",
+            borderwidth = 5,
+            borderpad = 5,
+            arrowcolor = "rgb(71, 71, 71)",
+            bordercolor = "rgb(71, 71, 71)",
+            bgcolor = "rgb(255, 184, 0)",
+        )
+
+        x_half = max(predictive_confidence)/2
         fig.update_layout(
             title="Predictive Confidence vs Entropy Score",
             xaxis_title="Predictive Confidence",
             yaxis_title="Entropy Score",
+            updatemenus=[{
+                "direction": "down",
+                "showactive": True,
+                "x": 0.1,
+                "xanchor": "left",
+                "y": 1.1,
+                "yanchor": "top"
+                }],
+            xaxis = dict(rangeslider=dict(visible=True), type="linear")
         )
 
         filename = self._save_interactive_plot_html("prediction_vs_entrophy", fig)
         self._interactive_plot_file_names["prediction_vs_entrophy"] = filename
+
 
 
 
