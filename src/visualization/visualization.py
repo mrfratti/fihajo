@@ -55,27 +55,6 @@ class VisualizeTraining:
         plt.ylabel(ylabel)
         plt.xlabel(xlabel)
         plt.legend()
-
-
-        # --- Interactive Chart | Accuracy & Loss --- |
-
-        # history_data = history.history
-        
-        # x_value = []
-        # for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-        #     x_value.append(x_axis_nr)
-
-        # data_info = {
-        #     "x":            x_value,
-        #     "accuracy":     history_data["accuracy"],
-        #     "val_accuracy": history_data["val_accuracy"],
-        #     "loss":         history_data["loss"],
-        #     "val_loss":     history_data["val_loss"]
-        # }
-
-
-        # filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
-        # self._interactive_plot_file_names["training"] = filename
         
 
 
@@ -988,6 +967,17 @@ class VisualizeUncertainty:
                 )
             )
         )
+
+        # fig.add_annotation(
+        #     text = f"Total plots: {len(predictive_confidence)}",
+        #     showarrow = False,
+        #     align = "center",
+        #     borderwidth = 5,
+        #     borderpad = 5,
+        #     arrowcolor = "rgb(71, 71, 71)",
+        #     bordercolor = "rgb(71, 71, 71)",
+        #     bgcolor = "rgb(255, 184, 0)",
+        # )
 
         fig.update_layout(
             title="Predictive Confidence vs Entropy Score",

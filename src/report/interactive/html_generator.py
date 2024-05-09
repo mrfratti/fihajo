@@ -101,7 +101,7 @@ class InteractiveHtmlGenerator:
             #         div_info = file.read()
             #     doc.asis(div_info)
             if file_end_lower == '.html':
-                with tag("iframe", src=data.image_location, style="width:100%; height:auto; border:none;"):
+                with tag("iframe", src=data.image_location, style="width:100%; height:500px; border:none;"):
                     text("")
 
             elif file_end_lower == '.png':
