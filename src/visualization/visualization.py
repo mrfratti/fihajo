@@ -602,20 +602,21 @@ class VisualizeEvaluation:
             plotly_graph_objects.Bar(
                 x = labels, 
                 y = accuracies, 
-                marker_color = ["green", "blue", "red"]
+                marker_color = ["blue", "green", "red"]
             )
         ])
+
         fig.update_layout(
-            title_text='Model Accuracy: Clean vs Adversarial Examples',
-            title_font_size=20,
-            xaxis=dict(
-                title='Model',
-                tickmode='array',
-                tickvals=bar_positions,
-                ticktext=labels
+            title_text = "Model Accuracy: Clean vs Adversarial Examples",
+            title_font_size = 20,
+            xaxis = dict(
+                title = "Model",
+                tickmode = "array",
+                tickvals = bar_positions,
+                ticktext = labels
             ),
             yaxis=dict(
-                title='Accuracy (%)'
+                title = "Accuracy (%)"
             )
         )
 
@@ -643,18 +644,7 @@ class VisualizeEvaluation:
         plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
         # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
 
-        return f"{self.plot_dir}/{filename}"
-    
-    def _save_interactive_plot_json(self, filename, data_info):
-        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        filename = f"{filename}_{timestamp}.json"
-        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/{filename}")
-        
-        with open(full_file_path, 'w') as file:
-            json.dump(data_info, file, indent=4)
-
-        return f"{self.plot_dir}/{filename}"
-    
+        return f"{self.plot_dir}/{filename}"    
 
 
     @property
@@ -724,24 +714,24 @@ class VisualizeUncertainty:
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
 
         fig.add_trace(plotly_graph_objects.Histogram(
-            x=pcs_scores,
-            name="PCS Scores",
-            marker_color="skyblue"),
+            x = pcs_scores,
+            name = "PCS Scores",
+            marker_color = "skyblue"),
             row=1, col=1)
         
-        fig.update_xaxes(title_text="PCS Scores", row=1, col=1)
-        fig.update_yaxes(title_text="Frequency", row=1, col=1)
+        fig.update_xaxes(title_text = "PCS Scores", row=1, col=1)
+        fig.update_yaxes(title_text = "Frequency", row=1, col=1)
         
         fig.add_trace(plotly_graph_objects.Histogram(
             x=mean_softmax_scores,
-            name="Mean Softmax Score",
-            marker_color="lightgreen"),
+            name = "Mean Softmax Score",
+            marker_color = "lightgreen"),
             row=2, col=1)
 
         fig.update_xaxes(title_text="Mean Softmax Score", row=2, col=1)
         fig.update_yaxes(title_text="Frequency", row=2, col=1)
                          
-        fig.update_layout(title_text="", xaxis_title_text="", yaxis_title_text="", bargap=0.2, height=600, width=1200)
+        fig.update_layout(title_text="", xaxis_title_text="", yaxis_title_text="", bargap=0.2)
 
         filename = self._save_interactive_plot_html("pcs_meansoftmax", fig)
         self._interactive_plot_file_names["pcs_meansoftmax"] = filename
@@ -751,7 +741,7 @@ class VisualizeUncertainty:
     def plot_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
         plt.figure(figsize=(20, 10))
-        sns.histplot(pcs_scores, bins=50, alpha=0.7, color="blue", kde=True, label="PCS")
+        sns.histplot(pcs_scores,bins=50, alpha=0.7, color="blue", kde=True, label="PCS")
         sns.histplot(
             mean_softmax_scores,
             bins=50,
@@ -784,8 +774,10 @@ class VisualizeUncertainty:
             marker_color="red",
             nbinsx=100))
 
-        fig.update_layout(title_text="Distribution of PCS and Mean Softmax Scores", xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores", 
-                        yaxis_title_text="Frequency", bargap=0.1)
+        fig.update_layout(
+            title_text="Distribution of PCS and Mean Softmax Scores", 
+            xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores", 
+            yaxis_title_text="Frequency", bargap=0.1)
 
         filename = self._save_interactive_plot_html("dist_pcs_meansoftmax", fig)
         self._interactive_plot_file_names["distrubution_meansoftmax"] = filename
@@ -848,7 +840,8 @@ class VisualizeUncertainty:
 
 
         # --- Interactive Chart | pcs_ms_inverse --- |
-        fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores as Uncertainty", "Distribution of Mean Softmax Scores as Uncertainty"))
+        fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores as Uncertainty", 
+                                                            "Distribution of Mean Softmax Scores as Uncertainty"))
 
         fig.add_trace(plotly_graph_objects.Histogram(x=pcs_inverse, name='PCS Scores', marker_color='skyblue'), row=1, col=1)
 
@@ -885,7 +878,7 @@ class VisualizeUncertainty:
         fig.update_yaxes(title_text="Frequency", row=2, col=1)
 
         fig.update_layout(title_text='Interactive Distribution Plots', xaxis_title_text='', 
-                        yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
+                        yaxis_title_text='Frequency', bargap=0.2)
 
         filename = self._save_interactive_plot_html("pcs_ms_inverse", fig)
         self._interactive_plot_file_names["pcs_ms_inverse"] = filename
@@ -916,11 +909,14 @@ class VisualizeUncertainty:
 
         fig.add_trace(plotly_graph_objects.Histogram(
             x=entropy_scores,
-            name='Predictive Entropy',
-            marker_color='blue'),)
+            name="Predictive Entropy",
+            marker_color="blue"),
+            )
 
-        fig.update_layout(title_text='Histogram of Predictive Entropy', xaxis_title_text='Predictive Entropy', 
-                          yaxis_title_text='Frequency', bargap=0.2, height=600, width=1200)
+        fig.update_layout(title_text="Histogram of Predictive Entropy",
+                          xaxis_title_text="Predictive Entropy",
+                          yaxis_title_text="Frequency",
+                          bargap=0.2)
 
         filename = self._save_interactive_plot_html("dist_entropy", fig)
         self._interactive_plot_file_names["entropy_distrubution"] = filename
