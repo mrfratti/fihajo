@@ -106,10 +106,16 @@ pipeline {
             }
         }
 
-        // Under process !!!!!!!!!!!!
         stage('Analyze') {
             steps {
-                sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                script {
+                    if (params.REPORT_INT) {
+                        sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --interactive"
+                    }
+                    else {
+                        sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                    }
+                }
             }
         }
 
