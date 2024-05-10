@@ -24,8 +24,6 @@ class VisualizeTraining:
     generate plot and storing plots
     """
 
-    # !!!!!!!!!!!!!!!!!! _interactive_plot_file_names and interactive_plot_file_names   |   maybe fix dict
-
     def __init__(self, plot_dir="src/report/reports/data/plots/training"):
         self.plot_dir = plot_dir
         os.makedirs(self.plot_dir, exist_ok=True)
@@ -70,7 +68,6 @@ class VisualizeTraining:
         # Loss
         self._plot_results(history, mode="loss", title="Model loss")
         filename = self._save_plot("val_acc_and_loss")
-        #plt.show()
         self._plot_file_names["training"] = filename
 
 
@@ -174,7 +171,6 @@ class VisualizeTraining:
         # loss
         self._plot_results(history, mode="loss", title="Adversarial Training Loss")
         filename = self._save_plot("adv_train_acc_loss")
-        #plt.show()
         self._plot_file_names["adversarialTraining"] = filename
 
 
@@ -278,24 +274,9 @@ class VisualizeTraining:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
-        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
 
         return f"{self.plot_dir}/{filename}"
-    
-    # def _save_interactive_plot_html(self, filename, data_info):
-    #     timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    #     filename = f"{filename}_{timestamp}.html"
-        
-    #     html_content = plotly.offline.plot(data_info, include_plotlyjs=True, output_type='file', auto_open=False)
-    #     html_content_new = Interactive_Html_Data.create_div_file_html(html_content)
-
-    #     full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/{filename}")
-
-    #     with open(full_file_path, 'w') as file:
-    #         file.write(html_content_new)
-
-    #     return f"{self.plot_dir}/{filename}"
 
 
     @property
@@ -343,7 +324,6 @@ class VisualizeEvaluation:
     def plot_predictions(self, model, x_test, y_true, num_samples=25):
         predictions = model.predict(x_test[:num_samples])
         predicted_labels = np.argmax(predictions, axis=1)
-        # true_label = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
         plt.figure(figsize=(20, 10))
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
@@ -353,7 +333,6 @@ class VisualizeEvaluation:
         plt.tight_layout()
         
         filename = self._save_plot("predictions")
-        #plt.show()
         self._plot_file_names["predictions"] = filename
 
         # --- Interactive Chart | plot predictions --- |
@@ -387,29 +366,10 @@ class VisualizeEvaluation:
         plt.ylabel("True Label", fontsize=18)
         plt.xlabel("Predicted Label", fontsize=18)
         filename = self._save_plot("confusion_matrix")
-        #plt.show()
         self._plot_file_names["confusion_matrix"] = filename
 
 
         # --- Interactive Chart | Confusion Matrix --- |
-        # cm = np.flipud(cm)
-        # fig = plotly_figure_factory.create_annotated_heatmap(
-        #     z=cm,
-        #     x=classes,
-        #     y=classes,
-        #     colorscale='Blues',
-        #     annotation_text=np.array(cm).astype(str),
-        #     showscale=True
-        # )
-
-        # fig.update_layout(
-        #     title='Confusion Matrix',
-        #     xaxis=dict(title='Predicted Label', tickmode='array'),
-        #     yaxis=dict(title='True Label', tickmode='array'),
-        #     title_font=dict(size=20),
-        #     xaxis_title_font=dict(size=18),
-        #     yaxis_title_font=dict(size=18)
-        # )
 
         plt.figure(figsize=(20, 15))
         sns.heatmap(
@@ -444,30 +404,10 @@ class VisualizeEvaluation:
         )
         plt.title("Classification Report", fontsize=20)
         filename = self._save_plot("classification_report")
-        #plt.show()
         self._plot_file_names["classification_report"] = filename
 
 
         # --- Interactive Chart | Classification Report --- |
-        # df_report = pd.DataFrame(report).transpose()
-        # df_report.drop("support", errors="ignore", inplace=True)
-        # data_heatmap = df_report[["precision", "recall", "f1-score"]].T
-        
-        # fig = plotly_graph_objects.Figure(
-        #     data = plotly_graph_objects.Heatmap(
-        #         x = data_heatmap.columns,
-        #         y = data_heatmap.index,
-        #         z = data_heatmap.values,
-        #         colorscale = 'viridis',
-        #         text = data_heatmap.round(2).astype(str),
-        #         texttemplate = "%{text}",
-        #         hoverinfo = "text"
-        #     )
-        # )
-        
-        # fig.update_layout(
-        #     title="Classification Report"
-        # )
 
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
@@ -489,8 +429,6 @@ class VisualizeEvaluation:
         # Generate FGSM adversarial examples
         x_adv_fgsm = fast_gradient_method(model.inner, x_test[:num_samples], eps, np.inf)
         predictions_fgsm = np.argmax(model.predict(x_adv_fgsm), axis=1)
-
-        # predictions_clean = np.argmax(model.predict(x_test[:num_samples]), axis=1)
 
         # Generate PGD adversarial examples
         x_adv_pgd = projected_gradient_descent(
@@ -523,7 +461,6 @@ class VisualizeEvaluation:
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
 
         filename = self._save_plot("adversarial_examples")
-        #plt.show()
         self._plot_file_names["adversarial_examples"] = filename
 
         # --- Interactive Chart | plot_accuracy_comparison --- |
@@ -571,7 +508,6 @@ class VisualizeEvaluation:
             plt.text(i, acc + 2, f"{acc:.2f}", ha="center", va="bottom")
 
         filename = self._save_plot("accuracy_comparison")
-        #plt.show()
         self._plot_file_names["accuracy_comparison"] = filename
 
 
@@ -620,8 +556,7 @@ class VisualizeEvaluation:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=True)
-        # plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
 
         return f"{self.plot_dir}/{filename}"    
 
@@ -670,7 +605,6 @@ class VisualizeUncertainty:
     def plot_pcs_mean_softmax(self, pcs_mean_softmax_scores):
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
         # Results is a list of tuples, where each tuple contains (predictions, scores)
-        # pcs_scores, mean_softmax_scores = results[0][1], results[1][1]
 
         plt.figure(figsize=(20, 10))
         plt.subplot(1, 2, 1)
@@ -1015,7 +949,6 @@ class VisualizeUncertainty:
             bgcolor = "rgb(255, 184, 0)",
         )
 
-        x_half = max(predictive_confidence)/2
         fig.update_layout(
             title="Predictive Confidence vs Entropy Score",
             xaxis_title="Predictive Confidence",
