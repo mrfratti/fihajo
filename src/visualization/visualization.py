@@ -335,7 +335,7 @@ class VisualizeUncertainty:
 
     def plot_dist_entropy_scores(self, entropy_scores):
         plt.figure(figsize=(20, 10))
-        sns.histplot(entropy_scores, bins=50, kde=True, color="blue", label="Clean Data")
+        sns.histplot(entropy_scores, bins=50, kde=True, color="red", label="Entropy Scores")
         plt.axvline(
             np.mean(entropy_scores),
             color="k",

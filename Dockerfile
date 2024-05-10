@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir \
   argparse==1.4.0 \
   yattag==1.15.2
 
-RUN chown -R jenkins:jenkins /opt/venv
+# RUN chown -R jenkins:jenkins /opt/venv
 
 USER jenkins
 
