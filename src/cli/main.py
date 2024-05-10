@@ -41,7 +41,7 @@ class CLIApp:
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
-        self.add_interactive_report_subparser(subparsers)
+        # self.add_interactive_report_subparser(subparsers)
     
         return parser
 
@@ -62,7 +62,7 @@ class CLIApp:
                                   help="Optimizer for training")
         parser_train.add_argument("--learning-rate", type=float, default=None, help="Learning rate for the optimizer")
         parser_train.add_argument("--report", action="store_true", help="Generate report")
-        parser_train.add_argument("--reportInteractive", action="store_true", help="Generate interactive report")
+        parser_train.add_argument("--interactive", action="store_true", help="Generate interactive report")
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser("evaluate", help="Evaluate the model")
@@ -76,7 +76,7 @@ class CLIApp:
         parser_evaluate.add_argument("--eps", type=self.check_eps, default=0.3, help="Epsilon for adversarial "
                                                                                      "perturbation during evaluation")
         parser_evaluate.add_argument("--report", action="store_true", help="Generate report")
-        parser_evaluate.add_argument("--reportInteractive", action="store_true", help="Generate interactive report")
+        parser_evaluate.add_argument("--interactive", action="store_true", help="Generate interactive report")
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
@@ -87,16 +87,17 @@ class CLIApp:
                                                                                      "for uncertainty analysis.")
         uncertainty_parser.add_argument("--batch", type=int, default=64, help="Batch size for analyzing.")
         uncertainty_parser.add_argument("--report", action="store_true", help="Generate report")
-        uncertainty_parser.add_argument("--reportInteractive", action="store_true", help="Generate interactive report")
+        uncertainty_parser.add_argument("--interactive", action="store_true", help="Generate interactive report")
         uncertainty_parser.set_defaults(func=self.analyze)
 
     def add_report_subparser(self, subparsers):
         report_parser = subparsers.add_parser("report", help="Genereate report")
+        report_parser.add_argument('--interactive', action='store_true', help='Generate interactive report')
         report_parser.set_defaults(func=self.report)
 
-    def add_interactive_report_subparser(self, subparsers):
-        report_interactive_parser = subparsers.add_parser("reportInteractive", help="Genereate interactive report")
-        report_interactive_parser.set_defaults(func=self.reportInteractive)
+    # def add_interactive_report_subparser(self, subparsers):
+    #     report_interactive_parser = subparsers.add_parser("reportInteractive", help="Genereate interactive report")
+    #     report_interactive_parser.set_defaults(func=self.reportInteractive)
         
 
     def check_positive(self, value):
@@ -145,10 +146,9 @@ class CLIApp:
             SendReportData().filenames = trainer.plot_file_names
             if args.report:
                 self.report()
-            
-            SendInteractiveReportData().filenames = trainer.interactive_plot_file_names
-            if args.reportInteractive:
-                self.reportInteractive()
+                
+            if args.interactive:
+                SendInteractiveReportData().filenames = trainer.interactive_plot_file_names
 
         except Exception as e:
             logging.error("An error occurred during training: %s", e)
@@ -207,13 +207,12 @@ class CLIApp:
             if args.report:
                 self.report()
 
-            send_interactive_data = SendInteractiveReportData()
-            send_interactive_data.adversarial_evaluated = args.adv_eval
-            send_interactive_data.filenames = evaluator.interactive_plot_file_names
-            
-            logging.debug("Evaluation complete, filenames: %s", evaluator.interactive_plot_file_names)
-            if args.reportInteractive:
-                self.reportInteractive()
+            if args.interactive:
+                send_interactive_data = SendInteractiveReportData()
+                send_interactive_data.adversarial_evaluated = args.adv_eval
+                send_interactive_data.filenames = evaluator.interactive_plot_file_names
+                
+                logging.debug("Evaluation complete, filenames: %s", evaluator.interactive_plot_file_names)
 
         except Exception as e:
             logging.error("An error occurred during evaluation: %s", e)
@@ -280,7 +279,9 @@ class CLIApp:
 
         except TypeError as e:
             logging.warning("main.report: %s", e)
-
+        
+        if args.interactive:
+            self.reportInteractive()
 
     def reportInteractive(self, args=""):
         """Run interactive report generation"""

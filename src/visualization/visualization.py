@@ -70,7 +70,7 @@ class VisualizeTraining:
         filename = self._save_plot("val_acc_and_loss")
         self._plot_file_names["training"] = filename
 
-
+    def plot_interactive_training_results(self, history):
         # --- Interactive Chart | Accuracy & Loss --- |
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
 
@@ -173,7 +173,7 @@ class VisualizeTraining:
         filename = self._save_plot("adv_train_acc_loss")
         self._plot_file_names["adversarialTraining"] = filename
 
-
+    def plot_interactive_adversarial_training_results(self, history):
         # --- Interactive Chart | Adversarial Training Results --- |
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Adversarial Training Accuracy", "Adversarial Model Loss"))
 
@@ -321,7 +321,7 @@ class VisualizeEvaluation:
         self._interactive_plot_file_names = {}
 
 
-    def plot_predictions(self, model, x_test, y_true, num_samples=25):
+    def plot_predictions(self, model, x_test, y_true, num_samples=25, filename_text = "plot_file_names"):
         predictions = model.predict(x_test[:num_samples])
         predicted_labels = np.argmax(predictions, axis=1)
         plt.figure(figsize=(20, 10))
@@ -332,23 +332,16 @@ class VisualizeEvaluation:
             plt.axis("off")
         plt.tight_layout()
         
-        filename = self._save_plot("predictions")
-        self._plot_file_names["predictions"] = filename
+        if filename_text == "plot_file_names":
+            filename = self._save_plot("predictions")
+            self._plot_file_names["predictions"] = filename
 
-        # --- Interactive Chart | plot predictions --- |
-        plt.figure(figsize=(20, 10))
-        for i in range(num_samples):
-            plt.subplot(5, 5, i + 1)
-            plt.imshow(x_test[i].reshape(28, 28), cmap="gray")
-            plt.title(f"True: {y_true[i]}, Predicted: {predicted_labels[i]}")
-            plt.axis("off")
-        plt.tight_layout()
-
-        filename = self._save_interactive_plot("predictions")
-        self._interactive_plot_file_names["predictions"] = filename
+        elif filename_text == "interactive_plot_file_names":
+            filename = self._save_interactive_plot("predictions")
+            self._interactive_plot_file_names["predictions"] = filename
 
 
-    def plot_confusion_matrix(self, y_true, y_pred, classes):
+    def plot_confusion_matrix(self, y_true, y_pred, classes, filename_text = "plot_file_names"):
         # Compute confusion matrix
         cm = confusion_matrix(y_true, y_pred)
 
@@ -365,31 +358,18 @@ class VisualizeEvaluation:
         plt.title("Confusion Matrix", fontsize=20)
         plt.ylabel("True Label", fontsize=18)
         plt.xlabel("Predicted Label", fontsize=18)
-        filename = self._save_plot("confusion_matrix")
-        self._plot_file_names["confusion_matrix"] = filename
-
-
-        # --- Interactive Chart | Confusion Matrix --- |
-
-        plt.figure(figsize=(20, 15))
-        sns.heatmap(
-            cm,
-            annot=True,
-            fmt="d",
-            cmap="Blues",
-            xticklabels=classes,
-            yticklabels=classes,
-        )
-        plt.title("Confusion Matrix", fontsize=20)
-        plt.ylabel("True Label", fontsize=18)
-        plt.xlabel("Predicted Label", fontsize=18)
         
-        filename = self._save_interactive_plot("confusion_matrix")
-        self._interactive_plot_file_names["confusion_matrix"] = filename
+        if filename_text == "plot_file_names":
+            filename = self._save_plot("confusion_matrix")
+            self._plot_file_names["confusion_matrix"] = filename
+
+        elif filename_text == "interactive_plot_file_names":
+            filename = self._save_interactive_plot("confusion_matrix")
+            self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
 
-    def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
+    def plot_classification_report(self, y_true, y_pred_classes, output_dict=True, filename_text = "plot_file_names"):
         report = classification_report(
             y_true, y_pred_classes, output_dict=output_dict, zero_division=0
         )
@@ -403,29 +383,18 @@ class VisualizeEvaluation:
             fmt=".2f",
         )
         plt.title("Classification Report", fontsize=20)
-        filename = self._save_plot("classification_report")
-        self._plot_file_names["classification_report"] = filename
+        
+        if filename_text == "plot_file_names":
+            filename = self._save_plot("classification_report")
+            self._plot_file_names["classification_report"] = filename
 
-
-        # --- Interactive Chart | Classification Report --- |
-
-        df_report = pd.DataFrame(report).transpose()
-        df_report.drop("support", errors="ignore", inplace=True)
-        plt.figure(figsize=(20, 16))
-        sns.heatmap(
-            df_report[["precision", "recall", "f1-score"]].T,
-            annot=True,
-            cmap="viridis",
-            fmt=".2f",
-        )
-        plt.title("Classification Report", fontsize=20)
-
-        filename = self._save_interactive_plot("classification_report")
-        self._interactive_plot_file_names["classification_report"] = filename
+        elif filename_text == "interactive_plot_file_names":
+            filename = self._save_interactive_plot("classification_report")
+            self._interactive_plot_file_names["classification_report"] = filename
 
 
 
-    def plot_adversarial_examples(self, model, x_test, eps, num_samples=25):
+    def plot_adversarial_examples(self, model, x_test, eps, num_samples=25, filename_text = "plot_file_names"):
         # Generate FGSM adversarial examples
         x_adv_fgsm = fast_gradient_method(model.inner, x_test[:num_samples], eps, np.inf)
         predictions_fgsm = np.argmax(model.predict(x_adv_fgsm), axis=1)
@@ -460,37 +429,13 @@ class VisualizeEvaluation:
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
 
-        filename = self._save_plot("adversarial_examples")
-        self._plot_file_names["adversarial_examples"] = filename
+        if filename_text == "plot_file_names":
+            filename = self._save_plot("adversarial_examples")
+            self._plot_file_names["adversarial_examples"] = filename
 
-        # --- Interactive Chart | plot_accuracy_comparison --- |
-
-        plt.figure(figsize=(2 * num_samples, 6))
-
-        plt.figure(figsize=(20, 10))
-        for i in range(num_samples):
-            # Original images
-            plt.subplot(3, num_samples, i + 1)
-            plt.imshow(x_test[i], cmap="gray")
-            plt.title(f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}", fontsize=18)
-            plt.axis("off")
-
-            # Plot FGSM adversarial images
-            plt.subplot(3, num_samples, num_samples + i + 1)
-            plt.imshow(x_adv_fgsm[i], cmap="gray")
-            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=18)
-            plt.axis("off")
-
-            # Plot PGD adversarial images
-            plt.subplot(3, num_samples, 2 * num_samples + i + 1)
-            plt.imshow(x_adv_pgd[i], cmap="gray")
-            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=18)
-            plt.axis("off")
-
-        plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
-
-        filename = self._save_interactive_plot("adversarial_examples")
-        self._interactive_plot_file_names["adversarial_examples"] = filename
+        elif filename_text == "interactive_plot_file_names":
+            filename = self._save_interactive_plot("adversarial_examples")
+            self._interactive_plot_file_names["adversarial_examples"] = filename
 
 
 
@@ -511,8 +456,8 @@ class VisualizeEvaluation:
         self._plot_file_names["accuracy_comparison"] = filename
 
 
-        # --- Interactive Chart | plot_accuracy_comparison --- |
-
+    def plot_interactive_accuracy_comparison(self, accuracies, labels=["Clean", "FGSM", "PGD"]):
+        bar_positions = np.arange(len(accuracies))
         fig = plotly_graph_objects.Figure([
             plotly_graph_objects.Bar(
                 x = labels, 
