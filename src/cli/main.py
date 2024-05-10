@@ -156,7 +156,7 @@ class CLIApp:
     def evaluate(self, args):
         """Runs evaluation attack on model"""
 
-        if hasattr(args, "model_path") or args.model_path is not None:
+        if hasattr(args, "model_path") and args.model_path is not None:
             model_path = args.model_path
         else:
             model_path = input("Enter the model path for analysis or press Enter to use the default path: ").strip()
@@ -219,7 +219,7 @@ class CLIApp:
 
     def analyze(self, args):
         model_path = (args.model_path
-            if (hasattr(args, "model_path") or args.model_path is not None)
+            if (hasattr(args, "model_path") and args.model_path is not None)
                       else input("Enter the model path for analysis or press Enter to use the default path: ").strip())
 
         if not model_path:
