@@ -62,7 +62,7 @@ class CLIApp:
                                   help="Optimizer for training")
         parser_train.add_argument("--learning-rate", type=float, default=None, help="Learning rate for the optimizer")
         parser_train.add_argument("--report", action="store_true", help="Generate report")
-        parser_train.add_argument("--reportInteractive", action="store_true", help="Generate report")
+        parser_train.add_argument("--reportInteractive", action="store_true", help="Generate interactive report")
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser("evaluate", help="Evaluate the model")
@@ -76,7 +76,7 @@ class CLIApp:
         parser_evaluate.add_argument("--eps", type=self.check_eps, default=0.3, help="Epsilon for adversarial "
                                                                                      "perturbation during evaluation")
         parser_evaluate.add_argument("--report", action="store_true", help="Generate report")
-        parser_evaluate.add_argument("--reportInteractive", action="store_true", help="Generate report")
+        parser_evaluate.add_argument("--reportInteractive", action="store_true", help="Generate interactive report")
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
@@ -87,7 +87,7 @@ class CLIApp:
                                                                                      "for uncertainty analysis.")
         uncertainty_parser.add_argument("--batch", type=int, default=64, help="Batch size for analyzing.")
         uncertainty_parser.add_argument("--report", action="store_true", help="Generate report")
-        uncertainty_parser.add_argument("--reportInteractive", action="store_true", help="Generate report")
+        uncertainty_parser.add_argument("--reportInteractive", action="store_true", help="Generate interactive report")
         uncertainty_parser.set_defaults(func=self.analyze)
 
     def add_report_subparser(self, subparsers):
@@ -283,7 +283,7 @@ class CLIApp:
 
 
     def reportInteractive(self, args=""):
-        """Run report generation"""
+        """Run interactive report generation"""
         send_data = SendInteractiveReportData()
         if args and hasattr(args, 'adv_eval'):
             send_data.adversarial_evaluated = args.adv_eval
