@@ -45,7 +45,7 @@ class InteractiveHtmlGenerator:
         with tag("html", lang="en"):
             with tag("head"):
                 doc.stag("meta", charset="UTF-8")
-                doc.stag("link", rel="stylesheet", href="src/report/reports/dist/style.css")
+                doc.stag("link", rel="stylesheet", href="dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
 
             with tag("body"):
@@ -88,6 +88,8 @@ class InteractiveHtmlGenerator:
     def _img_section(self, data, section):
 
         file_path = data.image_location
+        remove_sub_path = "src/report/reports/"
+        file_path_new = file_path.replace(remove_sub_path, "", 1)
         file_split = os.path.splitext(file_path)
         file_end_lower = file_split[1].lower()
 
@@ -96,11 +98,11 @@ class InteractiveHtmlGenerator:
                 text(data.header_image)
 
             if file_end_lower == '.html':
-                with tag("iframe", src=data.image_location, style="width:100%; height:500px; border:none;"):
+                with tag("iframe", src=file_path_new, style="width:100%; height:500px; border:none;"):
                     text("")
 
             elif file_end_lower == '.png':
-                with tag("img", src=data.image_location, style="width:100%; height:auto;"):
+                with tag("img", src=file_path_new, style="width:100%; height:auto;"):
                     text("")
 
             with tag("div", klass="info"):
