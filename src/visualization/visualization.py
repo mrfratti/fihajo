@@ -568,7 +568,9 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_meansoftmax"] = filename
 
 
-        # --- Interactive Chart | plot_pcs_mean_softmax --- |
+    def plot_interactive_pcs_mean_softmax(self, pcs_mean_softmax_scores):
+        pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
+
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
 
         fig.add_trace(plotly_graph_objects.Histogram(
@@ -617,7 +619,9 @@ class VisualizeUncertainty:
         self._plot_file_names["distrubution_meansoftmax"] = filename
 
 
-        # --- Interactive Chart | plot_distribution_pcs_ms_scores --- |
+    def plot_interactive_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
+        pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
+
         fig = make_subplots(subplot_titles=(""))
 
         fig.add_trace(plotly_graph_objects.Histogram(
@@ -696,8 +700,13 @@ class VisualizeUncertainty:
         self._plot_file_names["pcs_inverse"] = filename
 
 
+    def plot_interactive_pcs_ms_inverse(self, pcs_mean_softmax_scores):
+        pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
+        pcs_inverse = 1 - pcs_scores
+        uncertainty_threshold_pcs = np.percentile(pcs_inverse, 95)
+        mean_softmax_inverse = 1 - mean_softmax_scores
+        uncertainty_threshold_mean_softmax = np.percentile(mean_softmax_inverse, 95)
 
-        # --- Interactive Chart | pcs_ms_inverse --- |
         fig = make_subplots(rows=2, cols=1, subplot_titles=("Distribution of PCS Scores as Uncertainty", 
                                                             "Distribution of Mean Softmax Scores as Uncertainty"))
 
@@ -761,8 +770,7 @@ class VisualizeUncertainty:
         #plt.show()
         self._plot_file_names["entropy_distrubution"] = filename
 
-
-        # --- Interactive Chart | Entropy Scores --- |
+    def plot_interactive_dist_entropy_scores(self, entropy_scores):
         fig = plotly_graph_objects.Figure()
 
         fig.add_trace(plotly_graph_objects.Histogram(
@@ -798,8 +806,10 @@ class VisualizeUncertainty:
         filename = self._save_plot("high_uncertain_inputs")
         self._plot_file_names["higly_uncertain_inputs"] = filename
 
-
-        # --- Interactive Chart | high_uncertain_inputs --- |
+    def high_interactive_uncertain_inputs(self, entropy_scores, x_test, num_samples=25):
+        num_samples = min(num_samples, len(x_test))
+        # Sort the indices of the entropy scores in descending order
+        sorted_indices = np.argsort(entropy_scores)[::-1]
         plt.figure(figsize=(8, 8))
         for i in range(num_samples):
             index = sorted_indices[i]
@@ -832,8 +842,7 @@ class VisualizeUncertainty:
         self._plot_file_names["prediction_vs_entrophy"] = filename
 
 
-        # --- Interactive Chart | predictive_conf_entropy_scores --- |
-
+    def plot_interactive_predictive_conf_entropy_scores(self, predictive_confidence, entropy_scores):
         fig = plotly_graph_objects.Figure(
             data=plotly_graph_objects.Scatter(
                 x=predictive_confidence,

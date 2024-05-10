@@ -119,29 +119,38 @@ pipeline {
                 script {
                     if (params.REPORT_INT) {
                         sh "python3 -m src.cli.main report --interactive"
+
+                        publishHTML target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "src/report/reports/",
+                            reportFiles: "index.html",
+                            reportName: "HTML Report"
+                        ]
+                        publishHTML target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "",
+                            reportFiles: "test_index.html",
+                            reportName: "HTML Interactive Report"
+                        ]
                     } 
                     else {
                         sh "python3 -m src.cli.main report"
+
+                        publishHTML target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "src/report/reports/",
+                            reportFiles: "index.html",
+                            reportName: "HTML Report"
+                        ]
+                        
                     }
                 }
-
-                publishHTML target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "src/report/reports/",
-                    reportFiles: "index.html",
-                    reportName: "HTML Report"
-                ]
-
-                publishHTML target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "",
-                    reportFiles: "test_index.html",
-                    reportName: "HTML Report 2"
-                ]
             }
         }
 
