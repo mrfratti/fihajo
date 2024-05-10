@@ -16,8 +16,6 @@ import plotly.figure_factory as plotly_figure_factory
 from plotly.subplots import make_subplots
 
 
-from src.report.interactive.interactive_html_data import Interactive_Html_Data
-
 
 class VisualizeTraining:
     """_summary_
@@ -72,93 +70,114 @@ class VisualizeTraining:
 
     def plot_interactive_training_results(self, history):
         # --- Interactive Chart | Accuracy & Loss --- |
-        fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
+        # fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
 
+        # history_data = history.history
+
+        # list_x_values = list(range(0, len(history_data['accuracy']) + 1))
+
+        # list_accuracy = [0] + history_data['accuracy']
+        # list_val_accuracy = [0] + history_data['val_accuracy']
+
+        # list_loss = [history_data['loss'][0]] + history_data['loss']
+        # list_val_loss = [history_data['val_loss'][0]] + history_data['val_loss']
+
+        # fig.add_trace(plotly_graph_objects.Scatter(
+        #     x=list_x_values,
+        #     y=list_accuracy,
+        #     mode="lines+markers",
+        #     name="Accuracy",
+        #     hoverinfo="y+name",),
+        #     row=1, col=1)
+        
+        # fig.add_trace(plotly_graph_objects.Scatter(
+        #     x=list_x_values,
+        #     y=list_val_accuracy,
+        #     mode="lines+markers",
+        #     name="Validation Accuracy",
+        #     hoverinfo="y+name",
+        #     line=dict(dash="dot")),
+        #     row=1, col=1)
+        
+        # fig.add_annotation(
+        #     x = list_x_values[-1],
+        #     y = list_accuracy[-1],
+        #     text = f"Accuracy: {list_accuracy[-1]:.2f}",
+        #     showarrow = True,
+        #     align = "center",
+        #     borderwidth = 5,
+        #     borderpad = 5,
+        #     arrowcolor = "rgb(71, 71, 71)",
+        #     bordercolor = "rgb(71, 71, 71)",
+        #     bgcolor = "rgb(255, 184, 0)",
+        #     xref="x1",
+        #     yref="y1"
+        # )
+
+
+        # fig.add_trace(plotly_graph_objects.Scatter(
+        #     x=list_x_values,
+        #     y=list_loss,
+        #     mode="lines+markers",
+        #     name="Loss",
+        #     hoverinfo="y+name",),
+        #     row=2, col=1)
+        
+        # fig.add_trace(plotly_graph_objects.Scatter(
+        #     x=list_x_values,
+        #     y=list_val_loss,
+        #     mode="lines+markers",
+        #     name="Validation Loss",
+        #     hoverinfo="y+name",
+        #     line=dict(dash="dot")),
+        #     row=2, col=1)
+        
+        # fig.add_annotation(
+        #     x = list_x_values[-1],
+        #     y = list_loss[-1],
+        #     text = f"Loss: {list_loss[-1]:.2f}",
+        #     showarrow = True,
+        #     align = "center",
+        #     borderwidth = 5,
+        #     borderpad = 5,
+        #     arrowcolor = "rgb(71, 71, 71)",
+        #     bordercolor = "rgb(71, 71, 71)",
+        #     bgcolor = "rgb(255, 184, 0)",
+        #     xref="x2",
+        #     yref="y2"
+        # )
+        
+        # fig.update_xaxes(title_text="Epoch", row=1, col=1)
+        # fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
+
+        # fig.update_xaxes(title_text="Epoch", row=2, col=1)
+        # fig.update_yaxes(title_text = "Loss", row=2, col=1)
+
+        # fig.update_layout(height = 1000)
+
+        # filename = self._save_interactive_plot_html("val_acc_and_loss", fig)
+        # self._interactive_plot_file_names["training"] = filename
+
+
+        # --- Interactive Chart | Accuracy & Loss --- | test 2
         history_data = history.history
-
-        list_x_values = list(range(0, len(history_data['accuracy']) + 1))
-
-        list_accuracy = [0] + history_data['accuracy']
-        list_val_accuracy = [0] + history_data['val_accuracy']
-
-        list_loss = [history_data['loss'][0]] + history_data['loss']
-        list_val_loss = [history_data['val_loss'][0]] + history_data['val_loss']
-
-        fig.add_trace(plotly_graph_objects.Scatter(
-            x=list_x_values,
-            y=list_accuracy,
-            mode="lines+markers",
-            name="Accuracy",
-            hoverinfo="y+name",),
-            row=1, col=1)
         
-        fig.add_trace(plotly_graph_objects.Scatter(
-            x=list_x_values,
-            y=list_val_accuracy,
-            mode="lines+markers",
-            name="Validation Accuracy",
-            hoverinfo="y+name",
-            line=dict(dash="dot")),
-            row=1, col=1)
-        
-        fig.add_annotation(
-            x = list_x_values[-1],
-            y = list_accuracy[-1],
-            text = f"Accuracy: {list_accuracy[-1]:.2f}",
-            showarrow = True,
-            align = "center",
-            borderwidth = 5,
-            borderpad = 5,
-            arrowcolor = "rgb(71, 71, 71)",
-            bordercolor = "rgb(71, 71, 71)",
-            bgcolor = "rgb(255, 184, 0)",
-            xref="x1",
-            yref="y1"
-        )
+        x_value = []
+        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
+            x_value.append(x_axis_nr)
+
+        data_info = {
+            "x":            x_value,
+            "accuracy":     history_data["accuracy"],
+            "val_accuracy": history_data["val_accuracy"],
+            "loss":         history_data["loss"],
+            "val_loss":     history_data["val_loss"]
+        }
 
 
-        fig.add_trace(plotly_graph_objects.Scatter(
-            x=list_x_values,
-            y=list_loss,
-            mode="lines+markers",
-            name="Loss",
-            hoverinfo="y+name",),
-            row=2, col=1)
-        
-        fig.add_trace(plotly_graph_objects.Scatter(
-            x=list_x_values,
-            y=list_val_loss,
-            mode="lines+markers",
-            name="Validation Loss",
-            hoverinfo="y+name",
-            line=dict(dash="dot")),
-            row=2, col=1)
-        
-        fig.add_annotation(
-            x = list_x_values[-1],
-            y = list_loss[-1],
-            text = f"Loss: {list_loss[-1]:.2f}",
-            showarrow = True,
-            align = "center",
-            borderwidth = 5,
-            borderpad = 5,
-            arrowcolor = "rgb(71, 71, 71)",
-            bordercolor = "rgb(71, 71, 71)",
-            bgcolor = "rgb(255, 184, 0)",
-            xref="x2",
-            yref="y2"
-        )
-        
-        fig.update_xaxes(title_text="Epoch", row=1, col=1)
-        fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
-
-        fig.update_xaxes(title_text="Epoch", row=2, col=1)
-        fig.update_yaxes(title_text = "Loss", row=2, col=1)
-
-        fig.update_layout(height = 1000)
-
-        filename = self._save_interactive_plot_html("val_acc_and_loss", fig)
+        filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
         self._interactive_plot_file_names["training"] = filename
+        
 
 
 
@@ -277,6 +296,17 @@ class VisualizeTraining:
         plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
 
         return f"{self.plot_dir}/{filename}"
+    
+    def _save_interactive_plot_json(self, filename, data_info):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"{filename}_{timestamp}.json"
+ 
+        full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/{filename}")
+        
+        with open(full_file_path, 'w') as file:
+            json.dump(data_info, file, indent=4)
+
+        return f"{self.plot_dir}/{filename}"
 
 
     @property
@@ -358,6 +388,17 @@ class VisualizeEvaluation:
         plt.title("Confusion Matrix", fontsize=20)
         plt.ylabel("True Label", fontsize=18)
         plt.xlabel("Predicted Label", fontsize=18)
+
+
+        # data_info = []
+
+        # for x in range(len(cm)):
+        #     for y in range(len(cm[x])):
+        #         data_info.append({'value': int(cm[x][y]), 'row': x, 'column': y})
+        
+        # filename = self._save_interactive_plot_json("confusion_matrix", data_info)
+        # self._interactive_plot_file_names["confusion_matrix"] = filename
+
         
         if filename_text == "plot_file_names":
             filename = self._save_plot("confusion_matrix")
