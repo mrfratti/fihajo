@@ -47,7 +47,6 @@ class InteractiveHtmlGenerator:
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="src/report/reports/dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
-                # doc.stag('script', src="https://cdn.plot.ly/plotly-latest.min.js")
 
             with tag("body"):
                 with tag("header"):
@@ -96,10 +95,6 @@ class InteractiveHtmlGenerator:
             with tag("h2"):
                 text(data.header_image)
 
-            # if file_end_lower == '.html':
-            #     with open(data.image_location, 'r', encoding='utf-8') as file:
-            #         div_info = file.read()
-            #     doc.asis(div_info)
             if file_end_lower == '.html':
                 with tag("iframe", src=data.image_location, style="width:100%; height:500px; border:none;"):
                     text("")
