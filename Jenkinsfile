@@ -138,8 +138,8 @@ pipeline {
                             allowMissing: false,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
-                            reportDir: "",
-                            reportFiles: "test_index.html",
+                            reportDir: "./src/report/reports/",
+                            reportFiles: "index_interactive.html",
                             reportName: "HTML Interactive Report"
                         ]
                     } 
