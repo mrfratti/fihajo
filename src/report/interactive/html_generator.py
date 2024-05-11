@@ -5,7 +5,6 @@ from yattag import Doc
 from src.report.html_data import HtmlData
 from src.report.image_data import ImageData
 from src.cli.string_styling import StringStyling
-from src.report.interactive.interactive_html_data import html_accuracy_loss_chart
 
 
 doc, tag, text = Doc().tagtext()
@@ -99,14 +98,7 @@ class InteractiveHtmlGenerator:
             with tag("h2"):
                 text(data.header_image)
 
-            if file_end_lower == ".json":
-                # with tag("iframe", src=file_path_new, style="width:100%; height:500px; border:none;"):
-                #     text("")
-                with open(file_path_new, "r") as json_file:
-                    data_accuracy_loss = json.load(json_file)
-                test_file = html_accuracy_loss_chart(data_accuracy_loss)
-
-            elif file_end_lower == ".html":
+            if file_end_lower == ".html":
                 with tag("iframe", src=file_path_new, style="width:100%; height:500px; border:none;"):
                     text("")
 

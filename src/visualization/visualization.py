@@ -14,6 +14,7 @@ import plotly
 import plotly.graph_objects as plotly_graph_objects
 import plotly.figure_factory as plotly_figure_factory
 from plotly.subplots import make_subplots
+from src.report.interactive.interactive_html_data import html_accuracy_loss_chart
 
 
 
@@ -174,8 +175,8 @@ class VisualizeTraining:
             "val_loss":     history_data["val_loss"]
         }
 
-
-        filename = self._save_interactive_plot_json("val_acc_and_loss", data_info)
+        data_info_html = html_accuracy_loss_chart(data_info)
+        filename = self._save_interactive_plot_html_2("val_acc_and_loss", data_info_html)
         self._interactive_plot_file_names["training"] = filename
         
 
@@ -297,14 +298,14 @@ class VisualizeTraining:
 
         return f"{self.plot_dir}/{filename}"
     
-    def _save_interactive_plot_json(self, filename, data_info):
+    def _save_interactive_plot_html_2(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        filename = f"{filename}_{timestamp}.json"
+        filename = f"{filename}_{timestamp}.html"
  
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/{filename}")
         
         with open(full_file_path, 'w') as file:
-            json.dump(data_info, file, indent=4)
+            file.write(data_info)
 
         return f"{self.plot_dir}/{filename}"
 
