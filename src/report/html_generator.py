@@ -1,5 +1,6 @@
 import logging
 import os
+from tomlkit import value
 from yattag import Doc
 from src.report.html_data import HtmlData
 from src.report.image_data import ImageData
@@ -16,7 +17,7 @@ class HtmlGenerator:
 
     def __init__(self) -> None:
         self._image_data_list = []
-        self._html_report = HtmlData()
+        self._html_report = None
 
     @property
     def image_data(self) -> int:
@@ -41,6 +42,8 @@ class HtmlGenerator:
         self._html_report = report
 
     def _generate(self):
+        if self._html_report is None:
+            raise ValueError("No html data object set")
         doc.asis("<!DOCTYPE html>")
         with tag("html", lang="en"):
             with tag("head"):

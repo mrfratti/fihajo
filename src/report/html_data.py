@@ -4,7 +4,7 @@ class HtmlData:
     """Defines data about the html"""
 
     def __init__(self):
-        self._html_store_location = ""
+        self._html_store_location = None
         self._filename = ""
         self._header_text = "Model Report"
         self._html_head = None
@@ -64,6 +64,8 @@ class HtmlData:
     @property
     def html_store_location(self):
         """Returns current set store location for html report"""
+        if self._html_store_location is None:
+            return "./src/report/reports/"
         return self._html_store_location
 
     @html_store_location.setter
