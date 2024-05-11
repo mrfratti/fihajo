@@ -15,6 +15,22 @@ def html_accuracy_loss_chart(data_accuracy_loss):
     <html>
         <head>
             <title>Training Accuracy & Loss</title>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
+            <style>
+                body {{
+                    background-color: #d5d5d5;
+                }}
+                .charts_box {{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 50px auto;
+                }}
+                .chart_line_1 {{
+                    width: 600px;
+                    height: 400px;
+                }}
+            </style>
         </head>
         <body>
             

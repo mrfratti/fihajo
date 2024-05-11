@@ -89,10 +89,11 @@ class InteractiveHtmlGenerator:
     def _img_section(self, data, section):
 
         file_path = data.image_location
-        remove_sub_path = "src/report/reports/"
-        file_path_new = file_path.replace(remove_sub_path, "", 1)
         file_split = os.path.splitext(file_path)
         file_end_lower = file_split[1].lower()
+
+        remove_sub_path = "src/report/reports/"
+        file_path_new = file_path.replace(remove_sub_path, "", 1)
 
         with tag("div", klass=section):
             with tag("h2"):
@@ -110,7 +111,7 @@ class InteractiveHtmlGenerator:
                 with tag("div"):
                     with tag("p"):
                         text(data.about_image)
-                with tag("a", href=data.image_location):
+                with tag("a", href=file_path_new):
                     with tag("button"):
                         text("Open Image File")
 
