@@ -279,22 +279,22 @@ class VisualizeTraining:
         # fig.update_yaxes(title_text = "Loss", row=2, col=1)
 
         history_data = history
-        
         x_value = []
         for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
             x_value.append(x_axis_nr)
 
         data_info = {
             "x":            x_value,
-            "accuracy":     history_data["accuracy"],
-            "val_accuracy": history_data["val_accuracy"],
-            "loss":         history_data["loss"],
-            "val_loss":     history_data["val_loss"]
+            "accuracy":     float(history_data["accuracy"][0]),
+            "val_accuracy": float(history_data["val_accuracy"][0]),
+            "loss":         float(history_data["loss"][0]),
+            "val_loss":     float(history_data["val_loss"][0])
         }
+        print(data_info)
 
         data_info_html = html_accuracy_loss_chart(data_info, "Adversarial Training Accuracy & Loss")
 
-        filename = self._save_interactive_plot_html("adv_train_acc_loss", data_info_html)
+        filename = self._save_interactive_plot_html_2("adv_train_acc_loss", data_info_html)
         self._interactive_plot_file_names["adversarialTraining"] = filename
         
 
