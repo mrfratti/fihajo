@@ -72,7 +72,7 @@ class Evaluator:
             if self.args.interactive:
                 visualizer.plot_predictions(self.model.inner, x_test, y_true, num_samples=25, filename_text = "interactive_plot_file_names")
                 visualizer.plot_interactive_confusion_matrix(y_true, y_pred_classes, classes=[str(i) for i in range(10)])
-                visualizer.plot_classification_report(y_true, y_pred_classes, filename_text = "interactive_plot_file_names")
+                visualizer.plot_interactive_classification_report(y_true, y_pred_classes)
                 self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
 
     def adversarial_evaluation(self, x_test, y_test):

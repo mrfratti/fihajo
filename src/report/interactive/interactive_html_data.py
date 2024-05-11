@@ -191,11 +191,18 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
 
 
 def html_heatmap_chart(data_heatmap):
-
+    
     heatmap_columns = list({each_data["column"] for each_data in data_heatmap})
     heatmap_rows = list({each_data["row"] for each_data in data_heatmap})
-    heatmap_rows = heatmap_rows[::-1]
+    heatmap_rows_flip = heatmap_rows[::-1]
     heatmap_max_value = max(each_data["value"] for each_data in data_heatmap)
+    
+    heatmap_data_xyz = []
+    for each in data_heatmap:
+        column_index = heatmap_columns.index(each["column"])
+        row_index = heatmap_rows.index(each["row"])
+        value = each["value"]
+        heatmap_data_xyz.append([column_index, row_index, value])
     
     html_content =  f"""
     <!DOCTYPE html>
@@ -221,17 +228,14 @@ def html_heatmap_chart(data_heatmap):
             <div id="chart_heatmap"></div>
 
             <script>
-                var js_chart_heatmap = echarts.init(document.getElementById('chart_heatmap'));
-                var data = {json.dumps(data_heatmap)};
+                var js_chart_heatmap = echarts.init(document.getElementById("chart_heatmap"));
+                var data = {json.dumps(heatmap_data_xyz)};
                 var columns = {json.dumps(heatmap_columns)};
-                var rows = {json.dumps(heatmap_rows)};
+                var rows = {json.dumps(heatmap_rows_flip)};
 
                 var option = {{
                     tooltip: {{
-                        position: "top",
-                        formatter: function (params) {{
-                            return "Value: " + params.value[2];
-                        }}
+                        position: "top"
                     }},
 
                     animation: false,
@@ -262,15 +266,120 @@ def html_heatmap_chart(data_heatmap):
                         calculable: true,
                         orient: "horizontal",
                         left: "center",
-                        bottom: "15%"
+                        bottom: "15%",
+                        inRange: {{
+                            color: ["#e0ffff", "#006edd"]
+                        }}
                     }},
 
                     series: [{{
                         name: "Heatmap",
                         type: "heatmap",
-                        data: data.map(function (item) {{
-                            return [columns.indexOf(item.column), rows.indexOf(item.row), item.value];
-                        }}),
+                        data: data,
+                        label: {{
+                            show: true
+                        }},
+                        itemStyle: {{
+                            emphasis: {{
+                                shadowBlur: 10,
+                                shadowColor: "rgba(0, 0, 0, 0.5)"
+                            }}
+                        }}
+                    }}]
+                }};
+                js_chart_heatmap.setOption(option);
+            </script>
+        </body>
+    </html>
+    """
+
+    return html_content
+
+
+def html_heatmap_chart_2(data_heatmap):
+
+    heatmap_columns = data_heatmap["columns"][:-1]
+    heatmap_rows = data_heatmap["rows"]
+    heatmap_values = data_heatmap["value"]
+
+    heatmap_data = []
+    for x, row in enumerate(heatmap_values):
+        for y, value in enumerate(row[:-1]):
+            heatmap_data.append([y, x, round(value, 3)])
+
+    html_content =  f"""
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Confusion Matrix</title>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
+            <style>
+                body {{
+                    background-color: #f2f2d2;
+                }}
+                #chart_heatmap {{
+                    width: 800px;
+                    height: 600px;
+                    margin: 50px auto;
+                }}
+            </style>
+        </head>
+        <body>
+            
+            <h2>Confusion Matrix</h2>
+
+            <div id="chart_heatmap"></div>
+
+            <script>
+                var js_chart_heatmap = echarts.init(document.getElementById("chart_heatmap"));
+                var data = {json.dumps(heatmap_data)};
+                var columns = {json.dumps(heatmap_columns)};
+                var rows = {json.dumps(heatmap_rows)};
+
+                var option = {{
+                    tooltip: {{
+                        position: "top"
+                    }},
+
+                    animation: false,
+
+                    grid: {{
+                        height: "50%",
+                        top: "10%"
+                    }},
+
+                    xAxis: {{
+                        type: "category",
+                        data: columns,
+                        splitArea: {{
+                            show: true
+                        }}
+                    }},
+                    
+                    yAxis: {{
+                        type: "category",
+                        data: rows,
+                        splitArea: {{
+                            show: true
+                        }}
+                    }},
+
+                    visualMap: {{
+                        min: 0,
+                        max: 1,
+                        calculable: true,
+                        orient: "horizontal",
+                        left: "center",
+                        bottom: "15%",
+                        inRange: {{
+                            color: ["#e0ffff", "#1aeb00"]
+                        }}
+                    }},
+
+                    series: [{{
+                        name: "Heatmap",
+                        type: "heatmap",
+                        data: data,
                         label: {{
                             show: true
                         }},

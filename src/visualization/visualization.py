@@ -14,7 +14,7 @@ import plotly
 import plotly.graph_objects as plotly_graph_objects
 import plotly.figure_factory as plotly_figure_factory
 from plotly.subplots import make_subplots
-from src.report.interactive.interactive_html_data import html_accuracy_loss_chart, html_heatmap_chart
+from src.report.interactive.interactive_html_data import html_accuracy_loss_chart, html_heatmap_chart, html_heatmap_chart_2
 
 
 
@@ -278,17 +278,18 @@ class VisualizeTraining:
         # fig.update_xaxes(title_text="Epoch", row=2, col=1)
         # fig.update_yaxes(title_text = "Loss", row=2, col=1)
 
-        history_data = history[0]
+        history_data = history
+        print(history_data)
         x_value = []
         for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
             x_value.append(x_axis_nr)
 
         data_info = {
             "x":            x_value,
-            "accuracy":     [float(history_data["accuracy"])],
-            "val_accuracy": [float(history_data["val_accuracy"])],
-            "loss":         [float(history_data["loss"])],
-            "val_loss":     [float(history_data["val_loss"])]
+            "accuracy":     [float(history_data["accuracy"][0])],
+            "val_accuracy": [float(history_data["val_accuracy"][0])],
+            "loss":         [float(history_data["loss"][0])],
+            "val_loss":     [float(history_data["val_loss"][0])]
         }
         print(data_info)
 
@@ -424,7 +425,7 @@ class VisualizeEvaluation:
         self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
-    def plot_classification_report(self, y_true, y_pred_classes, output_dict=True, filename_text = "plot_file_names"):
+    def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
         report = classification_report(
             y_true, y_pred_classes, output_dict=output_dict, zero_division=0
         )
@@ -439,14 +440,27 @@ class VisualizeEvaluation:
         )
         plt.title("Classification Report", fontsize=20)
         
-        if filename_text == "plot_file_names":
-            filename = self._save_plot("classification_report")
-            self._plot_file_names["classification_report"] = filename
+        filename = self._save_plot("classification_report")
+        self._plot_file_names["classification_report"] = filename
 
-        elif filename_text == "interactive_plot_file_names":
-            filename = self._save_interactive_plot("classification_report")
-            self._interactive_plot_file_names["classification_report"] = filename
+    def plot_interactive_classification_report(self, y_true, y_pred_classes, output_dict=True):
+        report = classification_report(
+            y_true, y_pred_classes, output_dict=output_dict, zero_division=0
+        )
+        df_report = pd.DataFrame(report).transpose()
+        df_report.drop("support", errors="ignore", inplace=True)
 
+        data_info = {
+            "value": df_report.values.tolist(),
+            "columns": list(df_report.columns),
+            "rows": list(df_report.index)
+        }
+
+        data_info_html = html_heatmap_chart_2(data_info)
+        
+        filename = self._save_interactive_plot_html_2("classification_report", data_info_html)
+        self._interactive_plot_file_names["classification_report"] = filename
+        
 
 
     def plot_adversarial_examples(self, model, x_test, eps, num_samples=25, filename_text = "plot_file_names"):
