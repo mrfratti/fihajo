@@ -34,8 +34,8 @@ def html_accuracy_loss_chart(data_accuracy_loss):
         </head>
         <body>
             
+            <h2>Training</h2>
             <div class="charts_box">
-                <h2>Training</h2>
                 <div id="chart_accuracy" class="chart_line_1"></div>
                 <div id="chart_loss" class="chart_line_1"></div>
             </div>
