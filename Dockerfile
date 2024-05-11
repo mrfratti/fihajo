@@ -26,7 +26,8 @@ RUN pip install --no-cache-dir \
   DateTime==5.4 \
   argparse==1.4.0 \
   yattag==1.15.2 \
-  plotly==5.22.0
+  plotly==5.22.0 \
+  tomlkit==0.12.5
 
 # RUN chown -R jenkins:jenkins /opt/venv
 

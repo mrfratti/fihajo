@@ -21,3 +21,4 @@ wheel==0.43.0
 oauthlib==3.2.2
 cryptography==42.0.6
 PyJWT==2.8.0
+tomlkit==0.12.5
