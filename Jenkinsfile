@@ -26,6 +26,8 @@ pipeline {
             steps {
                 timestamps { echo ">>>>>>>>>>Installing dependencies>>>>>>>>>>"}
                 sh '''
+                sh 'virtualenv venv --distribute'
+                sh 'source venv/bin/activate'
                 pip3 install --upgrade pip
                 pip3 install -r requirements.txt
                 '''
