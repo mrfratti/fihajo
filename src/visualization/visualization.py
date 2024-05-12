@@ -70,110 +70,31 @@ class VisualizeTraining:
         self._plot_file_names["training"] = filename
 
     def plot_interactive_training_results(self, history):
-        # --- Interactive Chart | Accuracy & Loss --- |
-        # fig = make_subplots(rows=2, cols=1, subplot_titles=("Training Accuracy", "Model Loss"))
 
-        # history_data = history.history
-
-        # list_x_values = list(range(0, len(history_data['accuracy']) + 1))
-
-        # list_accuracy = [0] + history_data['accuracy']
-        # list_val_accuracy = [0] + history_data['val_accuracy']
-
-        # list_loss = [history_data['loss'][0]] + history_data['loss']
-        # list_val_loss = [history_data['val_loss'][0]] + history_data['val_loss']
-
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_accuracy,
-        #     mode="lines+markers",
-        #     name="Accuracy",
-        #     hoverinfo="y+name",),
-        #     row=1, col=1)
-        
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_val_accuracy,
-        #     mode="lines+markers",
-        #     name="Validation Accuracy",
-        #     hoverinfo="y+name",
-        #     line=dict(dash="dot")),
-        #     row=1, col=1)
-        
-        # fig.add_annotation(
-        #     x = list_x_values[-1],
-        #     y = list_accuracy[-1],
-        #     text = f"Accuracy: {list_accuracy[-1]:.2f}",
-        #     showarrow = True,
-        #     align = "center",
-        #     borderwidth = 5,
-        #     borderpad = 5,
-        #     arrowcolor = "rgb(71, 71, 71)",
-        #     bordercolor = "rgb(71, 71, 71)",
-        #     bgcolor = "rgb(255, 184, 0)",
-        #     xref="x1",
-        #     yref="y1"
-        # )
-
-
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_loss,
-        #     mode="lines+markers",
-        #     name="Loss",
-        #     hoverinfo="y+name",),
-        #     row=2, col=1)
-        
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_val_loss,
-        #     mode="lines+markers",
-        #     name="Validation Loss",
-        #     hoverinfo="y+name",
-        #     line=dict(dash="dot")),
-        #     row=2, col=1)
-        
-        # fig.add_annotation(
-        #     x = list_x_values[-1],
-        #     y = list_loss[-1],
-        #     text = f"Loss: {list_loss[-1]:.2f}",
-        #     showarrow = True,
-        #     align = "center",
-        #     borderwidth = 5,
-        #     borderpad = 5,
-        #     arrowcolor = "rgb(71, 71, 71)",
-        #     bordercolor = "rgb(71, 71, 71)",
-        #     bgcolor = "rgb(255, 184, 0)",
-        #     xref="x2",
-        #     yref="y2"
-        # )
-        
-        # fig.update_xaxes(title_text="Epoch", row=1, col=1)
-        # fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
-
-        # fig.update_xaxes(title_text="Epoch", row=2, col=1)
-        # fig.update_yaxes(title_text = "Loss", row=2, col=1)
-
-        # fig.update_layout(height = 1000)
-
-        # filename = self._save_interactive_plot_html("val_acc_and_loss", fig)
-        # self._interactive_plot_file_names["training"] = filename
-
-
-        # --- Interactive Chart | Accuracy & Loss --- | test 2
         history_data = history.history
         
-        x_value = []
-        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-            x_value.append(x_axis_nr)
+        list_x_value = []
+        list_accuracy = []
+        list_val_accuracy = []
+        list_loss = []
+        list_val_loss = []
+
+        rounded_nr = 2
+        for x_axis_nr in range(0, len(history_data["accuracy"])):
+            list_x_value.append(x_axis_nr+1)
+            list_accuracy.append(round(history_data["accuracy"][x_axis_nr], rounded_nr))
+            list_val_accuracy.append(round(history_data["val_accuracy"][x_axis_nr], rounded_nr))
+            list_loss.append(round(history_data["loss"][x_axis_nr], rounded_nr))
+            list_val_loss.append(round(history_data["val_loss"][x_axis_nr], rounded_nr))
 
         data_info = {
-            "x":            x_value,
-            "accuracy":     history_data["accuracy"],
-            "val_accuracy": history_data["val_accuracy"],
-            "loss":         history_data["loss"],
-            "val_loss":     history_data["val_loss"]
+            "x_nr":         list_x_value,
+            "accuracy":     list_accuracy,
+            "val_accuracy": list_val_accuracy,
+            "loss":         list_loss,
+            "val_loss":     list_val_loss
         }
+
 
         data_info_html = html_accuracy_loss_chart(data_info, "Training Accuracy & Loss")
         filename = self._save_interactive_plot_html_2("val_acc_and_loss", data_info_html)
@@ -194,104 +115,29 @@ class VisualizeTraining:
         self._plot_file_names["adversarialTraining"] = filename
 
     def plot_interactive_adversarial_training_results(self, history):
-        # --- Interactive Chart | Adversarial Training Results --- |
-        # fig = make_subplots(rows=2, cols=1, subplot_titles=("Adversarial Training Accuracy", "Adversarial Model Loss"))
-
-        # history_data = history
-
-        # list_x_values = list(range(0, len(history_data['accuracy']) + 1))
-
-        # list_accuracy = [0] + history_data['accuracy']
-        # list_val_accuracy = [0] + history_data['val_accuracy']
-
-        # list_loss = [history_data['loss'][0]] + history_data['loss']
-        # list_val_loss = [history_data['val_loss'][0]] + history_data['val_loss']
-
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_accuracy,
-        #     mode="lines+markers",
-        #     name="Accuracy",
-        #     hoverinfo="y+name",),
-        #     row=1, col=1)
-        
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_val_accuracy,
-        #     mode="lines+markers",
-        #     name="Validation Accuracy",
-        #     hoverinfo="y+name",
-        #     line=dict(dash="dot")),
-        #     row=1, col=1)
-        
-        # fig.add_annotation(
-        #     x = list_x_values[-1],
-        #     y = list_accuracy[-1],
-        #     text = f"Accuracy: {list_accuracy[-1]:.2f}",
-        #     showarrow = True,
-        #     align = "center",
-        #     borderwidth = 5,
-        #     borderpad = 5,
-        #     arrowcolor = "rgb(71, 71, 71)",
-        #     bordercolor = "rgb(71, 71, 71)",
-        #     bgcolor = "rgb(255, 184, 0)",
-        #     xref="x1",
-        #     yref="y1"
-        # )
-
-
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_loss,
-        #     mode="lines+markers",
-        #     name="Loss",
-        #     hoverinfo="y+name",),
-        #     row=2, col=1)
-        
-        # fig.add_trace(plotly_graph_objects.Scatter(
-        #     x=list_x_values,
-        #     y=list_val_loss,
-        #     mode="lines+markers",
-        #     name="Validation Loss",
-        #     hoverinfo="y+name",
-        #     line=dict(dash="dot")),
-        #     row=2, col=1)
-        
-        # fig.add_annotation(
-        #     x = list_x_values[-1],
-        #     y = list_loss[-1],
-        #     text = f"Loss: {list_loss[-1]:.2f}",
-        #     showarrow = True,
-        #     align = "center",
-        #     borderwidth = 5,
-        #     borderpad = 5,
-        #     arrowcolor = "rgb(71, 71, 71)",
-        #     bordercolor = "rgb(71, 71, 71)",
-        #     bgcolor = "rgb(255, 184, 0)",
-        #     xref="x2",
-        #     yref="y2"
-        # )
-        
-        # fig.update_xaxes(title_text="Epoch", row=1, col=1)
-        # fig.update_yaxes(title_text = "Accuracy", row=1, col=1)
-
-        # fig.update_xaxes(title_text="Epoch", row=2, col=1)
-        # fig.update_yaxes(title_text = "Loss", row=2, col=1)
 
         history_data = history
-        print(history_data)
-        x_value = []
-        for x_axis_nr in range(1, len(history_data["accuracy"]) + 1):
-            x_value.append(x_axis_nr)
+
+        list_x_value = []
+        list_accuracy = []
+        list_val_accuracy = []
+        list_loss = []
+        list_val_loss = []
+
+        for x_axis_nr in range(0, len(history_data["accuracy"])):
+            list_x_value.append(x_axis_nr+1)
+            list_accuracy.append(history_data["accuracy"][x_axis_nr].item())
+            list_val_accuracy.append(history_data["val_accuracy"][x_axis_nr].item())
+            list_loss.append(history_data["loss"][x_axis_nr].item())
+            list_val_loss.append(history_data["val_loss"][x_axis_nr].item())
 
         data_info = {
-            "x":            x_value,
-            "accuracy":     [float(history_data["accuracy"][0])],
-            "val_accuracy": [float(history_data["val_accuracy"][0])],
-            "loss":         [float(history_data["loss"][0])],
-            "val_loss":     [float(history_data["val_loss"][0])]
+            "x_nr":         list_x_value,
+            "accuracy":     list_accuracy,
+            "val_accuracy": list_val_accuracy,
+            "loss":         list_loss,
+            "val_loss":     list_val_loss
         }
-        print(data_info)
 
         data_info_html = html_accuracy_loss_chart(data_info, "Adversarial Training Accuracy & Loss")
 

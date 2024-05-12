@@ -3,11 +3,11 @@ import json
 
 def html_accuracy_loss_chart(data_accuracy_loss, title):
     
-    data_al_x = data_accuracy_loss["x"]
-    data_al_accuracy = data_accuracy_loss["accuracy"]
+    data_al_x            = data_accuracy_loss["x_nr"]
+    data_al_accuracy     = data_accuracy_loss["accuracy"]
     data_al_val_accuracy = data_accuracy_loss["val_accuracy"]
-    data_al_loss = data_accuracy_loss["loss"]
-    data_al_val_loss = data_accuracy_loss["val_loss"]
+    data_al_loss         = data_accuracy_loss["loss"]
+    data_al_val_loss     = data_accuracy_loss["val_loss"]
 
     html_content = f"""
 
@@ -46,6 +46,14 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                 var js_chart_accuracy = echarts.init(document.getElementById("chart_accuracy"));
                 var js_chart_loss = echarts.init(document.getElementById("chart_loss"));
 
+                var data_al_x = {json.dumps(data_al_x)};
+
+                var data_al_accuracy = {json.dumps(data_al_accuracy)};
+                var data_al_val_accuracy = {json.dumps(data_al_val_accuracy)};
+
+                var data_al_loss = {json.dumps(data_al_loss)};
+                var data_al_val_loss = {json.dumps(data_al_val_loss)};
+
                 var option_accuracy = {{
                     title: {{
                         text: "Accuracy"
@@ -80,7 +88,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                     xAxis: {{
                         type: "category",
                         boundaryGap: false,
-                        data: {json.dumps(data_al_x)}
+                        data: data_al_x
                     }},
                     yAxis: {{
                         type: "value"
@@ -90,13 +98,11 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                         {{
                             name: "Accuracy",
                             type: "line",
-                            data: {json.dumps(data_al_accuracy)},
+                            data: data_al_accuracy,
                             smooth: true,
                             markPoint: {{
                                 label: {{
-                                    formatter: function (param) {{
-                                        return param.name + ": " + param.value.toFixed(2);
-                                    }}
+                                    formatter: "{{c}}"
                                 }},
                                 data: [
                                     {{ type: "max", name: "" }},
@@ -107,7 +113,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                         {{
                             name: "Validation Accuracy",
                             type: "line",
-                            data: {json.dumps(data_al_val_accuracy)},
+                            data: data_al_val_accuracy,
                             smooth: true
                         }}
                     ]
@@ -146,7 +152,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                     xAxis: {{
                         type: "category",
                         boundaryGap: false,
-                        data: {json.dumps(data_al_x)}
+                        data: data_al_x
                     }},
                     yAxis: {{
                         type: "value"
@@ -156,24 +162,22 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                         {{
                             name: "Loss",
                             type: "line",
-                            data: {json.dumps(data_al_loss)},
+                            data: data_al_loss,
                             smooth: true,
                             markPoint: {{
                                 label: {{
-                                    formatter: function (param) {{
-                                        return param.name + ": " + param.value.toFixed(2);
-                                    }}
+                                    formatter: "{{c}}"
                                 }},
                                 data: [
-                                    {{ type: "max", name: "" }},
-                                    {{ type: "min", name: "" }}
+                                    {{ type: "max", name: "y" }},
+                                    {{ type: "min", name: "y" }}
                                 ]
                             }}
                         }},
                         {{
                             name: "Validation Loss",
                             type: "line",
-                            data: {json.dumps(data_al_val_loss)},
+                            data: data_al_val_loss,
                             smooth: true
                         }}
                     ]
