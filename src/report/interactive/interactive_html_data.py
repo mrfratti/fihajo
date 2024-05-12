@@ -200,7 +200,7 @@ def html_heatmap_chart(data_heatmap):
     heatmap_data_xyz = []
     for each in data_heatmap:
         column_index = heatmap_columns.index(each["column"])
-        row_index = heatmap_rows.index(each["row"])
+        row_index = heatmap_rows_flip.index(each["row"])
         value = each["value"]
         heatmap_data_xyz.append([column_index, row_index, value])
     
@@ -211,14 +211,17 @@ def html_heatmap_chart(data_heatmap):
             <title>Confusion Matrix</title>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
             <style>
+
                 body {{
                     background-color: #f2f2d2;
                 }}
+
                 #chart_heatmap {{
                     width: 800px;
                     height: 600px;
                     margin: 50px auto;
                 }}
+
             </style>
         </head>
         <body>
@@ -252,6 +255,7 @@ def html_heatmap_chart(data_heatmap):
                             show: true
                         }}
                     }},
+
                     yAxis: {{
                         type: "category",
                         data: rows,
@@ -286,6 +290,7 @@ def html_heatmap_chart(data_heatmap):
                             }}
                         }}
                     }}]
+
                 }};
                 js_chart_heatmap.setOption(option);
             </script>
@@ -305,13 +310,13 @@ def html_heatmap_chart_2(data_heatmap):
     heatmap_data = []
     for x, row in enumerate(heatmap_values):
         for y, value in enumerate(row[:-1]):
-            heatmap_data.append([y, x, round(value, 3)])
+            heatmap_data.append([x, y, round(value, 3)])
 
     html_content =  f"""
     <!DOCTYPE html>
     <html>
         <head>
-            <title>Confusion Matrix</title>
+            <title>Classification Report</title>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
             <style>
                 body {{
@@ -350,7 +355,12 @@ def html_heatmap_chart_2(data_heatmap):
 
                     xAxis: {{
                         type: "category",
-                        data: columns,
+                        data: rows,
+                        axisLabel: {{
+                            interval: 0,
+                            rotate: 30,
+                            fontSize: 10
+                        }},
                         splitArea: {{
                             show: true
                         }}
@@ -358,7 +368,7 @@ def html_heatmap_chart_2(data_heatmap):
                     
                     yAxis: {{
                         type: "category",
-                        data: rows,
+                        data: columns,
                         splitArea: {{
                             show: true
                         }}
@@ -371,9 +381,12 @@ def html_heatmap_chart_2(data_heatmap):
                         orient: "horizontal",
                         left: "center",
                         bottom: "15%",
-                        inRange: {{
-                            color: ["#e0ffff", "#1aeb00"]
-                        }}
+                        type: "piecewise",
+                        pieces: [
+                            {{min: 0, max: 0.3, label: "Under 0.3", color: "yellow"}},
+                            {{min: 0.3, max: 0.7, label: "0.3 - 0.7", color: "orange"}},
+                            {{min: 0.7, max: 1, label: "Over 0.7", color: "green"}}
+                        ],
                     }},
 
                     series: [{{

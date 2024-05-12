@@ -63,7 +63,7 @@ class InteractiveHtmlGenerator:
                 with tag("main"):
                     for i, data in enumerate(self._image_data_list):
                         with tag("section", id=f"section{i}"):
-                            self._img_section(data, "right" if i % 2 == 0 else "left")
+                            self._img_section(data)
 
                 with tag("footer"):
                     text("Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
@@ -77,16 +77,10 @@ class InteractiveHtmlGenerator:
                 with tag("p"):
                     text("No data to show")
         else:
-            self._img()
+            for i, data in enumerate(self._image_data_list):
+                self._img_section(data)
 
-    def _img(self):
-        for i, data in enumerate(self._image_data_list):
-            if i % 2 == 0:
-                self._img_section(data, "right")
-            else:
-                self._img_section(data, "left")
-
-    def _img_section(self, data, section):
+    def _img_section(self, data):
 
         file_path = data.image_location
         file_split = os.path.splitext(file_path)
@@ -95,7 +89,7 @@ class InteractiveHtmlGenerator:
         remove_sub_path = "src/report/reports/"
         file_path_new = file_path.replace(remove_sub_path, "", 1)
 
-        with tag("div", klass=section):
+        with tag("div"):
             with tag("h2"):
                 text(data.header_image)
 
@@ -111,6 +105,7 @@ class InteractiveHtmlGenerator:
                 with tag("div"):
                     with tag("p"):
                         text(data.about_image)
+
                 with tag("a", href=file_path_new):
                     with tag("button"):
                         text("Open Image File")
