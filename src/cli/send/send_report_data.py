@@ -1,8 +1,8 @@
 import json
+import logging
 import os
 
 from src.report.API.html_generator_api import HtmlGeneratorApi
-from src.report.image_data import ImageData
 
 class SendReportData:
     """sends data to htmlGeneratorApi"""
@@ -18,13 +18,13 @@ class SendReportData:
 
     @property
     def filenames(self):
-        """prints out current plot filnames in list"""
+        """prints out current plot file names in list"""
         if len(self._filenames) < 1:
-            print("No filenames to be sent")
+            logging.warning("No filenames to be sent")
         else:
-            print("the following filenames is in list")
+            logging.info("the following filenames is in list")
             for filename in self._filenames:
-                print(filename)
+                logging.info(filename)
 
     @property
     def adversarial_evaluated(self):

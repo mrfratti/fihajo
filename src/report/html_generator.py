@@ -1,6 +1,5 @@
 import logging
 import os
-from tomlkit import value
 from yattag import Doc
 from src.report.html_data import HtmlData
 from src.report.image_data import ImageData
@@ -50,6 +49,8 @@ class HtmlGenerator:
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
+                if self._html_report.head is not None:
+                    doc.asis(self._html_report.head)
 
             with tag("body"):
                 with tag("header"):
@@ -63,30 +64,30 @@ class HtmlGenerator:
                                         text(data.header_image)
 
                 with tag("main"):
-                    for i, data in enumerate(self._image_data_list):
-                        with tag("section", id=f"section{i}"):
-                            self._img_section(data, "right" if i % 2 == 0 else "left")
+                    self._main()
 
                 with tag("footer"):
-                    text("Copyright © Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
+                    text("Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
         return doc.getvalue()
 
     def _main(self):
-        if len(self._image_data_list) < 1:
+        if len(self._image_data_list) is not 0:
+            self._img()
+            return
+        if self._html_report.main:
+            doc.asis(self._html_report.main)
+            return
+        else:
             with tag("div", klass="error"):
                 with tag("h2"):
                     text("Oops!")
                 with tag("p"):
                     text("No data to show")
-        else:
-            self._img()
 
     def _img(self):
         for i, data in enumerate(self._image_data_list):
-            if i % 2 == 0:
-                self._img_section(data, "right")
-            else:
-                self._img_section(data, "left")
+            with tag("section", id=f"section{i}"):
+                self._img_section(data, "right" if i % 2 == 0 else "left")
 
     def _img_section(self, data, section):
         with tag("div", klass=section):
