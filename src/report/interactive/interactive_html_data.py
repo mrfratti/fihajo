@@ -331,7 +331,7 @@ def html_heatmap_chart_2(data_heatmap):
         </head>
         <body>
             
-            <h2>Confusion Matrix</h2>
+            <h2>Classification Report</h2>
 
             <div id="chart_heatmap"></div>
 
@@ -383,9 +383,11 @@ def html_heatmap_chart_2(data_heatmap):
                         bottom: "15%",
                         type: "piecewise",
                         pieces: [
-                            {{min: 0, max: 0.3, label: "Under 0.3", color: "yellow"}},
-                            {{min: 0.3, max: 0.7, label: "0.3 - 0.7", color: "orange"}},
-                            {{min: 0.7, max: 1, label: "Over 0.7", color: "green"}}
+                            {{min: 0, max: 0.3, label: "Under 0.2", color: "#f9ff7e"}},
+                            {{min: 0.2, max: 0.4, label: "0.2 - 0.4", color: "#e3ff7e"}},
+                            {{min: 0.4, max: 0.6, label: "0.4 - 0.6", color: "#c4ff7e"}},
+                            {{min: 0.6, max: 0.8, label: "0.6 - 0.8", color: "#85ff78"}},
+                            {{min: 0.8, max: 1, label: "Over 0.8", color: "#5ed164"}}
                         ],
                     }},
 
