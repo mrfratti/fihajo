@@ -74,7 +74,7 @@ class HtmlGenerator:
         if len(self._image_data_list) != 0:
             self._img()
             return
-        if self._html_report.main:
+        if self._html_report.main is not None:
             doc.asis(self._html_report.main)
             return
         else:
