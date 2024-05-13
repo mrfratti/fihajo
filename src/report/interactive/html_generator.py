@@ -61,7 +61,7 @@ class InteractiveHtmlGenerator:
                                     with tag("a", href=f"#section{i}"):
                                         text(data.header_image)
 
-                with tag("main"):
+                with tag("div_width"):
                     for i, data in enumerate(self._image_data_list):
                         with tag("div", klass="div_width"):
                             with tag("section", id=f"section{i}"):
@@ -93,10 +93,11 @@ class InteractiveHtmlGenerator:
 
         with tag("div"):
             with tag("h2"):
+                text("TEST")
                 text(data.header_image)
 
             if file_end_lower == ".html":
-                with tag("iframe", src=file_path_new, style="width:100%; height:500px; border:none;"):
+                with tag("iframe", src=file_path_new, style="width:100%; height:700px; border:none;"):
                     text("")
 
             elif file_end_lower == ".png":

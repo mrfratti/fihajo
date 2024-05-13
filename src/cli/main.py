@@ -143,6 +143,7 @@ class CLIApp:
                 
             if args.interactive:
                 SendInteractiveReportData().filenames = trainer.interactive_plot_file_names
+                # self.reportInteractive()
 
         except Exception as e:
             logging.error("An error occurred during training: %s", e)
