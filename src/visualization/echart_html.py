@@ -16,7 +16,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
         <head>
             <title>Training Accuracy & Loss</title>
             <title>{title}</title>
-            <script src="../../dist/echarts.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
         </head>
         <body>
             
@@ -216,7 +216,7 @@ def html_heatmap_chart(data_heatmap):
     <html>
         <head>
             <title>Confusion Matrix</title>
-            <script src="../../dist/echarts.min.js"></script>
+             <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
         </head>
         <body>
             
@@ -320,7 +320,7 @@ def html_heatmap_chart_2(data_heatmap):
     <html>
         <head>
             <title>Classification Report</title>
-            <script src="../../dist/echarts.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
         </head>
         <body>
             
