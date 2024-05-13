@@ -49,7 +49,6 @@ class HtmlGenerator:
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
-                doc.asis("<script src='dist/echarts.min.js'></script>")
                 if self._html_report.head is not None:
                     doc.asis(self._html_report.head)
 
