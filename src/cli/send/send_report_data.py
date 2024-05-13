@@ -7,7 +7,7 @@ from src.report.API.html_generator_api import HtmlGeneratorApi
 class SendReportData:
     """sends data to htmlGeneratorApi"""
 
-    def __init__(self, path_json):
+    def __init__(self, path_json = ""):
         self._filenames = {}
         self.adversarial_evaluated = False
         self._path_json = path_json
