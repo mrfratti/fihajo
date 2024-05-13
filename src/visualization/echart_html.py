@@ -19,8 +19,8 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
             <script src="../../../dist/echarts.min.js"></script>
             <style>
                 .chart_line_1 {{
-                    min-width: 500px;
-                    min-height: 500px;
+                    min-width: 300px;
+                    min-height: 300px;
                 }}
             </style>
         </head>
@@ -223,11 +223,9 @@ def html_heatmap_chart(data_heatmap):
             <title>Confusion Matrix</title>
               <script src="../../../dist/echarts.min.js"></script>
             <style>
-
-
                 #chart_heatmap {{
-                    width: 800px;
-                    height: 600px;
+                    min-width: 300px;
+                    min-height: 300px;
                     margin: 50px auto;
                 }}
 
@@ -337,8 +335,8 @@ def html_heatmap_chart_2(data_heatmap):
               <script src="../../../dist/echarts.min.js"></script>
             <style>
                 #chart_heatmap {{
-                    min-width: 500px;
-                    min-height: 500px;
+                    min-width: 300px;
+                    min-height: 300px;
                     margin: 50px auto;
                 }}
             </style>
