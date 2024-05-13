@@ -29,7 +29,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                 }}
                 .chart_line_1 {{
                     width: 600px;
-                    height: 400px;
+                    height: 500px;
                 }}
             </style>
         </head>
@@ -116,6 +116,15 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                             data: data_al_val_accuracy,
                             smooth: true
                         }}
+                    ],
+
+                    dataZoom: [
+                        {{
+                            type: "slider"
+                        }},
+                        {{
+                            type: "inside"
+                        }}
                     ]
                 }};
 
@@ -179,6 +188,15 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
                             type: "line",
                             data: data_al_val_loss,
                             smooth: true
+                        }} 
+                    ],
+
+                    dataZoom: [
+                        {{
+                            type: "slider"
+                        }},
+                        {{
+                            type: "inside"
                         }}
                     ]
                 }};
@@ -293,6 +311,15 @@ def html_heatmap_chart(data_heatmap):
                                 shadowColor: "rgba(0, 0, 0, 0.5)"
                             }}
                         }}
+                    }}],
+
+                    dataZoom: [{{
+                        type: "slider",
+                        show: true,
+                        xAxisIndex: [0]
+                    }},
+                    {{
+                        type: "inside"
                     }}]
 
                 }};
@@ -408,6 +435,15 @@ def html_heatmap_chart_2(data_heatmap):
                                 shadowColor: "rgba(0, 0, 0, 0.5)"
                             }}
                         }}
+                    }}],
+
+                    dataZoom: [{{
+                        type: "slider",
+                        show: true,
+                        xAxisIndex: [0]
+                    }},
+                    {{
+                        type: "inside"
                     }}]
                 }};
                 js_chart_heatmap.setOption(option);

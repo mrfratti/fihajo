@@ -41,7 +41,6 @@ class CLIApp:
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
-        # self.add_interactive_report_subparser(subparsers)
     
         return parser
 
@@ -94,11 +93,6 @@ class CLIApp:
         report_parser = subparsers.add_parser("report", help="Genereate report")
         report_parser.add_argument('--interactive', action='store_true', help='Generate interactive report')
         report_parser.set_defaults(func=self.report)
-
-    # def add_interactive_report_subparser(self, subparsers):
-    #     report_interactive_parser = subparsers.add_parser("reportInteractive", help="Genereate interactive report")
-    #     report_interactive_parser.set_defaults(func=self.reportInteractive)
-        
 
     def check_positive(self, value):
         ivalue = int(value)
@@ -203,7 +197,7 @@ class CLIApp:
             send_data.filenames = evaluator.plot_file_names
 
             logging.debug("Evaluation complete, filenames: %s", evaluator.plot_file_names)
-            #SendReportData().filenames = evaluator.plot_file_names
+
             if args.report:
                 self.report()
 
