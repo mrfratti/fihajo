@@ -7,10 +7,6 @@ from src.report.image_data import ImageData
 class SendInteractiveReportData:
     """sends data to htmlGeneratorApi"""
 
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # Put inn data path in list too from visualtitation
-    # orgin report is used in each funtion(main.py): training, evaluate ..... 
-
     def __init__(self):
         self._filenames = {}
         self.adversarial_evaluated = False

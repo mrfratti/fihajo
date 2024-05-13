@@ -124,12 +124,13 @@ class VisualizeTraining:
         list_loss = []
         list_val_loss = []
 
+        rounded_nr = 2
         for x_axis_nr in range(0, len(history_data["accuracy"])):
             list_x_value.append(x_axis_nr+1)
-            list_accuracy.append(history_data["accuracy"][x_axis_nr].item())
-            list_val_accuracy.append(history_data["val_accuracy"][x_axis_nr].item())
-            list_loss.append(history_data["loss"][x_axis_nr].item())
-            list_val_loss.append(history_data["val_loss"][x_axis_nr].item())
+            list_accuracy.append(round(history_data["accuracy"][x_axis_nr].item(), rounded_nr))
+            list_val_accuracy.append(round(history_data["val_accuracy"][x_axis_nr].item(), rounded_nr))
+            list_loss.append(round(history_data["loss"][x_axis_nr].item(), rounded_nr))
+            list_val_loss.append(round(history_data["val_loss"][x_axis_nr].item(), rounded_nr))
 
         data_info = {
             "x_nr":         list_x_value,
@@ -869,7 +870,7 @@ class VisualizeUncertainty:
     def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
-        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True)
+        plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True, auto_open=False)
         
         return f"{self.plot_dir}/{filename}"
 
