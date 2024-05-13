@@ -122,6 +122,10 @@ main section {
   background-color: #fff;
   border-radius: 0.5rem;
 }
+.right iframe,
+.left iframe {
+  background-color: none;
+}
 .right h2,
 .left h2 {
   font-size: 2rem;

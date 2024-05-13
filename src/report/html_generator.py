@@ -100,7 +100,7 @@ class HtmlGenerator:
                 text(data.header_image)
 
             if file_end_lower == ".html":
-                with tag("iframe", src=file_path, style="width:100%; height:700px; border:none;"):
+                with tag("iframe", src=file_path):
                     text(data.header_image)
 
             elif file_end_lower == ".png":
