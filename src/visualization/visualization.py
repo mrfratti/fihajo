@@ -79,13 +79,14 @@ class VisualizeTraining:
         list_loss = []
         list_val_loss = []
 
-        rounded_nr = 2
+        rounded_accuracy = 3
+        rounded_loss = 3
         for x_axis_nr in range(0, len(history_data["accuracy"])):
             list_x_value.append(x_axis_nr+1)
-            list_accuracy.append(round(history_data["accuracy"][x_axis_nr], rounded_nr))
-            list_val_accuracy.append(round(history_data["val_accuracy"][x_axis_nr], rounded_nr))
-            list_loss.append(round(history_data["loss"][x_axis_nr], rounded_nr))
-            list_val_loss.append(round(history_data["val_loss"][x_axis_nr], rounded_nr))
+            list_accuracy.append(round(history_data["accuracy"][x_axis_nr], rounded_accuracy))
+            list_val_accuracy.append(round(history_data["val_accuracy"][x_axis_nr], rounded_accuracy))
+            list_loss.append(round(history_data["loss"][x_axis_nr], rounded_loss))
+            list_val_loss.append(round(history_data["val_loss"][x_axis_nr], rounded_loss))
 
         data_info = {
             "x_nr":         list_x_value,
@@ -124,13 +125,14 @@ class VisualizeTraining:
         list_loss = []
         list_val_loss = []
 
-        rounded_nr = 2
+        rounded_accuracy = 3
+        rounded_loss = 3
         for x_axis_nr in range(0, len(history_data["accuracy"])):
             list_x_value.append(x_axis_nr+1)
-            list_accuracy.append(round(history_data["accuracy"][x_axis_nr].item(), rounded_nr))
-            list_val_accuracy.append(round(history_data["val_accuracy"][x_axis_nr].item(), rounded_nr))
-            list_loss.append(round(history_data["loss"][x_axis_nr].item(), rounded_nr))
-            list_val_loss.append(round(history_data["val_loss"][x_axis_nr].item(), rounded_nr))
+            list_accuracy.append(round(history_data["accuracy"][x_axis_nr].item(), rounded_accuracy))
+            list_val_accuracy.append(round(history_data["val_accuracy"][x_axis_nr].item(), rounded_accuracy))
+            list_loss.append(round(history_data["loss"][x_axis_nr].item(), rounded_loss))
+            list_val_loss.append(round(history_data["val_loss"][x_axis_nr].item(), rounded_loss))
 
         data_info = {
             "x_nr":         list_x_value,

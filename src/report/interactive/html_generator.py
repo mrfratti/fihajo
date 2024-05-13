@@ -47,6 +47,7 @@ class InteractiveHtmlGenerator:
             with tag("head"):
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
+                doc.stag("link", rel="stylesheet", href="dist/style_interactive.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
 
             with tag("body"):
@@ -62,8 +63,9 @@ class InteractiveHtmlGenerator:
 
                 with tag("main"):
                     for i, data in enumerate(self._image_data_list):
-                        with tag("section", id=f"section{i}"):
-                            self._img_section(data)
+                        with tag("div", klass="div_width"):
+                            with tag("section", id=f"section{i}"):
+                                self._img_section(data)
 
                 with tag("footer"):
                     text("Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")

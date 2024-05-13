@@ -26,12 +26,6 @@ pipeline {
             steps {
                 timestamps { echo ">>>>>>>>>>Installing dependencies>>>>>>>>>>"}
                 sh '''
-                if [ -d ".env" ]; then
-                echo "**> virtualenv exists"
-                else
-                echo "**> creating virtualenv"
-                virtualenv .env
-                fi
                 pip3 install --upgrade pip
                 pip3 install -r requirements.txt
                 '''
