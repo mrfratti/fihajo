@@ -14,7 +14,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
     <!DOCTYPE html>
     <html>
         <head>
-            <title>Training Accuracy & Loss</title>
+
             <title>{title}</title>
             <script src="../../../dist/echarts.min.js"></script>
             <style>
@@ -26,7 +26,6 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
         </head>
         <body>
             
-            <h2>Training</h2>
             <div class="charts_box">
                 <div id="chart_accuracy" class="chart_line_1"></div>
                 <div id="chart_loss" class="chart_line_1"></div>
@@ -236,7 +235,6 @@ def html_heatmap_chart(data_heatmap):
         </head>
         <body>
             
-            <h2>Confusion Matrix</h2>
 
             <div id="chart_heatmap"></div>
 
@@ -339,15 +337,14 @@ def html_heatmap_chart_2(data_heatmap):
               <script src="../../../dist/echarts.min.js"></script>
             <style>
                 #chart_heatmap {{
-                    width: 800px;
-                    height: 600px;
+                    min-width: 500px;
+                    min-height: 500px;
                     margin: 50px auto;
                 }}
             </style>
         </head>
         <body>
             
-            <h2>Classification Report</h2>
 
             <div id="chart_heatmap"></div>
 
