@@ -14,7 +14,7 @@ import plotly
 import plotly.graph_objects as plotly_graph_objects
 import plotly.figure_factory as plotly_figure_factory
 from plotly.subplots import make_subplots
-from src.report.interactive.interactive_html_data import html_accuracy_loss_chart, html_heatmap_chart, html_heatmap_chart_2
+from src.visualization.echart_html import html_accuracy_loss_chart, html_heatmap_chart, html_heatmap_chart_2
 
 
 

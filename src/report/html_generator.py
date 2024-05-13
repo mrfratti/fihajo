@@ -71,7 +71,7 @@ class HtmlGenerator:
         return doc.getvalue()
 
     def _main(self):
-        if len(self._image_data_list) is not 0:
+        if len(self._image_data_list) != 0:
             self._img()
             return
         if self._html_report.main:
@@ -90,18 +90,30 @@ class HtmlGenerator:
                 self._img_section(data, "right" if i % 2 == 0 else "left")
 
     def _img_section(self, data, section):
+        file_path = data.image_location
+        file_split = os.path.splitext(file_path)
+        file_end_lower = file_split[1].lower()
+
+
         with tag("div", klass=section):
             with tag("h2"):
                 text(data.header_image)
-            doc.stag("img", src=data.image_location)
+
+            if file_end_lower == ".html":
+                with tag("iframe", src=file_path, style="width:100%; height:700px; border:none;"):
+                    text(data.header_image)
+
+            elif file_end_lower == ".png":
+                doc.stag("img", src=file_path)
+
             with tag("div", klass="info"):
                 with tag("div"):
                     with tag("p"):
                         text(data.about_image)
-                with tag("a", href=data.image_location):
+
+                with tag("a", href=file_path):
                     with tag("button"):
                         text("Open Image File")
-
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""
         try:

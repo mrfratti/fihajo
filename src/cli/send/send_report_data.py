@@ -7,11 +7,10 @@ from src.report.API.html_generator_api import HtmlGeneratorApi
 class SendReportData:
     """sends data to htmlGeneratorApi"""
 
-    def __init__(self):
+    def __init__(self, path_json):
         self._filenames = {}
         self.adversarial_evaluated = False
-        self._path_json = "data/send.json"
-
+        self._path_json = path_json
     def delete_json(self):
         if os.path.exists(self._path_json):
             os.remove(self._path_json)
@@ -154,8 +153,7 @@ class SendReportData:
                 images.append(img_data)
 
         if len(images) < 1:
-            raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating "
-                             "a report!")
+            raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating report!")
 
         HtmlGeneratorApi(
             report_filename=report_filename,

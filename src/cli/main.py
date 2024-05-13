@@ -3,9 +3,8 @@ import logging
 import json
 
 from uncertainty_wizard.models import StochasticMode
-from src.cli.send.send_report_data import SendReportData
-from src.cli.send.send_interactive_report_data import SendInteractiveReportData
 
+from src.cli.send.send_report_data import SendReportData
 from src.datasets.dataset_handler import (
     MnistDatasetHandler,
     Cifar10DatasetHandler,
@@ -23,7 +22,9 @@ from src.uncertainty.analyze import Analyzer
 class CLIApp:
     def __init__(self):
         self.parser = self.setup_parser()
+        self._report_location= "data/send.json"
         self._plot_file_names = {}
+        self._interactive_report_location= "data/send_interactive.json"
         self._interactive_plot_file_names = {}
 
     def setup_parser(self):
@@ -137,12 +138,12 @@ class CLIApp:
             trainer.save_model()
 
             # find and save to data
-            SendReportData().filenames = trainer.plot_file_names
+            SendReportData(self._report_location).filenames = trainer.plot_file_names
             if args.report:
                 self.report()
                 
             if args.interactive:
-                SendInteractiveReportData().filenames = trainer.interactive_plot_file_names
+                SendReportData(self._interactive_report_location).filenames = trainer.interactive_plot_file_names
                 # self.reportInteractive()
 
         except Exception as e:
@@ -193,7 +194,7 @@ class CLIApp:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
 
-            send_data = SendReportData()
+            send_data = SendReportData(self._report_location)
             send_data.adversarial_evaluated = args.adv_eval
             send_data.filenames = evaluator.plot_file_names
 
@@ -203,7 +204,7 @@ class CLIApp:
                 self.report()
 
             if args.interactive:
-                send_interactive_data = SendInteractiveReportData()
+                send_interactive_data = SendReportData(self._interactive_report_location)
                 send_interactive_data.adversarial_evaluated = args.adv_eval
                 send_interactive_data.filenames = evaluator.interactive_plot_file_names
                 
@@ -247,13 +248,12 @@ class CLIApp:
             analyzer = Analyzer(model_builder, (x_test, y_test), batch, args)
             analyzer.analyze()
 
-            SendReportData().filenames = analyzer.plot_file_names
+            SendReportData(self._report_location).filenames = analyzer.plot_file_names
             if args.report:
                 self.report()
-
-            
+                
             if args.interactive:
-                SendInteractiveReportData().filenames = analyzer.interactive_plot_file_names
+                SendReportData(self._interactive_report_location).filenames = analyzer.interactive_plot_file_names
                 # self.reportInteractive()
 
         except Exception as e:
@@ -262,39 +262,27 @@ class CLIApp:
 
     def report(self, args=""):
         """Run report generation"""
-        send_data = SendReportData()
+        if args.interactive:
+            send_data = SendReportData(self._interactive_report_location)
+        else:
+            send_data = SendReportData(self._report_location)
+
         if args and hasattr(args, 'adv_eval'):
             send_data.adversarial_evaluated = args.adv_eval
         else:
             send_data.adversarial_evaluated = False
 
         try:
-            send_data.send()
+            if args.interactive:
+                send_data.send("./src/report/reports/","index_interactive")
+            else:
+                send_data.send()
         except ValueError as e:
             logging.warning("main.report: %s", e)
 
         except TypeError as e:
             logging.warning("main.report: %s", e)
         
-        if args.interactive:
-            self.reportInteractive()
-
-    def reportInteractive(self, args=""):
-        """Run interactive report generation"""
-        send_data = SendInteractiveReportData()
-        if args and hasattr(args, 'adv_eval'):
-            send_data.adversarial_evaluated = args.adv_eval
-        else:
-            send_data.adversarial_evaluated = False
-
-        try:
-            send_data.send()
-        except ValueError as e:
-            logging.warning("main.report: %s", e)
-
-        except TypeError as e:
-            logging.warning("main.report: %s", e)
-
 
     def load_config(self, file_path):
         """loading predefined configuration file in json format"""
@@ -306,9 +294,6 @@ class CLIApp:
         if self.args.config:
             config_args = self.load_config(self.args.config)
             self.args.__dict__.update(config_args)
-            # config_args.setdefault('adv', False)
-            # for key, value in config_args.items():
-            #    setattr(args, key, value)
 
         if self.args.verbose:
             logging.basicConfig(
