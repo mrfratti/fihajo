@@ -20,9 +20,9 @@ class SendReportData:
     def filenames(self):
         """prints out current plot file names in list"""
         if len(self._filenames) < 1:
-            logging.warning("No filenames to be sent")
+            print("No filenames to be sent")
         else:
-            logging.info("the following filenames is in list")
+            print("the following filenames is in list")
             for filename in self._filenames:
                 logging.info(filename)
 
