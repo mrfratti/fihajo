@@ -124,6 +124,7 @@ pipeline {
 
                 script {
                     if (params.REPORT_INT) {
+                        sh "python3 -m src.cli.main report"
                         sh "python3 -m src.cli.main report --interactive"
 
                         publishHTML target: [
