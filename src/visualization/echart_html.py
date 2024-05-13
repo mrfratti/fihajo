@@ -17,21 +17,6 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
             <title>Training Accuracy & Loss</title>
             <title>{title}</title>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
-            <style>
-                body {{
-                    background-color: #f2f2d2;
-                }}
-                .charts_box {{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin: 50px auto;
-                }}
-                .chart_line_1 {{
-                    width: 600px;
-                    height: 500px;
-                }}
-            </style>
         </head>
         <body>
             
@@ -232,19 +217,6 @@ def html_heatmap_chart(data_heatmap):
         <head>
             <title>Confusion Matrix</title>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
-            <style>
-
-                body {{
-                    background-color: #f2f2d2;
-                }}
-
-                #chart_heatmap {{
-                    width: 800px;
-                    height: 600px;
-                    margin: 50px auto;
-                }}
-
-            </style>
         </head>
         <body>
             
@@ -349,16 +321,6 @@ def html_heatmap_chart_2(data_heatmap):
         <head>
             <title>Classification Report</title>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
-            <style>
-                body {{
-                    background-color: #f2f2d2;
-                }}
-                #chart_heatmap {{
-                    width: 800px;
-                    height: 600px;
-                    margin: 50px auto;
-                }}
-            </style>
         </head>
         <body>
             
