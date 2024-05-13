@@ -55,7 +55,7 @@ pipeline {
             steps {
                 sh '''
                 pip3 install safety
-                safety check
+                safety check -r requirements.txt
                 '''
             }
         }
