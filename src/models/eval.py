@@ -63,15 +63,23 @@ class Evaluator:
             y_pred = self.model.predict(x_test)
             y_pred_classes = np.argmax(y_pred, axis=1)
             y_true = np.argmax(y_test, axis=1)
+            
+            if self.args.dataset == "mnist":
+                class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+            
+            if self.args.dataset == "fashion_mnist":
+                class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
 
-            visualizer.plot_predictions(self.model.inner, x_test, y_true, num_samples=25)
-            visualizer.plot_confusion_matrix(y_true, y_pred_classes, classes=[str(i) for i in range(10)])
-            visualizer.plot_classification_report(y_true, y_pred_classes)
+            list_class = [str(i) for i in class_names]
+
+            visualizer.plot_predictions(self.model.inner, x_test, y_true, classes=list_class, num_samples=25)
+            visualizer.plot_confusion_matrix(y_true, y_pred_classes, classes=list_class)
+            visualizer.plot_classification_report(y_true, y_pred_classes, classes=list_class)
             self._plot_file_names.update(visualizer.plot_file_names)
 
             if self.args.interactive:
-                visualizer.plot_predictions(self.model.inner, x_test, y_true, num_samples=25, filename_text = "interactive_plot_file_names")
-                visualizer.plot_interactive_confusion_matrix(y_true, y_pred_classes, classes=[str(i) for i in range(10)])
+                visualizer.plot_predictions(self.model.inner, x_test, y_true, classes=list_class, num_samples=25, filename_text = "interactive_plot_file_names")
+                visualizer.plot_interactive_confusion_matrix(y_true, y_pred_classes, classes=list_class)
                 visualizer.plot_interactive_classification_report(y_true, y_pred_classes)
                 self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
 

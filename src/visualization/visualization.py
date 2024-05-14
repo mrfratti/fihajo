@@ -218,14 +218,14 @@ class VisualizeEvaluation:
         self._interactive_plot_file_names = {}
 
 
-    def plot_predictions(self, model, x_test, y_true, num_samples=25, filename_text = "plot_file_names"):
+    def plot_predictions(self, model, x_test, y_true, classes, num_samples=25, filename_text = "plot_file_names"):
         predictions = model.predict(x_test[:num_samples])
         predicted_labels = np.argmax(predictions, axis=1)
         plt.figure(figsize=(20, 10))
         for i in range(num_samples):
             plt.subplot(5, 5, i + 1)
             plt.imshow(x_test[i].reshape(28, 28), cmap="gray")
-            plt.title(f"True: {y_true[i]}, Predicted: {predicted_labels[i]}")
+            plt.title(f"True: {classes[y_true[i]]}, Predicted: {classes[predicted_labels[i]]}")
             plt.axis("off")
         plt.tight_layout()
         
@@ -274,12 +274,14 @@ class VisualizeEvaluation:
         self._interactive_plot_file_names["confusion_matrix"] = filename
 
 
-    def plot_classification_report(self, y_true, y_pred_classes, output_dict=True):
+    def plot_classification_report(self, y_true, y_pred_classes, classes, output_dict=True):
         report = classification_report(
-            y_true, y_pred_classes, output_dict=output_dict, zero_division=0
+            y_true, y_pred_classes, output_dict=output_dict, zero_division=0, target_names = classes
         )
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
+        print(df_report)
+        
         plt.figure(figsize=(20, 16))
         sns.heatmap(
             df_report[["precision", "recall", "f1-score"]].T,
