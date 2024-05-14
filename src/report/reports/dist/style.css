@@ -310,12 +310,6 @@ nav li a:hover {
   color: #ffffff;
 }
 
-#chart_heatmap {
-  width: 800px;
-  height: 600px;
-  margin: 50px auto;
-}
-
 .charts_box {
   display: flex;
   justify-content: center;

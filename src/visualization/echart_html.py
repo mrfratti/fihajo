@@ -20,7 +20,8 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
             <style>
                 .chart_line_1 {{
                     min-width: 300px;
-                    min-height: 300px;
+                    min-height: 500px;
+                    height: 100%;
                 }}
             </style>
         </head>
@@ -225,7 +226,7 @@ def html_heatmap_chart(data_heatmap):
             <style>
                 #chart_heatmap {{
                     min-width: 300px;
-                    min-height: 300px;
+                    min-height: 500px;
                     margin: 50px auto;
                 }}
 
@@ -336,8 +337,9 @@ def html_heatmap_chart_2(data_heatmap):
             <style>
                 #chart_heatmap {{
                     min-width: 300px;
-                    min-height: 300px;
+                    min-height: 500px;
                     margin: 50px auto;
+
                 }}
             </style>
         </head>
