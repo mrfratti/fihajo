@@ -20,8 +20,7 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
             <style>
                 .chart_line_1 {{
                     min-width: 300px;
-                    min-height: 500px;
-                    height: 100%;
+                    min-height: 300px;
                 }}
             </style>
         </head>
