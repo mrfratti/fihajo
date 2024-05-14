@@ -266,7 +266,7 @@ class VisualizeEvaluation:
 
         for x in range(len(cm)):
             for y in range(len(cm[x])):
-                data_info.append({"value": int(cm[x][y]), "row": x, "column": y})
+                data_info.append({"value": int(cm[x][y]), "row": classes[x], "column": classes[y]})
 
         data_info_html = html_heatmap_chart(data_info)
         
@@ -280,8 +280,7 @@ class VisualizeEvaluation:
         )
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
-        print(df_report)
-        
+
         plt.figure(figsize=(20, 16))
         sns.heatmap(
             df_report[["precision", "recall", "f1-score"]].T,
@@ -294,9 +293,9 @@ class VisualizeEvaluation:
         filename = self._save_plot("classification_report")
         self._plot_file_names["classification_report"] = filename
 
-    def plot_interactive_classification_report(self, y_true, y_pred_classes, output_dict=True):
+    def plot_interactive_classification_report(self, y_true, y_pred_classes, classes, output_dict=True):
         report = classification_report(
-            y_true, y_pred_classes, output_dict=output_dict, zero_division=0
+            y_true, y_pred_classes, output_dict=output_dict, zero_division=0, target_names = classes
         )
         df_report = pd.DataFrame(report).transpose()
         df_report.drop("support", errors="ignore", inplace=True)
@@ -314,7 +313,7 @@ class VisualizeEvaluation:
         
 
 
-    def plot_adversarial_examples(self, model, x_test, eps, num_samples=25, filename_text = "plot_file_names"):
+    def plot_adversarial_examples(self, model, x_test, eps, classes, num_samples=25, filename_text = "plot_file_names"):
         # Generate FGSM adversarial examples
         x_adv_fgsm = fast_gradient_method(model.inner, x_test[:num_samples], eps, np.inf)
         predictions_fgsm = np.argmax(model.predict(x_adv_fgsm), axis=1)
@@ -332,19 +331,19 @@ class VisualizeEvaluation:
             # Original images
             plt.subplot(3, num_samples, i + 1)
             plt.imshow(x_test[i], cmap="gray")
-            plt.title(f"Clean\nPred: {np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]}", fontsize=18)
+            plt.title(f"Clean\nPred:\n {classes[np.argmax(model.predict(x_test[i:i + 1]), axis=1)[0]]}", fontsize=10)
             plt.axis("off")
 
             # Plot FGSM adversarial images
             plt.subplot(3, num_samples, num_samples + i + 1)
             plt.imshow(x_adv_fgsm[i], cmap="gray")
-            plt.title(f"FGSM\nPred: {predictions_fgsm[i]}", fontsize=18)
+            plt.title(f"FGSM\nPred:\n {classes[predictions_fgsm[i]]}", fontsize=10)
             plt.axis("off")
 
             # Plot PGD adversarial images
             plt.subplot(3, num_samples, 2 * num_samples + i + 1)
             plt.imshow(x_adv_pgd[i], cmap="gray")
-            plt.title(f"PGD\nPred: {predictions_pgd[i]}", fontsize=18)
+            plt.title(f"PGD\nPred:\n {classes[predictions_pgd[i]]}", fontsize=10)
             plt.axis("off")
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)

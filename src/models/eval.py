@@ -80,7 +80,7 @@ class Evaluator:
             if self.args.interactive:
                 visualizer.plot_predictions(self.model.inner, x_test, y_true, classes=list_class, num_samples=25, filename_text = "interactive_plot_file_names")
                 visualizer.plot_interactive_confusion_matrix(y_true, y_pred_classes, classes=list_class)
-                visualizer.plot_interactive_classification_report(y_true, y_pred_classes)
+                visualizer.plot_interactive_classification_report(y_true, y_pred_classes, classes=list_class)
                 self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
 
     def adversarial_evaluation(self, x_test, y_test):
@@ -102,8 +102,16 @@ class Evaluator:
         predictions_pgd = self.model.predict(x_adv_pgd)
         logging.info(f"Evaluation on PGD - Loss: {loss_pgd:.2f}%, Accuracy: {acc_pgd * 100:.2f}%")
 
+        if self.args.dataset == "mnist":
+                class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+            
+        if self.args.dataset == "fashion_mnist":
+                class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+
+        list_class = [str(i) for i in class_names]
+        
         visualizer = VisualizeEvaluation()
-        visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, num_samples=25)
+        visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, classes=list_class, num_samples=25)
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
         labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
@@ -112,7 +120,7 @@ class Evaluator:
         self._plot_file_names.update(visualizer.plot_file_names)
 
         if self.args.interactive:
-            visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, num_samples=25, filename_text =  "adversarial_examples")
+            visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, classes=list_class, num_samples=25, filename_text =  "adversarial_examples")
             visualizer.plot_interactive_accuracy_comparison(accuracies, labels=labels)
             self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
         
