@@ -64,8 +64,7 @@ class Evaluator:
             y_pred_classes = np.argmax(y_pred, axis=1)
             y_true = np.argmax(y_test, axis=1)
             
-            if self.args.dataset == "mnist":
-                class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+            class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             
             if self.args.dataset == "fashion_mnist":
                 class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
@@ -102,8 +101,7 @@ class Evaluator:
         predictions_pgd = self.model.predict(x_adv_pgd)
         logging.info(f"Evaluation on PGD - Loss: {loss_pgd:.2f}%, Accuracy: {acc_pgd * 100:.2f}%")
 
-        if self.args.dataset == "mnist":
-                class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             
         if self.args.dataset == "fashion_mnist":
                 class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
