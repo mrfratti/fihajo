@@ -124,6 +124,7 @@ class VisualizeTraining:
         }
 
         data_info_html = html_accuracy_loss_chart(data_info, "Adversarial Training Accuracy & Loss")
+
         filename = self._save_interactive_plot_html_2("adv_train_acc_loss", data_info_html)
         self._interactive_plot_file_names["adversarialTraining"] = filename
 
@@ -134,7 +135,7 @@ class VisualizeTraining:
         plt.close()
         return f"{self.plot_dir}/{filename}"
 
-    def _save_interactive_plot_html(self, filename: str, data_info) -> str:
+    def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
         plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True,
@@ -222,10 +223,14 @@ class VisualizeEvaluation:
 
     def plot_interactive_confusion_matrix(self, y_true, y_pred, classes):
         cm = confusion_matrix(y_true, y_pred)
-        data_info = [{"value": int(cm[x][y]), "row": classes[x], "column": classes[y]}
-                     for x in range(len(cm))
-                     for y in range(len(cm[x]))]
+        data_info = []
+
+        for x in range(len(cm)):
+            for y in range(len(cm[x])):
+                data_info.append({"value": int(cm[x][y]), "row": classes[x], "column": classes[y]})
+
         data_info_html = html_heatmap_chart(data_info, classes)
+
         filename = self._save_interactive_plot_html_2("confusion_matrix", data_info_html)
         self._interactive_plot_file_names["confusion_matrix"] = filename
 
@@ -255,6 +260,7 @@ class VisualizeEvaluation:
         }
 
         data_info_html = html_heatmap_chart_2(data_info)
+
         filename = self._save_interactive_plot_html_2("classification_report", data_info_html)
         self._interactive_plot_file_names["classification_report"] = filename
 
@@ -350,21 +356,21 @@ class VisualizeEvaluation:
         plt.close()
         return f"{self.plot_dir}/{filename}"
 
-    def _save_interactive_plot(self, filename: str) -> str:
+    def _save_interactive_plot(self, filename):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.png"
         plt.savefig(os.path.join(self.plot_dir, filename))
         plt.close()
         return f"{self.plot_dir}/{filename}"
 
-    def _save_interactive_plot_html(self, filename: str, data_info) -> str:
+    def _save_interactive_plot_html(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
         plotly.offline.plot(data_info, filename=os.path.join(self.plot_dir, filename), include_plotlyjs=True,
                             auto_open=False)
         return f"{self.plot_dir}/{filename}"
 
-    def _save_interactive_plot_html_2(self, filename: str, data_info: str) -> str:
+    def _save_interactive_plot_html_2(self, filename, data_info):
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
         full_file_path = os.path.join(os.getcwd(), f"{self.plot_dir}/{filename}")
@@ -432,23 +438,30 @@ class VisualizeUncertainty:
     def plot_interactive_pcs_mean_softmax(self, pcs_mean_softmax_scores):
         """Plots interactive distribution of PCS and Mean Softmax Scores."""
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
+
         fig = make_subplots(rows=2, cols=1,
                             subplot_titles=("Distribution of PCS Scores", "Distribution of Mean Softmax Scores"))
+
         fig.add_trace(plotly_graph_objects.Histogram(
             x=pcs_scores,
             name="PCS Scores",
             marker_color="skyblue"),
             row=1, col=1)
+
         fig.update_xaxes(title_text="PCS Scores", row=1, col=1)
         fig.update_yaxes(title_text="Frequency", row=1, col=1)
+
         fig.add_trace(plotly_graph_objects.Histogram(
             x=mean_softmax_scores,
             name="Mean Softmax Score",
             marker_color="lightgreen"),
             row=2, col=1)
+
         fig.update_xaxes(title_text="Mean Softmax Score", row=2, col=1)
         fig.update_yaxes(title_text="Frequency", row=2, col=1)
+
         fig.update_layout(title_text="", xaxis_title_text="", yaxis_title_text="", bargap=0.2)
+
         filename = self._save_interactive_plot_html("pcs_meansoftmax", fig)
         self._interactive_plot_file_names["pcs_meansoftmax"] = filename
 
@@ -475,21 +488,26 @@ class VisualizeUncertainty:
     def plot_interactive_distribution_pcs_ms_scores(self, pcs_mean_softmax_scores):
         """Plots interactive distribution of PCS and Mean Softmax Scores."""
         pcs_scores, mean_softmax_scores = pcs_mean_softmax_scores
+
         fig = make_subplots(subplot_titles=(""))
+
         fig.add_trace(plotly_graph_objects.Histogram(
             x=pcs_scores,
             name="PCS",
             marker_color="blue",
             nbinsx=100))
+
         fig.add_trace(plotly_graph_objects.Histogram(
             x=mean_softmax_scores,
             name="Mean Softmax",
             marker_color="red",
             nbinsx=100))
+
         fig.update_layout(
             title_text="Distribution of PCS and Mean Softmax Scores",
             xaxis_title_text="Predictive Confidence Score & Mean Softmax Scores",
             yaxis_title_text="Frequency", bargap=0.1)
+
         filename = self._save_interactive_plot_html("dist_pcs_meansoftmax", fig)
         self._interactive_plot_file_names["distrubution_meansoftmax"] = filename
 
@@ -768,7 +786,7 @@ class VisualizeUncertainty:
         plt.close()
         return f"{self.plot_dir}/{filename}"
 
-    def _save_interactive_plot(self, filename: str) -> str:
+    def _save_interactive_plot(self, filename):
         """Saves an interactive plot to a file."""
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.png"
@@ -776,7 +794,7 @@ class VisualizeUncertainty:
         plt.close()
         return f"{self.plot_dir}/{filename}"
 
-    def _save_interactive_plot_html(self, filename: str, data_info) -> str:
+    def _save_interactive_plot_html(self, filename, data_info):
         """Saves an interactive plot to an HTML file."""
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{filename}_{timestamp}.html"
