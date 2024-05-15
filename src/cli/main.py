@@ -37,12 +37,10 @@ class CLIApp:
                             help="Minimize the output, show only essential information.")
 
         subparsers = parser.add_subparsers(dest="command")
-
         self.add_train_subparser(subparsers)
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
-    
         return parser
 
     def add_train_subparser(self, subparsers):
