@@ -102,10 +102,10 @@ pipeline {
 
                     if (!params.ADV_EVAL) {
                         if (params.REPORT_INT) {
-                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}  --interactive"
+                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}  --interactive"
                         } 
                         else {
-                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}  --interactive"
+                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
                         }
                     }
                 }
