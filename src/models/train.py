@@ -16,7 +16,6 @@ from src.cli.string_styling import StringStyling
 from src.visualization.visualization import VisualizeTraining
 from src.weight_processing.weight_manager import WeightManager
 
-
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
 
 
@@ -48,7 +47,7 @@ class Trainer:
     def plot_file_names(self) -> dict:
         """List of plot filenames"""
         return self._plot_file_names
-    
+
     @property
     def interactive_plot_file_names(self) -> dict:
         """List of plot filenames"""
@@ -71,7 +70,7 @@ class Trainer:
 
     def training(self):
         """
-        Executes standard training procedure, including callbacks for early stopping and logging.
+        Executes standard training procedure for the MNIST model, including callbacks for early stopping and logging.
         """
 
         x_train, y_train = self.train_dataset
@@ -100,7 +99,6 @@ class Trainer:
         if self.args.interactive:
             visualizer.plot_interactive_training_results(history)
             self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
-
 
     def adversarial_training(self):
         """
@@ -195,7 +193,6 @@ class Trainer:
         if self.args.interactive:
             visualizer.plot_interactive_adversarial_training_results(adv_training_history)
             self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
-        
 
     def save_model(self):
         """saving model weights"""
