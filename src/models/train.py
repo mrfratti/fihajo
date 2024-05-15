@@ -42,11 +42,17 @@ class Trainer:
         self.test_dataset = test_dataset
         self.loss_object = CategoricalCrossentropy(from_logits=False)
         self._plot_file_names = {}
+        self._interactive_plot_file_names = {}
 
     @property
     def plot_file_names(self) -> dict:
         """List of plot filenames"""
         return self._plot_file_names
+    
+    @property
+    def interactive_plot_file_names(self) -> dict:
+        """List of plot filenames"""
+        return self._interactive_plot_file_names
 
     def train(self):
         """
@@ -90,6 +96,11 @@ class Trainer:
         visualizer = VisualizeTraining()
         visualizer.plot_training_results(history)
         self._plot_file_names.update(visualizer.plot_file_names)
+
+        if self.args.interactive:
+            visualizer.plot_interactive_training_results(history)
+            self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
+
 
     def adversarial_training(self):
         """
@@ -180,6 +191,11 @@ class Trainer:
         visualizer = VisualizeTraining()
         visualizer.plot_adversarial_training_results(adv_training_history)
         self._plot_file_names.update(visualizer.plot_file_names)
+
+        if self.args.interactive:
+            visualizer.plot_interactive_adversarial_training_results(adv_training_history)
+            self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
+        
 
     def save_model(self):
         """saving model weights"""

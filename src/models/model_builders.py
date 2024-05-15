@@ -11,9 +11,8 @@ from uncertainty_wizard.models.stochastic_utils.layers import (
 
 
 class ModelBuilderInterface(ABC):
-    """Interface for building stochastic models for various datasets."""
     @abstractmethod
-    def create_model(self):
+    def create_model(self, stochastic_mode: StochasticMode):
         pass
 
 
@@ -61,7 +60,49 @@ class MNISTModelBuilder(BaseModelBuilder):
                 layers.Dense(10, activation="softmax"),
             ]
         )
-        return self.compile_model(model)
+
+        optimizer = self.select_optimizer()
+
+        model.compile(
+            loss=losses.categorical_crossentropy,
+            optimizer=optimizer,
+            metrics=["accuracy"],
+        )
+
+        return model
+
+    def select_optimizer(self):
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.legacy.Adam()
+                    if self.learning_rate is None
+                    else optimizers.legacy.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.legacy.SGD()
+                    if self.learning_rate is None
+                    else optimizers.legacy.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
+        else:
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.Adam()
+                    if self.learning_rate is None
+                    else optimizers.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.SGD()
+                    if self.learning_rate is None
+                    else optimizers.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.Adadelta()
+        return opt
 
 
 class Cifar10ModelBuilder(BaseModelBuilder):
@@ -82,10 +123,57 @@ class Cifar10ModelBuilder(BaseModelBuilder):
             layers.Dense(64, activation="relu"),
             layers.Dense(10, activation="softmax")
         ])
-        return self.compile_model(model)
+
+        optimizer = self.select_optimizer()
+
+        model.compile(
+            loss=losses.categorical_crossentropy,
+            optimizer=optimizer,
+            metrics=["accuracy"],
+        )
+
+        return model
+
+    def select_optimizer(self):
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.legacy.Adam()
+                    if self.learning_rate is None
+                    else optimizers.legacy.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.legacy.SGD()
+                    if self.learning_rate is None
+                    else optimizers.legacy.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
+        else:
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.Adam()
+                    if self.learning_rate is None
+                    else optimizers.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.SGD()
+                    if self.learning_rate is None
+                    else optimizers.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.Adadelta()
+        return opt
 
 
-class FashionMnistModelBuilder(BaseModelBuilder):
+class FashionMnistModelBuilder(ModelBuilderInterface):
+    def __init__(self, stochastic_mode: StochasticMode, optimizer="adadelta", learning_rate=None):
+        self.stochastic_mode = stochastic_mode
+        self.optimizer_name = optimizer
+        self.learning_rate = learning_rate
+
     def create_model(self):
         model = uwiz.models.StochasticSequential(
             [
@@ -98,4 +186,46 @@ class FashionMnistModelBuilder(BaseModelBuilder):
                 layers.Dense(10, activation="softmax"),
             ]
         )
-        return self.compile_model(model)
+
+        optimizer = self.select_optimizer()
+
+        model.compile(
+            loss=losses.categorical_crossentropy,
+            optimizer=optimizer,
+            metrics=["accuracy"],
+        )
+
+        return model
+
+    def select_optimizer(self):
+        if platform.system() == "Darwin" and platform.processor() == "arm":
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.legacy.Adam()
+                    if self.learning_rate is None
+                    else optimizers.legacy.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.legacy.SGD()
+                    if self.learning_rate is None
+                    else optimizers.legacy.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.legacy.Adadelta()  # pylint: disable=E1101
+        else:
+            if self.optimizer_name == "adam":
+                opt = (
+                    optimizers.Adam()
+                    if self.learning_rate is None
+                    else optimizers.Adam(learning_rate=self.learning_rate)
+                )
+            elif self.optimizer_name == "sgd":
+                opt = (
+                    optimizers.SGD()
+                    if self.learning_rate is None
+                    else optimizers.SGD(learning_rate=self.learning_rate)
+                )
+            else:
+                opt = optimizers.Adadelta()
+        return opt

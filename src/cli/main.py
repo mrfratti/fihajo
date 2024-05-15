@@ -3,6 +3,7 @@ import logging
 import json
 
 from uncertainty_wizard.models import StochasticMode
+
 from src.cli.send.send_report_data import SendReportData
 from src.datasets.dataset_handler import (
     MnistDatasetHandler,
@@ -18,11 +19,13 @@ from src.models.train import Trainer
 from src.models.eval import Evaluator
 from src.uncertainty.analyze import Analyzer
 
-
 class CLIApp:
     def __init__(self):
         self.parser = self.setup_parser()
+        self._report_location= "data/send.json"
         self._plot_file_names = {}
+        self._interactive_report_location= "data/send_interactive.json"
+        self._interactive_plot_file_names = {}
 
     def setup_parser(self):
         parser = argparse.ArgumentParser(description="AI Model Uncertainty Analysis Tool")
@@ -39,7 +42,7 @@ class CLIApp:
         self.add_evaluate_subparser(subparsers)
         self.add_analyze_subparser(subparsers)
         self.add_report_subparser(subparsers)
-
+    
         return parser
 
     def add_train_subparser(self, subparsers):
@@ -59,6 +62,7 @@ class CLIApp:
                                   help="Optimizer for training")
         parser_train.add_argument("--learning-rate", type=float, default=None, help="Learning rate for the optimizer")
         parser_train.add_argument("--report", action="store_true", help="Generate report")
+        parser_train.add_argument("--interactive", action="store_true", help="Generate interactive plot for report")
 
     def add_evaluate_subparser(self, subparsers):
         parser_evaluate = subparsers.add_parser("evaluate", help="Evaluate the model")
@@ -72,6 +76,7 @@ class CLIApp:
         parser_evaluate.add_argument("--eps", type=self.check_eps, default=0.3, help="Epsilon for adversarial "
                                                                                      "perturbation during evaluation")
         parser_evaluate.add_argument("--report", action="store_true", help="Generate report")
+        parser_evaluate.add_argument("--interactive", action="store_true", help="Generate interactive plot for report")
         parser_evaluate.set_defaults(func=self.evaluate)
 
     def add_analyze_subparser(self, subparsers):
@@ -82,10 +87,12 @@ class CLIApp:
                                                                                      "for uncertainty analysis.")
         uncertainty_parser.add_argument("--batch", type=int, default=64, help="Batch size for analyzing.")
         uncertainty_parser.add_argument("--report", action="store_true", help="Generate report")
+        uncertainty_parser.add_argument("--interactive", action="store_true", help="Generate interactive plot for report")
         uncertainty_parser.set_defaults(func=self.analyze)
 
     def add_report_subparser(self, subparsers):
         report_parser = subparsers.add_parser("report", help="Genereate report")
+        report_parser.add_argument('--interactive', action='store_true', help='Generate interactive report')
         report_parser.set_defaults(func=self.report)
 
     def check_positive(self, value):
@@ -125,12 +132,20 @@ class CLIApp:
         (x_train, y_train), (x_test, y_test) = dataset_handler.load_and_preprocess()
 
         try:
+            # process
             trainer = Trainer(model_builder, (x_train, y_train), (x_test, y_test), args)
             trainer.train()
             trainer.save_model()
-            SendReportData().filenames = trainer.plot_file_names
+
+            # find and save to data
+            SendReportData(self._report_location).filenames = trainer.plot_file_names
             if args.report:
                 self.report()
+                
+            if args.interactive:
+                SendReportData(self._interactive_report_location).filenames = trainer.interactive_plot_file_names
+                # self.reportInteractive()
+
         except Exception as e:
             logging.error("An error occurred during training: %s", e)
 
@@ -179,14 +194,22 @@ class CLIApp:
             evaluator = Evaluator(model_builder, (x_test, y_test), args)
             evaluator.evaluate()
 
-            send_data = SendReportData()
+            send_data = SendReportData(self._report_location)
             send_data.adversarial_evaluated = args.adv_eval
             send_data.filenames = evaluator.plot_file_names
 
             logging.debug("Evaluation complete, filenames: %s", evaluator.plot_file_names)
-            #SendReportData().filenames = evaluator.plot_file_names
+
             if args.report:
                 self.report()
+
+            if args.interactive:
+                send_interactive_data = SendReportData(self._interactive_report_location)
+                send_interactive_data.adversarial_evaluated = args.adv_eval
+                send_interactive_data.filenames = evaluator.interactive_plot_file_names
+                
+                logging.debug("Evaluation complete, filenames: %s", evaluator.interactive_plot_file_names)
+
         except Exception as e:
             logging.error("An error occurred during evaluation: %s", e)
 
@@ -224,27 +247,42 @@ class CLIApp:
         try:
             analyzer = Analyzer(model_builder, (x_test, y_test), batch, args)
             analyzer.analyze()
-            SendReportData().filenames = analyzer.plot_file_names
+
+            SendReportData(self._report_location).filenames = analyzer.plot_file_names
             if args.report:
                 self.report()
+                
+            if args.interactive:
+                SendReportData(self._interactive_report_location).filenames = analyzer.interactive_plot_file_names
+                # self.reportInteractive()
+
         except Exception as e:
             logging.error("An error occurred during uncertainty analysis: %s", e)
 
+
     def report(self, args=""):
         """Run report generation"""
-        send_data = SendReportData()
+        if args.interactive:
+            send_data = SendReportData(self._interactive_report_location)
+        else:
+            send_data = SendReportData(self._report_location)
+
         if args and hasattr(args, 'adv_eval'):
             send_data.adversarial_evaluated = args.adv_eval
         else:
             send_data.adversarial_evaluated = False
 
         try:
-            send_data.send()
+            if args.interactive:
+                send_data.send("./src/report/reports/","index_interactive")
+            else:
+                send_data.send()
         except ValueError as e:
             logging.warning("main.report: %s", e)
 
         except TypeError as e:
             logging.warning("main.report: %s", e)
+        
 
     def load_config(self, file_path):
         """loading predefined configuration file in json format"""
@@ -256,9 +294,6 @@ class CLIApp:
         if self.args.config:
             config_args = self.load_config(self.args.config)
             self.args.__dict__.update(config_args)
-            # config_args.setdefault('adv', False)
-            # for key, value in config_args.items():
-            #    setattr(args, key, value)
 
         if self.args.verbose:
             logging.basicConfig(

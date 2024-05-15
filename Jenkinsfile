@@ -8,9 +8,11 @@ pipeline {
         string(name: 'SAVE_PATH', defaultValue: 'data/models/model.weights.h5', description: 'Path to save model weights')
         string(name: 'EPSILON', defaultValue: '0.3', description: 'Epsilon value for adversarial training or evaluation')
         choice(name: 'OPTIMIZER', choices: ['adadelta', 'adam', 'sgd'], description: 'Optimizer for training')
-        choice(name: 'DATASET', choices: ['mnist', 'cifar10', 'fashion_mnist'], description: 'Dataset for training and evaluation')
+        choice(name: 'DATASET', choices: ['mnist', 'fashion_mnist'], description: 'Dataset for training and evaluation')
         booleanParam(name: 'ADV_EVAL', defaultValue: false, description: 'Perform adversarial attacks during evaluation')
+        booleanParam(name: 'REPORT_INT', defaultValue: false, description: 'Generate Interactive HTML Report')
     }
+    
 
     stages {
         stage('Setup') {
@@ -53,7 +55,7 @@ pipeline {
             steps {
                 sh '''
                 pip3 install safety
-                safety check
+                safety check -r requirements.txt
                 '''
             }
         }
@@ -61,14 +63,28 @@ pipeline {
         stage('Train') {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
-                sh "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
+                script {
+                    if (params.REPORT_INT) {
+                        sh "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --interactive"
+                    } 
+                    else {
+                        sh "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
+                    }
+                }
             }
         }
 
         stage('Adversarial Training') {
             when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
-                sh "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
+                script {
+                    if (params.REPORT_INT) {
+                        sh "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON} --interactive"
+                    } 
+                    else {
+                        sh "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
+                    }
+                }
             }
         }
 
@@ -76,9 +92,21 @@ pipeline {
             steps {
                 script {
                     if (params.ADV_EVAL) {
-                        sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
-                    } else {
-                        sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                        if (params.REPORT_INT) {
+                            sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}  --interactive"
+                        }
+                        else {
+                            sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
+                        }
+                    } 
+
+                    if (!params.ADV_EVAL) {
+                        if (params.REPORT_INT) {
+                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}  --interactive"
+                        } 
+                        else {
+                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                        }
                     }
                 }
             }
@@ -86,23 +114,60 @@ pipeline {
 
         stage('Analyze') {
             steps {
-                sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                script {
+                    if (params.REPORT_INT) {
+                        sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --interactive"
+                    }
+                    else {
+                        sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
+                    }
+                }
             }
         }
 
         stage('Generate HTML Report') {
             steps {
-                sh "python3 -m src.cli.main report"
-                publishHTML target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'src/report/reports/',
-                    reportFiles: 'index.html',
-                    reportName: "HTML Report"
-                ]
+
+                script {
+                    if (params.REPORT_INT) {
+                        sh "python3 -m src.cli.main report"
+                        sh "python3 -m src.cli.main report --interactive"
+
+                        publishHTML target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "src/report/reports/",
+                            reportFiles: "index.html",
+                            reportName: "HTML Report"
+                        ]
+                        publishHTML target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "./src/report/reports/",
+                            reportFiles: "index_interactive.html",
+                            reportName: "HTML Interactive Report"
+                        ]
+                    } 
+                    else {
+                        sh "python3 -m src.cli.main report"
+
+                        publishHTML target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "src/report/reports/",
+                            reportFiles: "index.html",
+                            reportName: "HTML Report"
+                        ]
+                        
+                    }
+                }
             }
         }
+
+
     }
 
     post {

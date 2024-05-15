@@ -1,30 +1,29 @@
 import json
+import logging
 import os
 
 from src.report.API.html_generator_api import HtmlGeneratorApi
-from src.report.image_data import ImageData
 
 class SendReportData:
     """sends data to htmlGeneratorApi"""
 
-    def __init__(self):
+    def __init__(self, path_json = ""):
         self._filenames = {}
         self.adversarial_evaluated = False
-        self._path_json = "data/send.json"
-
+        self._path_json = path_json
     def delete_json(self):
         if os.path.exists(self._path_json):
             os.remove(self._path_json)
 
     @property
     def filenames(self):
-        """prints out current plot filnames in list"""
+        """prints out current plot file names in list"""
         if len(self._filenames) < 1:
             print("No filenames to be sent")
         else:
             print("the following filenames is in list")
             for filename in self._filenames:
-                print(filename)
+                logging.info(filename)
 
     @property
     def adversarial_evaluated(self):
@@ -154,8 +153,7 @@ class SendReportData:
                 images.append(img_data)
 
         if len(images) < 1:
-            raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating "
-                             "a report!")
+            raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating report!")
 
         HtmlGeneratorApi(
             report_filename=report_filename,

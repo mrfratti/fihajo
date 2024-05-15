@@ -16,7 +16,7 @@ class HtmlGenerator:
 
     def __init__(self) -> None:
         self._image_data_list = []
-        self._html_report = HtmlData()
+        self._html_report = None
 
     @property
     def image_data(self) -> int:
@@ -41,12 +41,16 @@ class HtmlGenerator:
         self._html_report = report
 
     def _generate(self):
+        if self._html_report is None:
+            raise ValueError("No html data object set")
         doc.asis("<!DOCTYPE html>")
         with tag("html", lang="en"):
             with tag("head"):
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
                 doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
+                if self._html_report.head is not None:
+                    doc.asis(self._html_report.head)
 
             with tag("body"):
                 with tag("header"):
@@ -60,44 +64,56 @@ class HtmlGenerator:
                                         text(data.header_image)
 
                 with tag("main"):
-                    for i, data in enumerate(self._image_data_list):
-                        with tag("section", id=f"section{i}"):
-                            self._img_section(data, "right" if i % 2 == 0 else "left")
+                    self._main()
 
                 with tag("footer"):
-                    text("Copyright © Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
+                    text("Firat Celebi, Joakim Hole Polden, Harykaran Lambotharan")
         return doc.getvalue()
 
     def _main(self):
-        if len(self._image_data_list) < 1:
+        if len(self._image_data_list) != 0:
+            self._img()
+            return
+        if self._html_report.main is not None:
+            doc.asis(self._html_report.main)
+            return
+        else:
             with tag("div", klass="error"):
                 with tag("h2"):
                     text("Oops!")
                 with tag("p"):
                     text("No data to show")
-        else:
-            self._img()
 
     def _img(self):
         for i, data in enumerate(self._image_data_list):
-            if i % 2 == 0:
-                self._img_section(data, "right")
-            else:
-                self._img_section(data, "left")
+            with tag("section", id=f"section{i}"):
+                self._img_section(data, "right" if i % 2 == 0 else "left")
 
     def _img_section(self, data, section):
+        file_path = data.image_location
+        file_split = os.path.splitext(file_path)
+        file_end_lower = file_split[1].lower()
+
+
         with tag("div", klass=section):
             with tag("h2"):
                 text(data.header_image)
-            doc.stag("img", src=data.image_location)
+
+            if file_end_lower == ".html":
+                with tag("iframe", src=file_path):
+                    text(data.header_image)
+
+            elif file_end_lower == ".png":
+                doc.stag("img", src=file_path)
+
             with tag("div", klass="info"):
                 with tag("div"):
                     with tag("p"):
                         text(data.about_image)
-                with tag("a", href=data.image_location):
+
+                with tag("a", href=file_path):
                     with tag("button"):
                         text("Open Image File")
-
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""
         try:

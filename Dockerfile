@@ -25,9 +25,10 @@ RUN pip install --no-cache-dir \
   cleverhans==4.0.0 \
   DateTime==5.4 \
   argparse==1.4.0 \
-  yattag==1.15.2
+  yattag==1.15.2 \
+  plotly==5.22.0
 
-# RUN chown -R jenkins:jenkins /opt/venv
+RUN chown -R jenkins:jenkins /opt/venv
 
 USER jenkins
 
