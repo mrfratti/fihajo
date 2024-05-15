@@ -95,16 +95,4 @@ docker run -p 8080:8080 -p 50000:50000 jenkins
 ## Environment Variable Setup for Jenkins
 
 Refer to the [Jenkins Environment Variable Setup Guide](docs/jenkins_path_tutorial.md) for detailed instructions on 
-configuring environment variables in Jenkins to ensure smooth execution of your build process. 
-
-
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information. 
-
-# Contact
-
-- Firat Celebi
-- Joakim Hole Polden
-- Harykaran Lambotharan
+configuring environment variables in Jenkins to ensure smooth execution of your build process.
