@@ -8,7 +8,9 @@ from src.cli.string_styling import StringStyling
 
 doc, tag, text = Doc().tagtext()
 
-logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
+)
 
 
 class HtmlGenerator:
@@ -48,7 +50,11 @@ class HtmlGenerator:
             with tag("head"):
                 doc.stag("meta", charset="UTF-8")
                 doc.stag("link", rel="stylesheet", href="dist/style.css")
-                doc.stag("meta", name="viewport", content="width=device-width, initial-scale=1.0")
+                doc.stag(
+                    "meta",
+                    name="viewport",
+                    content="width=device-width, initial-scale=1.0",
+                )
                 if self._html_report.head is not None:
                     doc.asis(self._html_report.head)
 
@@ -94,7 +100,6 @@ class HtmlGenerator:
         file_split = os.path.splitext(file_path)
         file_end_lower = file_split[1].lower()
 
-
         with tag("div", klass=section):
             with tag("h2"):
                 text(data.header_image)
@@ -114,6 +119,7 @@ class HtmlGenerator:
                 with tag("a", href=file_path):
                     with tag("button"):
                         text("Open Image File")
+
     def write_html(self) -> None:
         """Writes the html file when the html is generated"""
         try:
@@ -140,6 +146,8 @@ class HtmlGenerator:
             logging.warning("htmlgenerator: %s", e)
             return
         except FileNotFoundError:
-            print(StringStyling.box_style("Cannot open html file or filepath not found"))
+            print(
+                StringStyling.box_style("Cannot open html file or filepath not found")
+            )
         except PermissionError:
             print(StringStyling.box_style("Missing permission to write html file"))

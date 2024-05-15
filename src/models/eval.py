@@ -11,7 +11,9 @@ from cleverhans.tf2.attacks.projected_gradient_descent import projected_gradient
 from src.visualization.visualization import VisualizeEvaluation
 from src.weight_processing.weight_manager import WeightManager
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message).80s"
+)
 
 
 class Evaluator:
@@ -65,25 +67,61 @@ class Evaluator:
             class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
             if self.args.dataset == "fashion_mnist":
-                class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
-                               "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+                class_names = [
+                    "T-shirt/top",
+                    "Trouser",
+                    "Pullover",
+                    "Dress",
+                    "Coat",
+                    "Sandal",
+                    "Shirt",
+                    "Sneaker",
+                    "Bag",
+                    "Ankle boot",
+                ]
             elif self.args.dataset == "cifar10":
-                class_names = ["airplane", "automobile", "bird", "cat", "deer",
-                               "dog", "frog", "horse", "ship", "truck"]
+                class_names = [
+                    "airplane",
+                    "automobile",
+                    "bird",
+                    "cat",
+                    "deer",
+                    "dog",
+                    "frog",
+                    "horse",
+                    "ship",
+                    "truck",
+                ]
 
             list_class = [str(i) for i in class_names]
 
-            visualizer.plot_predictions(self.model.inner, x_test, y_true, classes=list_class, num_samples=25)
+            visualizer.plot_predictions(
+                self.model.inner, x_test, y_true, classes=list_class, num_samples=25
+            )
             visualizer.plot_confusion_matrix(y_true, y_pred_classes, classes=list_class)
-            visualizer.plot_classification_report(y_true, y_pred_classes, classes=list_class)
+            visualizer.plot_classification_report(
+                y_true, y_pred_classes, classes=list_class
+            )
             self._plot_file_names.update(visualizer.plot_file_names)
 
             if self.args.interactive:
-                visualizer.plot_predictions(self.model.inner, x_test, y_true, classes=list_class, num_samples=25,
-                                            filename_text="interactive_plot_file_names")
-                visualizer.plot_interactive_confusion_matrix(y_true, y_pred_classes, classes=list_class)
-                visualizer.plot_interactive_classification_report(y_true, y_pred_classes, classes=list_class)
-                self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
+                visualizer.plot_predictions(
+                    self.model.inner,
+                    x_test,
+                    y_true,
+                    classes=list_class,
+                    num_samples=25,
+                    filename_text="interactive_plot_file_names",
+                )
+                visualizer.plot_interactive_confusion_matrix(
+                    y_true, y_pred_classes, classes=list_class
+                )
+                visualizer.plot_interactive_classification_report(
+                    y_true, y_pred_classes, classes=list_class
+                )
+                self._interactive_plot_file_names.update(
+                    visualizer.interactive_plot_file_names
+                )
 
     def adversarial_evaluation(self, x_test, y_test):
         self.evaluation(x_test, y_test, plot_results=True)
@@ -93,31 +131,63 @@ class Evaluator:
             self.model.inner, x_test, self.args.eps, np.inf, clip_min=0.0, clip_max=1.0
         )
         loss_fgsm, acc_fgsm = self.model.evaluate(x_adv_fgsm, y_test, verbose=1)
-        predictions_fgsm = self.model.predict(x_adv_fgsm)
-        logging.info(f"Evaluation on FGSM - Loss: {loss_fgsm:.2f}%, Accuracy: {acc_fgsm * 100:.2f}%")
+        # predictions_fgsm = self.model.predict(x_adv_fgsm)
+        logging.info(
+            f"Evaluation on FGSM - Loss: {loss_fgsm:.2f}%, Accuracy: {acc_fgsm * 100:.2f}%"
+        )
 
         # Projected Gradient Descent
         x_adv_pgd = projected_gradient_descent(
-            self.model.inner, x_test, self.args.eps, 0.01, 40, np.inf, clip_min=0.0, clip_max=1.0
+            self.model.inner,
+            x_test,
+            self.args.eps,
+            0.01,
+            40,
+            np.inf,
+            clip_min=0.0,
+            clip_max=1.0,
         )
         loss_pgd, acc_pgd = self.model.evaluate(x_adv_pgd, y_test, verbose=1)
-        predictions_pgd = self.model.predict(x_adv_pgd)
-        logging.info(f"Evaluation on PGD - Loss: {loss_pgd:.2f}%, Accuracy: {acc_pgd * 100:.2f}%")
+        # predictions_pgd = self.model.predict(x_adv_pgd)
+        logging.info(
+            f"Evaluation on PGD - Loss: {loss_pgd:.2f}%, Accuracy: {acc_pgd * 100:.2f}%"
+        )
 
         class_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         if self.args.dataset == "fashion_mnist":
-            class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
-                           "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+            class_names = [
+                "T-shirt/top",
+                "Trouser",
+                "Pullover",
+                "Dress",
+                "Coat",
+                "Sandal",
+                "Shirt",
+                "Sneaker",
+                "Bag",
+                "Ankle boot",
+            ]
         elif self.args.dataset == "cifar10":
-            class_names = ["airplane", "automobile", "bird", "cat", "deer",
-                           "dog", "frog", "horse", "ship", "truck"]
-
+            class_names = [
+                "airplane",
+                "automobile",
+                "bird",
+                "cat",
+                "deer",
+                "dog",
+                "frog",
+                "horse",
+                "ship",
+                "truck",
+            ]
 
         list_class = [str(i) for i in class_names]
 
         visualizer = VisualizeEvaluation()
-        visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, classes=list_class, num_samples=25)
+        visualizer.plot_adversarial_examples(
+            self.model, x_test, self.args.eps, classes=list_class, num_samples=25
+        )
         accuracies = [acc * 100, acc_fgsm * 100, acc_pgd * 100]
         labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
@@ -125,10 +195,18 @@ class Evaluator:
         self._plot_file_names.update(visualizer.plot_file_names)
 
         if self.args.interactive:
-            visualizer.plot_adversarial_examples(self.model, x_test, self.args.eps, classes=list_class,
-                                                 num_samples=25, filename_text="adversarial_examples")
+            visualizer.plot_adversarial_examples(
+                self.model,
+                x_test,
+                self.args.eps,
+                classes=list_class,
+                num_samples=25,
+                filename_text="adversarial_examples",
+            )
             visualizer.plot_interactive_accuracy_comparison(accuracies, labels=labels)
-            self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
+            self._interactive_plot_file_names.update(
+                visualizer.interactive_plot_file_names
+            )
 
     @property
     def plot_file_names(self) -> dict:

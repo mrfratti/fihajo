@@ -4,13 +4,15 @@ import os
 
 from src.report.API.html_generator_api import HtmlGeneratorApi
 
+
 class SendReportData:
     """sends data to htmlGeneratorApi"""
 
-    def __init__(self, path_json = ""):
+    def __init__(self, path_json=""):
         self._filenames = {}
         self.adversarial_evaluated = False
         self._path_json = path_json
+
     def delete_json(self):
         if os.path.exists(self._path_json):
             os.remove(self._path_json)
@@ -36,7 +38,9 @@ class SendReportData:
     @filenames.setter
     def filenames(self, filenames):
         if not isinstance(filenames, dict):
-            raise TypeError("Send report: The filenames to be sent needs to be in a dict")
+            raise TypeError(
+                "Send report: The filenames to be sent needs to be in a dict"
+            )
         if len(filenames) < 1:
             raise ValueError("Send report: No filenames for images in filename list")
         existing = self._load_json()
@@ -52,7 +56,7 @@ class SendReportData:
                 data = json.load(file)
                 print("Loaded filenames from JSON:", data)
                 return data
-                #return json.load(file)
+                # return json.load(file)
         return {}
 
     def _img(self, key, filenames):
@@ -66,17 +70,17 @@ class SendReportData:
             "adversarialTraining": (
                 "Adversarial Training",
                 "Insights into model performance over each epoch providing when exposed to adversarially modified "
-                "inputs."
+                "inputs.",
             ),
             "predictions": (
                 "Model Predictions",
                 "Displays predictions from the model alongside actual labels, highlighting how well the model "
-                "performs on unseen data."
+                "performs on unseen data.",
             ),
             "confusion_matrix": (
                 "Confusion Matrix",
                 "This confusion matrix provides a detailed breakdown of the model's predictions across different "
-                "classes, helping identify classes that are frequently confused."
+                "classes, helping identify classes that are frequently confused.",
             ),
             "classification_report": (
                 "Classification Report",
@@ -91,53 +95,58 @@ class SendReportData:
                 "dataset. F1-Score is a measure of a model's accuracy that combines precision and recall into a "
                 "single metric by taking their harmonic mean. It's useful when we need to balance precision and "
                 "recall. An F1-score of 0.99 for digit 0 indicates a very good balance between precision and recall "
-                "for this class."
+                "for this class.",
             ),
             "accuracy_comparison": (
                 "Accuracy Comparison",
                 "Bar graph comparing model accuracy on clean vs. adversarially altered data. "
                 "Shows how adversarial attack performed on data that has not been adversarial trained, will impact"
-                "models predictions"
+                "models predictions",
             ),
             "adversarial_examples": (
                 "Adversarial Examples",
                 "Visualizes the outputs of adversarial examples and shows the model's predictions, highlighting the "
-                "vulnerability and robustness of the model under attack."
+                "vulnerability and robustness of the model under attack.",
             ),
             "pcs_meansoftmax": (
                 "PCS and Mean Softmax",
                 "Graphs of Predictive Confidence Score and Mean Softmax outputs, indicating confidence levels and "
-                "class probabilities."
+                "class probabilities.",
             ),
             "distrubution_meansoftmax": (
                 "Distribution of Mean Softmax",
-                "Distribution plot of softmax output values, providing insights into model certainty across classes."
+                "Distribution plot of softmax output values, providing insights into model certainty across classes.",
             ),
             "pcs_inverse": (
                 "PCS Inverse",
                 "Plot of inverse Predictive Confidence Scores, useful for understanding areas of high model "
-                "uncertainty."
+                "uncertainty.",
             ),
             "entropy_distrubution": (
                 "Entropy Distribution",
-                "Visualization of entropy in model predictions, highlighting areas where the model is least certain."
+                "Visualization of entropy in model predictions, highlighting areas where the model is least certain.",
             ),
             "higly_uncertain_inputs": (
                 "Highly Uncertain Inputs",
-                "Showcases inputs for which the model exhibited the highest uncertainty, useful for further analysis."
+                "Showcases inputs for which the model exhibited the highest uncertainty, useful for further analysis.",
             ),
             "prediction_vs_entrophy": (
                 "Prediction vs. Entropy",
-                "Scatter plot analyzing the relationship between model predictions and their associated entropy."
-            )
+                "Scatter plot analyzing the relationship between model predictions and their associated entropy.",
+            ),
         }
-        header, about = descriptions.get(key, (key.replace("_", " ").title(), f"Generated plot for "
-                                                                              f"{key.replace('_', ' ')}"))
+        header, about = descriptions.get(
+            key,
+            (
+                key.replace("_", " ").title(),
+                f"Generated plot for " f"{key.replace('_', ' ')}",
+            ),
+        )
         if key in filenames:
             return {
                 "image_header": header,
                 "image_location": filenames[key],
-                "about_image": about
+                "about_image": about,
             }
         else:
             print(f"Key {key} not found in filenames")
@@ -147,13 +156,15 @@ class SendReportData:
         images = []
         self._filenames = self._load_json()
 
-        for i in range(len(self._filenames)-1, -1, -1):
+        for i in range(len(self._filenames) - 1, -1, -1):
             img_data = self._img(list(self._filenames.keys())[i], self._filenames)
             if img_data is not None:
                 images.append(img_data)
 
         if len(images) < 1:
-            raise ValueError("No images to generate report from, run train, evaluate and analyze to before generating report!")
+            raise ValueError(
+                "No images to generate report from, run train, evaluate and analyze to before generating report!"
+            )
 
         HtmlGeneratorApi(
             report_filename=report_filename,

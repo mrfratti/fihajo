@@ -52,7 +52,9 @@ class WeightManager:
             self.current_model.inner.load_weights(self.model_path)
             logging.info("Model weights loaded from %s", self.model_path)
         except FileNotFoundError:
-            logging.error("The specified weight file was not found: %s", self.model_path)
+            logging.error(
+                "The specified weight file was not found: %s", self.model_path
+            )
             sys.exit(1)
         except PermissionError:
             logging.error("Cannot open weight file missing permission to read")

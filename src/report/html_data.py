@@ -1,5 +1,3 @@
-
-
 class HtmlData:
     """Defines data about the html"""
 
@@ -11,29 +9,33 @@ class HtmlData:
         self._menu = None
         self._main = None
 
-    
     @property
-    def head(self)->str:
+    def head(self) -> str:
         return self._html_head
+
     @head.setter
-    def head(self,tag)->None:
-        if isinstance(tag,str):
+    def head(self, tag) -> None:
+        if isinstance(tag, str):
             self._html_head = tag
+
     @property
-    def menu(self)->list:
+    def menu(self) -> list:
         return self._menu
+
     @menu.setter
     def menu(self, menu):
-        if isinstance(menu,list):
-            self._menu=menu
+        if isinstance(menu, list):
+            self._menu = menu
+
     @property
-    def main(self)->str:
+    def main(self) -> str:
         return self._main
+
     @main.setter
-    def main(self, tag)->str:
-        if isinstance(tag,str):
-            self._main=tag
-        
+    def main(self, tag) -> str:
+        if isinstance(tag, str):
+            self._main = tag
+
     @property
     def header_text(self) -> str:
         """header text for html report"""

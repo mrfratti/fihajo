@@ -8,7 +8,9 @@ from src.visualization.visualization import VisualizeUncertainty
 from src.weight_processing.weight_manager import WeightManager
 
 
-logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message).80s", level=logging.INFO
+)
 
 
 class Analyzer:
@@ -57,7 +59,6 @@ class Analyzer:
         self.analyze_entropy(x_test)
         self.table_generator(x_test, y_test)
 
-
     def run_quantified(self, x_test):
         """
         Performs quantified predictions using the model to obtain both confidence and uncertainty metrics.
@@ -92,10 +93,14 @@ class Analyzer:
 
         if self.args.interactive:
             visualizer.plot_interactive_pcs_mean_softmax(self.pcs_mean_softmax_scores)
-            visualizer.plot_interactive_distribution_pcs_ms_scores(self.pcs_mean_softmax_scores)
+            visualizer.plot_interactive_distribution_pcs_ms_scores(
+                self.pcs_mean_softmax_scores
+            )
             visualizer.plot_interactive_pcs_ms_inverse(self.pcs_mean_softmax_scores)
 
-            self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
+            self._interactive_plot_file_names.update(
+                visualizer.interactive_plot_file_names
+            )
 
     def analyze_entropy(self, x_test):
         """
@@ -132,15 +137,23 @@ class Analyzer:
         visualizer = VisualizeUncertainty()
         visualizer.plot_dist_entropy_scores(self.entropy_scores)
         visualizer.high_uncertain_inputs(self.entropy_scores, x_test, num_samples=25)
-        visualizer.plot_predictive_conf_entropy_scores(predictive_confidence, self.entropy_scores)
+        visualizer.plot_predictive_conf_entropy_scores(
+            predictive_confidence, self.entropy_scores
+        )
 
         self._plot_file_names.update(visualizer.plot_file_names)
 
         if self.args.interactive:
             visualizer.plot_interactive_dist_entropy_scores(self.entropy_scores)
-            visualizer.high_interactive_uncertain_inputs(self.entropy_scores, x_test, num_samples=25)
-            visualizer.plot_interactive_predictive_conf_entropy_scores(predictive_confidence, self.entropy_scores)
-            self._interactive_plot_file_names.update(visualizer.interactive_plot_file_names)
+            visualizer.high_interactive_uncertain_inputs(
+                self.entropy_scores, x_test, num_samples=25
+            )
+            visualizer.plot_interactive_predictive_conf_entropy_scores(
+                predictive_confidence, self.entropy_scores
+            )
+            self._interactive_plot_file_names.update(
+                visualizer.interactive_plot_file_names
+            )
 
     def table_generator(self, x_test, y_test):
         """
@@ -149,7 +162,9 @@ class Analyzer:
         :param y_test:(np.array): Test dataset labels.
         """
         true_labels = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
-        predicted_labels = np.argmax(self.model.predict(x_test), axis=1)  # y_pred_classes
+        predicted_labels = np.argmax(
+            self.model.predict(x_test), axis=1
+        )  # y_pred_classes
         table = pd.DataFrame(
             {
                 "True Label": true_labels,
@@ -170,7 +185,9 @@ class Analyzer:
             output_dir = save_path if save_path else "data/tables"
 
         except EOFError as e:
-            logging.error("analyze: error with input from user console, using default path: %s", e)
+            logging.error(
+                "analyze: error with input from user console, using default path: %s", e
+            )
             output_dir = "data/tables"
 
         if not os.path.exists(output_dir):
@@ -189,7 +206,7 @@ class Analyzer:
     @property
     def plot_file_names(self) -> dict:
         return self._plot_file_names
-    
+
     @property
     def interactive_plot_file_names(self) -> dict:
         return self._interactive_plot_file_names
