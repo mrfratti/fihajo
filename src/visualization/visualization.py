@@ -267,8 +267,8 @@ class VisualizeEvaluation:
         for x in range(len(cm)):
             for y in range(len(cm[x])):
                 data_info.append({"value": int(cm[x][y]), "row": classes[x], "column": classes[y]})
-
-        data_info_html = html_heatmap_chart(data_info)
+        
+        data_info_html = html_heatmap_chart(data_info, classes)
         
         filename = self._save_interactive_plot_html_2("confusion_matrix", data_info_html)
         self._interactive_plot_file_names["confusion_matrix"] = filename

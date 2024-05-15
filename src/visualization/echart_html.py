@@ -202,17 +202,16 @@ def html_accuracy_loss_chart(data_accuracy_loss, title):
 
 
 
-def html_heatmap_chart(data_heatmap):
+def html_heatmap_chart(data_heatmap, classes):
     
-    heatmap_columns = list({each_data["column"] for each_data in data_heatmap})
-    heatmap_rows = list({each_data["row"] for each_data in data_heatmap})
-    heatmap_rows_flip = heatmap_rows[::-1]
     heatmap_max_value = max(each_data["value"] for each_data in data_heatmap)
+
+    classes_flip = classes[::-1]
     
     heatmap_data_xyz = []
     for each in data_heatmap:
-        column_index = heatmap_columns.index(each["column"])
-        row_index = heatmap_rows_flip.index(each["row"])
+        column_index = classes.index(each["column"])
+        row_index = classes_flip.index(each["row"])
         value = each["value"]
         heatmap_data_xyz.append([column_index, row_index, value])
     
@@ -239,8 +238,8 @@ def html_heatmap_chart(data_heatmap):
             <script>
                 var js_chart_heatmap = echarts.init(document.getElementById("chart_heatmap"));
                 var data = {json.dumps(heatmap_data_xyz)};
-                var columns = {json.dumps(heatmap_columns)};
-                var rows = {json.dumps(heatmap_rows_flip)};
+                var columns = {json.dumps(classes)};
+                var rows = {json.dumps(classes_flip)};
 
                 var option = {{
                     tooltip: {{
