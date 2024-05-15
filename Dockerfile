@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir \
   yattag==1.15.2 \
   plotly==5.22.0
 
-# RUN chown -R jenkins:jenkins /opt/venv
+RUN chown -R jenkins:jenkins /opt/venv
 
 USER jenkins
 

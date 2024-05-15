@@ -92,15 +92,21 @@ pipeline {
             steps {
                 script {
                     if (params.ADV_EVAL) {
-                        sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
-                    } else {
-                        sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
-                    }
+                        if (params.REPORT_INT) {
+                            sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}  --interactive"
+                        }
+                        else {
+                            sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
+                        }
+                    } 
 
-                    if (params.ADV_EVAL && params.REPORT_INT) {
-                        sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}  --interactive"
-                    } else {
-                        sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}  --interactive"
+                    if (!params.ADV_EVAL) {
+                        if (params.REPORT_INT) {
+                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}  --interactive"
+                        } 
+                        else {
+                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}  --interactive"
+                        }
                     }
                 }
             }
