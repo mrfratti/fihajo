@@ -14,17 +14,25 @@ pipeline {
     }
     
 
+    environment {
+        PLOT_DIR = 'data/plots/training'
+        MODEL_DIR = 'data/models'
+        LOG_DIR = 'data/logs'
+        REPORT_DIR = 'report/reports'
+    }
+
     stages {
         stage('Setup') {
             steps {
-                checkout scm
-                sh "mkdir -p data/plots/training data/models data/logs report/reports"
+                script {
+                    sh "mkdir -p ${PLOT_DIR} ${MODEL_DIR} ${LOG_DIR} ${REPORT_DIR}"
+                }
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                timestamps { echo ">>>>>>>>>>Installing dependencies>>>>>>>>>>"}
+                timestamps { echo ">Installing dependencies"}
                 sh '''
                 pip3 install --upgrade pip
                 pip3 install -r requirements.txt
@@ -34,7 +42,7 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                timestamps { echo ">>>>>>>>>>Running Unit Tests>>>>>>>>>>"}
+                timestamps { echo "Running Unit Tests"}
                 sh '''
                 python3 -m unittest discover -v -s ./tests
                 '''
@@ -43,7 +51,7 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                timestamps { echo ">>>>>>>>>>Running bandit on source code>>>>>>>>>>"}
+                timestamps { echo "Running bandit on source code"}
                 sh '''
                 pip3 install bandit
                 bandit -r src/ -c bandit.yaml
@@ -64,12 +72,11 @@ pipeline {
             when { expression { params.ACTION == 'Standard Training' } }
             steps {
                 script {
+                    def trainCmd = "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
                     if (params.REPORT_INT) {
-                        sh "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --interactive"
-                    } 
-                    else {
-                        sh "python3 -m src.cli.main train --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER}"
+                        trainCmd += " --interactive"
                     }
+                    sh trainCmd
                 }
             }
         }
@@ -78,12 +85,11 @@ pipeline {
             when { expression { params.ACTION == 'Adversarial Training' } }
             steps {
                 script {
+                    def advTrainCmd = "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
                     if (params.REPORT_INT) {
-                        sh "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON} --interactive"
-                    } 
-                    else {
-                        sh "python3 -m src.cli.main train --adv --dataset ${params.DATASET} --epochs ${params.EPOCHS} --batch ${params.BATCH_SIZE} --save-path ${params.SAVE_PATH} --optimizer ${params.OPTIMIZER} --eps ${params.EPSILON}"
+                        advTrainCmd += " --interactive"
                     }
+                    sh advTrainCmd
                 }
             }
         }
@@ -91,23 +97,14 @@ pipeline {
         stage('Evaluate') {
             steps {
                 script {
+                    def evalCmd = "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
                     if (params.ADV_EVAL) {
-                        if (params.REPORT_INT) {
-                            sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}  --interactive"
-                        }
-                        else {
-                            sh "python3 -m src.cli.main evaluate --adv-eval --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --eps ${params.EPSILON}"
-                        }
-                    } 
-
-                    if (!params.ADV_EVAL) {
-                        if (params.REPORT_INT) {
-                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}  --interactive"
-                        } 
-                        else {
-                            sh "python3 -m src.cli.main evaluate --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
-                        }
+                        evalCmd += " --adv-eval --eps ${params.EPSILON}"
                     }
+                    if (params.REPORT_INT) {
+                        evalCmd += " --interactive"
+                    }
+                    sh evalCmd
                 }
             }
         }
@@ -115,12 +112,11 @@ pipeline {
         stage('Analyze') {
             steps {
                 script {
+                    def analyzeCmd = "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
                     if (params.REPORT_INT) {
-                        sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH} --interactive"
+                        analyzeCmd += " --interactive"
                     }
-                    else {
-                        sh "python3 -m src.cli.main analyze --dataset ${params.DATASET} --model-path ${params.SAVE_PATH}"
-                    }
+                    sh analyzeCmd
                 }
             }
         }
