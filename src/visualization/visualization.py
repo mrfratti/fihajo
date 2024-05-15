@@ -655,7 +655,10 @@ class VisualizeUncertainty:
         for i in range(num_samples):
             index = sorted_indices[i]
             plt.subplot(5, 5, i + 1)
-            plt.imshow(x_test[index].reshape(28, 28), cmap='gray')
+            if x_test.shape[-1] == 1:  # Grayscale images
+                plt.imshow(x_test[i].reshape(x_test.shape[1], x_test.shape[2]), cmap="gray")
+            else:   # RGB images
+                plt.imshow(x_test[i].reshape(x_test.shape[1], x_test.shape[2], x_test.shape[3]))
             plt.title(f"Entropy: {entropy_scores[sorted_indices[i]]:.2f}")
             plt.axis("off")
         plt.tight_layout()

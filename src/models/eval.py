@@ -122,7 +122,6 @@ class Evaluator:
         labels = ["Clean", "FGSM", "PGD"]
         visualizer.plot_accuracy_comparison(accuracies, labels=labels)
 
-        # self.plot_file_names.update(visualizer.plot_file_names)
         self._plot_file_names.update(visualizer.plot_file_names)
 
         if self.args.interactive:

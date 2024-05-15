@@ -71,7 +71,7 @@ class Trainer:
 
     def training(self):
         """
-        Executes standard training procedure for the MNIST model, including callbacks for early stopping and logging.
+        Executes standard training procedure, including callbacks for early stopping and logging.
         """
 
         x_train, y_train = self.train_dataset

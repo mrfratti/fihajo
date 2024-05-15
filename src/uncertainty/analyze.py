@@ -150,12 +150,6 @@ class Analyzer:
         """
         true_labels = np.argmax(y_test, axis=1) if np.ndim(y_test) > 1 else y_test
         predicted_labels = np.argmax(self.model.predict(x_test), axis=1)  # y_pred_classes
-        # self.pcs_scores = -self.pcs_scores
-        # self.mean_softmax_scores = -self.mean_softmax_scores
-        # predictive_confidence = np.max(self.model.predict(x_test), axis=1) #
-        # Mean Softmax Probability
-
-        # Create a table with the following columns
         table = pd.DataFrame(
             {
                 "True Label": true_labels,
