@@ -22,7 +22,7 @@ for this project are Keras/TensorFlow, Uncertainty Wizard and CleverHans librari
 #### 1. Clone the Repository
 ```sh
 git clone https://github.com/mrfratti/fihajo.git
-cd ai-uncertainty-analysis
+cd fihajo
 ```
 
 #### 2. Install Dependencies
